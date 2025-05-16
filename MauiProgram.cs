@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using ServiPuntos.uy_mobile.Views;
+using DotNet.Meteor.HotReload.Plugin;
 
 namespace ServiPuntos.uy_mobile;
 
@@ -9,6 +11,9 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
+#if DEBUG
+		.EnableHotReload()
+#endif
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

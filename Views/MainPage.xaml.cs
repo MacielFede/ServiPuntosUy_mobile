@@ -1,4 +1,4 @@
-﻿namespace ServiPuntos.uy_mobile;
+﻿namespace ServiPuntos.uy_mobile.Views;
 
 public partial class MainPage : ContentPage
 {

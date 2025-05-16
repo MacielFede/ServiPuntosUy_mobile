@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "FiVgo+RniIo=",
+  "dgSpecHash": "oJhZEIORN94=",
   "success": true,
   "projectFilePath": "/Users/FedeMaciel/dev/ServiPuntos.uy_mobile/ServiPuntos.uy_mobile.csproj",
   "expectedPackageFiles": [
+    "/Users/FedeMaciel/.nuget/packages/dotnetmeteor.hotreload.plugin/3.3.0/dotnetmeteor.hotreload.plugin.3.3.0.nupkg.sha512",
     "/Users/FedeMaciel/.nuget/packages/googlegson/2.11.0.5/googlegson.2.11.0.5.nupkg.sha512",
     "/Users/FedeMaciel/.nuget/packages/microsoft.extensions.configuration/9.0.0/microsoft.extensions.configuration.9.0.0.nupkg.sha512",
     "/Users/FedeMaciel/.nuget/packages/microsoft.extensions.configuration.abstractions/9.0.0/microsoft.extensions.configuration.abstractions.9.0.0.nupkg.sha512",
