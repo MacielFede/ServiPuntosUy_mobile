@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:ServiPuntos.uy_mobile.ViewModels"
+             xmlns:icons="http://www.aathifmahir.com/dotnet/2022/maui/icons"
+             x:Class="ServiPuntos.uy_mobile.Views.LoginPage"><!-- x:DataType="viewModel:LoginViewModel" -->
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Margin="20">
+            <!-- <Image
+                Source="ServiPuntos.uy_mobile_logo.png"
+                HeightRequest="185"
+                Aspect="AspectFit" /> -->
+
+            <Label
+                Text="Welcome to tupenca.uy!"
+                Style="{StaticResource Headline}"
+                SemanticProperties.HeadingLevel="Level1"
+                Margin="40" />
+
+            <!-- <ImageButton Grid.Column="1"
+                         Margin="10,10, 20, 10"
+                         CornerRadius="25"
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="Start"
+                         Command="{Binding Path=LoginAuth0Command}"
+                         Source="google_logo.png" />
+
+            <Entry
+                x:Name="EmailEntry"
+                Placeholder="Email"
+                Text="{Binding Email}"
+                Margin="0, 0, 0, 20" />
+
+            <Entry
+                x:Name="PasswordEntry"
+                Placeholder="Password"
+                IsPassword="True"
+                Text="{Binding Password}"
+                Margin="0, 0, 0, 20" /> -->
+
+            <!-- <Button
+                x:Name="LoginBtn"
+                Text="Login"
+                SemanticProperties.Hint="Login"
+                Command="{Binding Path=LoginCommand}"
+                HorizontalOptions="Fill"
+                Margin="0, 0, 0, 10" />
+            <Button
+                x:Name="RegisterBtn"
+                Text="Signup"
+                SemanticProperties.Hint="Signup"
+                Command="{Binding Path=RegisterCommand}"
+                HorizontalOptions="Fill" /> -->
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
