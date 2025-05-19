@@ -3,7 +3,7 @@ using ServiPuntos.uy_mobile.Services.Interfaces;
 
 namespace ServiPuntos.uy_mobile.Services;
 
-public class IdentityService() : BaseService, IIdentityService
+public class AuthService() : IAuthService
 {
   private const string Uri = "identity";
   // public async Task<ApiResponse<SessionData>?> Login(string siteUrl, string email, string password, int accessType)
@@ -33,11 +33,11 @@ public class IdentityService() : BaseService, IIdentityService
     return await GeneratePostRequest<ApiResponse<SessionData>>(siteUrl, requestUri, null, payload, true);
   }
 
-  public async Task Logout()
-  {
-    // await auth0Client.LogoutAsync();
-    SecureStorage.RemoveAll();
-  }
+  // public async Task Logout()
+  // {
+  //   // await auth0Client.LogoutAsync();
+  //   SecureStorage.RemoveAll();
+  // }
 
   public async Task SaveSession(SessionData sessionData, string siteUrl)
   {

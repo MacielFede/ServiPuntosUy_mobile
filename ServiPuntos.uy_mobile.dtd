@@ -1,0 +1,45 @@
+<!ELEMENT Project (PropertyGroup,ItemGroup+)>
+<!ATTLIST Project Sdk NMTOKEN #REQUIRED>
+<!ELEMENT PropertyGroup (TargetFrameworks,OutputType,RootNamespace,UseMaui,SingleProject,ImplicitUsings,Nullable,ApplicationTitle,ApplicationId,ApplicationDisplayVersion,ApplicationVersion,WindowsPackageType,SupportedOSPlatformVersion+)>
+<!ELEMENT TargetFrameworks (#PCDATA)>
+<!ELEMENT OutputType (#PCDATA)>
+<!ELEMENT RootNamespace (#PCDATA)>
+<!ELEMENT UseMaui (#PCDATA)>
+<!ELEMENT SingleProject (#PCDATA)>
+<!ELEMENT ImplicitUsings (#PCDATA)>
+<!ELEMENT Nullable (#PCDATA)>
+<!ELEMENT ApplicationTitle (#PCDATA)>
+<!ELEMENT ApplicationId (#PCDATA)>
+<!ELEMENT ApplicationDisplayVersion (#PCDATA)>
+<!ELEMENT ApplicationVersion (#PCDATA)>
+<!ELEMENT WindowsPackageType (#PCDATA)>
+<!ELEMENT SupportedOSPlatformVersion (#PCDATA)>
+<!ATTLIST SupportedOSPlatformVersion Condition CDATA #REQUIRED>
+<!ELEMENT ItemGroup (MauiIcon?,MauiSplashScreen?,MauiImage*,MauiFont?,MauiAsset?,PackageReference*,MauiXaml*,Compile*)>
+<!ELEMENT MauiIcon EMPTY>
+<!ATTLIST MauiIcon Include CDATA #REQUIRED>
+<!ATTLIST MauiIcon ForegroundFile CDATA #REQUIRED>
+<!ATTLIST MauiIcon Color CDATA #REQUIRED>
+<!ELEMENT MauiSplashScreen EMPTY>
+<!ATTLIST MauiSplashScreen Include CDATA #REQUIRED>
+<!ATTLIST MauiSplashScreen Color CDATA #REQUIRED>
+<!ATTLIST MauiSplashScreen BaseSize CDATA #REQUIRED>
+<!ELEMENT MauiImage EMPTY>
+<!ATTLIST MauiImage Include CDATA #IMPLIED>
+<!ATTLIST MauiImage Update CDATA #IMPLIED>
+<!ATTLIST MauiImage Resize NMTOKEN #IMPLIED>
+<!ATTLIST MauiImage BaseSize CDATA #IMPLIED>
+<!ELEMENT MauiFont EMPTY>
+<!ATTLIST MauiFont Include CDATA #REQUIRED>
+<!ELEMENT MauiAsset EMPTY>
+<!ATTLIST MauiAsset Include CDATA #REQUIRED>
+<!ATTLIST MauiAsset LogicalName CDATA #REQUIRED>
+<!ELEMENT PackageReference EMPTY>
+<!ATTLIST PackageReference Include NMTOKEN #REQUIRED>
+<!ATTLIST PackageReference Version CDATA #REQUIRED>
+<!ELEMENT MauiXaml (SubType)>
+<!ATTLIST MauiXaml Update CDATA #REQUIRED>
+<!ELEMENT SubType (#PCDATA)>
+<!ELEMENT Compile (DependentUpon,SubType)>
+<!ATTLIST Compile Update CDATA #REQUIRED>
+<!ELEMENT DependentUpon (#PCDATA)>
