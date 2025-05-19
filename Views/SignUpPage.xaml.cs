@@ -1,10 +1,10 @@
-using ServiPuntos.uy_mobile.ViewModel;
+using ServiPuntos.uy_mobile.ViewModels;
 
 namespace ServiPuntos.uy_mobile.Views;
 
-public partial class SignupPage : ContentPage
+public partial class SignUpPage : ContentPage
 {
-  public SignupPage(SignupViewModel signupViewModel)
+  public SignUpPage(SignUpViewModel signupViewModel)
   {
     InitializeComponent();
     BindingContext = signupViewModel;

@@ -1,16 +1,13 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.Views;
 using ServiPuntos.uy_mobile.Services.Interfaces;
 
-namespace ServiPuntos.uy_mobile.ViewModel;
+namespace ServiPuntos.uy_mobile.ViewModels;
 
-[QueryProperty("SiteUrl", "SiteUrl")]
-public partial class SignupViewModel(IIdentityService identityService) : ObservableObject
+[QueryProperty("TenantUrl", "TenantUrl")]
+public partial class SignUpViewModel(IAuthService authService) : ObservableObject
 {
-  [ObservableProperty] private string? _siteUrl;
+  [ObservableProperty] private string? _tenantUrl;
 
   [ObservableProperty] private string? _name;
   [ObservableProperty] private string? _email;
@@ -19,11 +16,11 @@ public partial class SignupViewModel(IIdentityService identityService) : Observa
   [RelayCommand]
   private async Task Signup()
   {
-    var registerResult = await identityService.Signup(SiteUrl, Name, Email, Password);
+    var registerResult = await authService.Signup(TenantUrl, Name, Email, Password);
 
     if (registerResult is { Error: false })
     {
-      await identityService.SaveSession(registerResult.Data, SiteUrl);
+      await authService.SaveSession(registerResult.Data);
       // await Shell.Current.GoToAsync($"///{nameof(EventsPage)}");
     }
     else

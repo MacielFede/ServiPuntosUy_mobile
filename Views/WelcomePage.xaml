@@ -24,7 +24,7 @@
             <!-- <Entry
                     x:Name="SiteEntry"
                     Placeholder="URL DEL TENANT"
-                    Text="{Binding SiteUrl}"/> -->
+                    Text="{Binding tenantUrl}"/> -->
 
             <Button
                 x:Name="LoginBtn"
@@ -36,7 +36,7 @@
                 x:Name="SignUpBtn"
                 Text="Registrarse"
                 SemanticProperties.Hint="Continue"
-                Command="{Binding GoToLoginPageCommand}"
+                Command="{Binding GoToSignUpPageCommand}"
                 HorizontalOptions="Fill"
                 BackgroundColor="Black"/>
         </VerticalStackLayout>

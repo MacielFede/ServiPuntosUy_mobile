@@ -3,7 +3,8 @@ using ServiPuntos.uy_mobile.Views;
 using DotNet.Meteor.HotReload.Plugin;
 using CommunityToolkit.Maui;
 using ServiPuntos.uy_mobile.ViewModels;
-using ServiPuntos.uy_mobile.Helpers;
+using ServiPuntos.uy_mobile.Services;
+using ServiPuntos.uy_mobile.Services.Interfaces;
 
 namespace ServiPuntos.uy_mobile;
 
@@ -22,10 +23,15 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			}).UseMauiCommunityToolkit();
-		builder.Services.AddSingleton<ApiConnection>();
+		// Services
+		builder.Services.AddSingleton<IAuthService, AuthService>();
+		// Pages
 		builder.Services.AddSingleton<WelcomePage>();
-		builder.Services.AddSingleton<WelcomeViewModel>();
+		builder.Services.AddSingleton<SignUpPage>();
 		builder.Services.AddSingleton<LoginPage>();
+		// ViewModels
+		builder.Services.AddSingleton<WelcomeViewModel>();
+		builder.Services.AddSingleton<SignUpViewModel>();
 		// builder.Services.AddSingleton<LoginViewModel>();
 
 #if DEBUG

@@ -12,5 +12,10 @@ public partial class WelcomeViewModel : ObservableObject
   {
     await Shell.Current.GoToAsync($"{nameof(LoginPage)}");
   }
+  [RelayCommand]
+  private async Task GoToSignUpPage()
+  {
+    await Shell.Current.GoToAsync($"{nameof(SignUpPage)}");
+  }
 }
 

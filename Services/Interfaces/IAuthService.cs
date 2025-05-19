@@ -2,13 +2,13 @@ using ServiPuntos.uy_mobile.Models;
 
 namespace ServiPuntos.uy_mobile.Services.Interfaces;
 
-public interface IIdentityService
+public interface IAuthService
 {
-  public Task<ApiResponse<SessionData>?> Login(string email, string password, int accessType);
+  public Task<ApiResponse<SessionData>?> Login(string tenantUrl, string email, string password);
 
   // public Task<ApiResponse<SessionData>?> LoginAuth0(int accessType);
 
-  public Task<ApiResponse<SessionData>?> Signup(string name, string email, string password);
+  public Task<ApiResponse<SessionData>?> Signup(string tenantUrl, string name, string email, string password);
 
   public Task Logout();
 
