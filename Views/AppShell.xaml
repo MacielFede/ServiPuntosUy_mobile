@@ -7,7 +7,7 @@
     Title="ServiPuntos.uy">
 
     <ShellContent
-        Title="Welcome"
+        Title="Bienvenido"
         ContentTemplate="{DataTemplate views:WelcomePage}"
         Route="WelcomePage"/>
 

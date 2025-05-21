@@ -17,8 +17,11 @@
                     Aspect="AspectFit"/> -->
 
             <Label
-                Text="Bienvenido a NOMBRE DEL TENANT"
+                Text="NOMBRE DEL TENANT"
                 Style="{StaticResource Headline}"
+                SemanticProperties.HeadingLevel="Level1"/>
+            <Label
+                Text="Debes iniciar sesión para poder comprar nuestros productos y ver nuestras ofertas."
                 SemanticProperties.HeadingLevel="Level1"/>
 
             <!-- <Entry

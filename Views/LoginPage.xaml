@@ -4,8 +4,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:ServiPuntos.uy_mobile.ViewModels"
              xmlns:icons="http://www.aathifmahir.com/dotnet/2022/maui/icons"
-             x:Class="ServiPuntos.uy_mobile.Views.LoginPage">
-    <!-- x:DataType="viewModel:LoginViewModel" -->
+             x:Class="ServiPuntos.uy_mobile.Views.LoginPage"
+             x:DataType="viewModel:LoginViewModel">
 
     <ScrollView>
         <VerticalStackLayout
@@ -14,10 +14,10 @@
             <!-- <Image
                 Source="ServiPuntos.uy_mobile_logo.png"
                 HeightRequest="185"
-                Aspect="AspectFit" /> -->
+                Aspect="AspectFit" />  -->
 
             <Label
-                Text="Bienvenido a NOMBRE TENANT"
+                Text="NOMBRE TENANT"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1"
                 Margin="40"/>
@@ -28,34 +28,35 @@
                          VerticalOptions="CenterAndExpand"
                          HorizontalOptions="Start"
                          Command="{Binding Path=LoginAuth0Command}"
-                         Source="google_logo.png" />
+                         Source="google_logo.png" /> -->
 
             <Entry
                 x:Name="EmailEntry"
                 Placeholder="Email"
                 Text="{Binding Email}"
-                Margin="0, 0, 0, 20" />
+                Margin="0, 0, 0, 20"/>
 
             <Entry
                 x:Name="PasswordEntry"
                 Placeholder="Password"
                 IsPassword="True"
                 Text="{Binding Password}"
-                Margin="0, 0, 0, 20" /> -->
+                Margin="0, 0, 0, 20"/>
 
-            <!-- <Button
+            <Button
                 x:Name="LoginBtn"
-                Text="Login"
+                Text="Iniciar sesión"
                 SemanticProperties.Hint="Login"
                 Command="{Binding Path=LoginCommand}"
                 HorizontalOptions="Fill"
-                Margin="0, 0, 0, 10" />
+                Margin="0, 0, 0, 10"/>
             <Button
                 x:Name="RegisterBtn"
-                Text="Signup"
+                Text="Registrarse"
                 SemanticProperties.Hint="Signup"
-                Command="{Binding Path=RegisterCommand}"
-                HorizontalOptions="Fill" /> -->
+                Command="{Binding Path=GoToSignUpPageCommand}"
+                HorizontalOptions="Fill"
+                BackgroundColor="Black"/>
         </VerticalStackLayout>
     </ScrollView>
 

@@ -1,75 +1,59 @@
-// using CommunityToolkit.Mvvm.ComponentModel;
-// using CommunityToolkit.Mvvm.Input;
-// using CommunityToolkit.Mvvm.Messaging;
-// using TuPencaUy.Models;
-// using TuPencaUy.Services.Interfaces;
-// using TuPencaUy.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using ServiPuntos.uy_mobile.Services.Interfaces;
+using ServiPuntos.uy_mobile.Views;
 
-// namespace TuPencaUy.ViewModels;
+namespace ServiPuntos.uy_mobile.ViewModels;
 
-// [QueryProperty("tenantUrl", "tenantUrl")]
-// public partial class LoginViewModel(IIdentityService identityService) : ObservableObject
-// {
-//     [ObservableProperty] private string? _tenantUrl;
+public partial class LoginViewModel(IAuthService authService) : ObservableObject
+{
+  [ObservableProperty] private string? _email;
+  [ObservableProperty] private string? _password;
 
-//     [ObservableProperty] private string? _email;
-//     [ObservableProperty] private string? _password;
+  [RelayCommand]
+  private async Task Login()
+  {
+    var loginResult = await authService.Login(Email, Password);
+    if (loginResult is { Error: false })
+    {
+      await authService.SaveSession(loginResult.Data);
+      await Shell.Current.GoToAsync(nameof(HomePage));
+    }
+    else
+    {
+      await Shell.Current.DisplayAlert("Login error", "loginResult.Message", "OK");
+    }
+  }
 
-//     [RelayCommand]
-//     private async Task Login()
-//     {
-//         var siteResult = await identityService.ValidateSite(tenantUrl);
+  // [RelayCommand]
+  // private async Task LoginAuth0()
+  // {
+  //   var siteResult = await authService.ValidateSite();
 
-//         if (siteResult == null || siteResult.Error)
-//         {
-//             await Application.Current.MainPage.DisplayAlert("Site error", siteResult.Message, "OK");
-//             return;
-//         }
+  //   if (siteResult == null || siteResult.Error)
+  //   {
+  //     await Application.Current.MainPage.DisplayAlert("Site error", siteResult.Message, "OK");
+  //     return;
+  //   }
 
-//         var accessType = siteResult.Data.AccessType;
+  //   var accessType = siteResult.Data.AccessType;
 
-//         var loginResult = await identityService.Login(tenantUrl, Email, Password, accessType);
+  //   var loginResult = await authService.LoginAuth0(, accessType);
 
-//         if (loginResult is { Error: false })
-//         {
-//             await identityService.SaveSession(loginResult.Data, tenantUrl);
-//             await Shell.Current.GoToAsync($"///{nameof(EventsPage)}");
-//         }
-//         else
-//         {
-//             await Application.Current.MainPage.DisplayAlert("Login error", loginResult.Message, "OK");
-//         }
-//     }
+  //   if (loginResult is { Error: false })
+  //   {
+  //     await authService.SaveSession(loginResult.Data, );
+  //     await Shell.Current.GoToAsync($"///{nameof(EventsPage)}");
+  //   }
+  //   else
+  //   {
+  //     await Application.Current.MainPage.DisplayAlert("Login error", loginResult.Message, "OK");
+  //   }
+  // }
 
-//     [RelayCommand]
-//     private async Task LoginAuth0()
-//     {
-//         var siteResult = await identityService.ValidateSite(tenantUrl);
-
-//         if (siteResult == null || siteResult.Error)
-//         {
-//             await Application.Current.MainPage.DisplayAlert("Site error", siteResult.Message, "OK");
-//             return;
-//         }
-
-//         var accessType = siteResult.Data.AccessType;
-
-//         var loginResult = await identityService.LoginAuth0(tenantUrl, accessType);
-
-//         if (loginResult is { Error: false })
-//         {
-//             await identityService.SaveSession(loginResult.Data, tenantUrl);
-//             await Shell.Current.GoToAsync($"///{nameof(EventsPage)}");
-//         }
-//         else
-//         {
-//             await Application.Current.MainPage.DisplayAlert("Login error", loginResult.Message, "OK");
-//         }
-//     }
-
-//     [RelayCommand]
-//     private async Task Register()
-//     {
-//         await Shell.Current.GoToAsync($"{nameof(SignupPage)}?tenantUrl={tenantUrl}");
-//     }
-// }
+  [RelayCommand]
+  private async Task GoToSignUpPage()
+  {
+    await Shell.Current.GoToAsync(nameof(SignUpPage));
+  }
+}

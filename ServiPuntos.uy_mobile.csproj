@@ -1,5 +1,4 @@
-﻿<!DOCTYPE Project SYSTEM "ServiPuntos.uy_mobile.dtd">
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
@@ -11,7 +10,7 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>ServiPuntos.uy_mobile</ApplicationTitle>
+		<ApplicationTitle>ServiPuntos</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.servipuntos.uy_mobile</ApplicationId>
@@ -50,15 +49,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
-	</ItemGroup>
-	<ItemGroup>
 		<!-- * Dependencies -->
+		<PackageReference Include="DotNetEnv" Version="3.1.1" />
 		<PackageReference Include="DotNetMeteor.HotReload.Plugin" Version="3.*" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.2" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -75,6 +73,12 @@
 			<SubType>Designer</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\SignUpPage.xaml">
+			<SubType>Designer</SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\HomePage.xaml">
+			<SubType>Designer</SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\ProductDetailPage.xaml">
 			<SubType>Designer</SubType>
 		</MauiXaml>
 	</ItemGroup>
@@ -98,6 +102,14 @@
 		</Compile>
 		<Compile Update="Views\SignUpPage.xaml.cs">
 			<DependentUpon>SignUpPage.xaml</DependentUpon>
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\HomePage.xaml.cs">
+			<DependentUpon>HomePage.xaml</DependentUpon>
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\ProductDetailPage.xaml.cs">
+			<DependentUpon>ProductDetailPage.xaml</DependentUpon>
 			<SubType>Code</SubType>
 		</Compile>
 	</ItemGroup>
