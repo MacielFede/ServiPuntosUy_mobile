@@ -24,14 +24,9 @@
                 Text="Debes iniciar sesión para poder comprar nuestros productos y ver nuestras ofertas."
                 SemanticProperties.HeadingLevel="Level1"/>
 
-            <!-- <Entry
-                    x:Name="SiteEntry"
-                    Placeholder="URL DEL TENANT"
-                    Text="{Binding tenantUrl}"/> -->
-
             <Button
                 x:Name="LoginBtn"
-                Text="Iniciar sesión"
+                Text="Iniciar sesión con usuario interno"
                 SemanticProperties.Hint="Continue"
                 Command="{Binding GoToLoginPageCommand}"
                 HorizontalOptions="Fill"/>
@@ -42,6 +37,12 @@
                 Command="{Binding GoToSignUpPageCommand}"
                 HorizontalOptions="Fill"
                 BackgroundColor="Black"/>
+            <Button
+                x:Name="FirebaseBtn"
+                Text="Continuar con Google"
+                SemanticProperties.Hint="Continue"
+                HorizontalOptions="Fill"
+                BackgroundColor="Red"/>
         </VerticalStackLayout>
     </ScrollView>
 

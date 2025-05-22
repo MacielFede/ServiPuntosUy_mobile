@@ -10,9 +10,9 @@ namespace ServiPuntos.uy_mobile.Services
       // Simulate fetching data from an API or database
       var products = new List<Product>
             {
-                new(1,"Product 1","Description of Product 1"),
-                new(2,"Product 2","Description of Product 2"),
-                new(3,"Product 3","Description of Product 3")
+                new(1,"Product 1","Description of Product 1", null),
+                new(2,"Product 2","Description of Product 2", null),
+                new(3,"Product 3","Description of Product 3", null)
             };
       return Task.FromResult(products);
     }

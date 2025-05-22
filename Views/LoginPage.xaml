@@ -50,13 +50,6 @@
                 Command="{Binding Path=LoginCommand}"
                 HorizontalOptions="Fill"
                 Margin="0, 0, 0, 10"/>
-            <Button
-                x:Name="RegisterBtn"
-                Text="Registrarse"
-                SemanticProperties.Hint="Signup"
-                Command="{Binding Path=GoToSignUpPageCommand}"
-                HorizontalOptions="Fill"
-                BackgroundColor="Black"/>
         </VerticalStackLayout>
     </ScrollView>
 

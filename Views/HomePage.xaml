@@ -13,29 +13,47 @@
     </Grid.RowDefinitions>
 
     <!-- Header with Avatar -->
-    <StackLayout Orientation="Horizontal"
-                 Padding="10"
-                 BackgroundColor="LightGray">
+    <FlexLayout AlignContent="SpaceEvenly"
+                AlignItems="Center"
+                JustifyContent="SpaceBetween"
+                Padding="10"
+                Margin="20">
       <ImageButton Source="avatar.png"
                    WidthRequest="50"
-                   HeightRequest="50"
-                   Clicked="OnAvatarClicked"/>
-      <Label Text="Home"
+                   HeightRequest="50"/>
+      <Label Text="Productos"
              FontSize="24"
              VerticalOptions="Center"/>
-    </StackLayout>
+      <Button Text="Logout"
+              VerticalOptions="Center"
+              BackgroundColor="DarkRed"
+              Command="{Binding LogoutCommand}"/>
+    </FlexLayout>
 
     <!-- Product List -->
-    <ListView Grid.Row="1"
-              ItemsSource="{Binding Products}"
-              SelectionMode="Single"
-              ItemSelected="OnProductSelected">
-      <ListView.ItemTemplate>
+    <CollectionView Grid.Row="1"
+                    ItemsSource="{Binding Products}"
+                    SelectionMode="Single"
+                    SelectionChanged="OnProductSelected">
+      <CollectionView.ItemTemplate>
         <DataTemplate x:DataType="models:Product">
-          <TextCell Text="{Binding Name}"
-                    Detail="{Binding Description}"></TextCell>
+          <StackLayout Orientation="Horizontal"
+                       Padding="10"
+                       Spacing="10">
+            <Image Source="{Binding ImageUrl}"
+                   WidthRequest="50"
+                   HeightRequest="50"/>
+            <StackLayout VerticalOptions="Center">
+              <Label Text="{Binding Name}"
+                     FontSize="18"
+                     FontAttributes="Bold"/>
+              <Label Text="{Binding Description}"
+                     FontSize="14"
+                     TextColor="Gray"/>
+            </StackLayout>
+          </StackLayout>
         </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
+      </CollectionView.ItemTemplate>
+    </CollectionView>
   </Grid>
 </ContentPage>

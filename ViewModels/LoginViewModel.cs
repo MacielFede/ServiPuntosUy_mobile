@@ -13,15 +13,27 @@ public partial class LoginViewModel(IAuthService authService) : ObservableObject
   [RelayCommand]
   private async Task Login()
   {
-    var loginResult = await authService.Login(Email, Password);
-    if (loginResult is { Error: false })
+    try
     {
-      await authService.SaveSession(loginResult.Data);
-      await Shell.Current.GoToAsync(nameof(HomePage));
+      if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+      {
+        await Shell.Current.DisplayAlert("Error en el inicio de sesión", "Debes ingresar email y contraseña", "OK");
+        return;
+      }
+      var loginResult = await authService.Login(Email, Password);
+      if (loginResult is { Error: false, Data: not null })
+      {
+        await authService.SaveSession(loginResult.Data);
+        await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+      }
+      else
+      {
+        await Shell.Current.DisplayAlert("Error en el inicio de sesión", loginResult?.Message, "OK");
+      }
     }
-    else
+    catch (Exception e)
     {
-      await Shell.Current.DisplayAlert("Login error", "loginResult.Message", "OK");
+      await Shell.Current.DisplayAlert("Error en el inicio de sesión", e.Message, "OK");
     }
   }
 
@@ -51,9 +63,4 @@ public partial class LoginViewModel(IAuthService authService) : ObservableObject
   //   }
   // }
 
-  [RelayCommand]
-  private async Task GoToSignUpPage()
-  {
-    await Shell.Current.GoToAsync(nameof(SignUpPage));
-  }
 }

@@ -6,9 +6,10 @@ using ServiPuntos.uy_mobile.Services.Interfaces;
 
 namespace ServiPuntos.uy_mobile.ViewModels;
 
-public partial class HomeViewModel(IProductsService productsService) : ObservableObject
+public partial class HomeViewModel(IProductsService productsService, IAuthService authService) : ObservableObject
 {
   private readonly IProductsService _productService = productsService;
+  private readonly IAuthService _authService = authService;
   [ObservableProperty]
   private ObservableCollection<Product> products = [];
 
@@ -17,5 +18,11 @@ public partial class HomeViewModel(IProductsService productsService) : Observabl
     var productsList = await _productService.GetProductsAsync();
     Products = new ObservableCollection<Product>(productsList);
   }
-}
 
+  [RelayCommand]
+  public async Task Logout()
+  {
+    await _authService.Logout();
+    await Shell.Current.GoToAsync("//WelcomePage");
+  }
+}

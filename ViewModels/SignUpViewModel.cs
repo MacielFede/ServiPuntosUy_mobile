@@ -14,12 +14,13 @@ public partial class SignUpViewModel(IAuthService authService) : ObservableObjec
   [RelayCommand]
   private async Task Signup()
   {
+    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+    return;
     var registerResult = await authService.Signup(Name, Email, Password);
 
     if (registerResult is { Error: false })
     {
       await authService.SaveSession(registerResult.Data);
-      await Shell.Current.GoToAsync(nameof(HomePage));
     }
     else
     {

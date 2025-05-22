@@ -20,16 +20,9 @@ public partial class HomePage : ContentPage
     }
   }
 
-
-  private async void OnAvatarClicked(object sender, EventArgs e)
+  private async void OnProductSelected(object sender, SelectionChangedEventArgs selection)
   {
-    // Show sidebar with login and signup buttons
-    await Shell.Current.GoToAsync(nameof(LoginPage));
-  }
-
-  private async void OnProductSelected(object sender, SelectedItemChangedEventArgs selection)
-  {
-    if (selection.SelectedItem is Product selectedProduct)
+    if (selection.CurrentSelection.FirstOrDefault() is Product selectedProduct)
     {
       var navParams = new Dictionary<string, object>
     {

@@ -270,3 +270,5 @@ BenchmarkDotNet.Artifacts/
 
 Microsoft.*/
 System.*/
+
+obj/

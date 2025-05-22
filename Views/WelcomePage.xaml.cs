@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using Newtonsoft.Json;
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.ViewModels;
+﻿using ServiPuntos.uy_mobile.ViewModels;
 
 namespace ServiPuntos.uy_mobile.Views;
 
