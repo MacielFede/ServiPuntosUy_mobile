@@ -263,8 +263,12 @@ paket-files/
 .mfractor/
 
 # Visual Studio Code
-.vscode
 /samples/workload-install.ps1
 
 # Benchmarkdot
 BenchmarkDotNet.Artifacts/
+
+Microsoft.*/
+System.*/
+
+obj/

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:ServiPuntos.uy_mobile.ViewModels"
+             xmlns:models="clr-namespace:ServiPuntos.uy_mobile.Models"
+             x:Class="ServiPuntos.uy_mobile.Views.HomePage"
+             x:DataType="viewModel:HomeViewModel">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- Header with Avatar -->
+    <FlexLayout AlignContent="SpaceEvenly"
+                AlignItems="Center"
+                JustifyContent="SpaceBetween"
+                Padding="10"
+                Margin="20">
+      <ImageButton Source="avatar.png"
+                   WidthRequest="50"
+                   HeightRequest="50"/>
+      <Label Text="Productos"
+             FontSize="24"
+             VerticalOptions="Center"/>
+      <Button Text="Logout"
+              VerticalOptions="Center"
+              BackgroundColor="DarkRed"
+              Command="{Binding LogoutCommand}"/>
+    </FlexLayout>
+
+    <!-- Product List -->
+    <CollectionView Grid.Row="1"
+                    ItemsSource="{Binding Products}"
+                    SelectionMode="Single"
+                    SelectionChanged="OnProductSelected">
+      <CollectionView.ItemTemplate>
+        <DataTemplate x:DataType="models:Product">
+          <StackLayout Orientation="Horizontal"
+                       Padding="10"
+                       Spacing="10">
+            <Image Source="{Binding ImageUrl}"
+                   WidthRequest="50"
+                   HeightRequest="50"/>
+            <StackLayout VerticalOptions="Center">
+              <Label Text="{Binding Name}"
+                     FontSize="18"
+                     FontAttributes="Bold"/>
+              <Label Text="{Binding Description}"
+                     FontSize="14"
+                     TextColor="Gray"/>
+            </StackLayout>
+          </StackLayout>
+        </DataTemplate>
+      </CollectionView.ItemTemplate>
+    </CollectionView>
+  </Grid>
+</ContentPage>
