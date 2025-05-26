@@ -25,7 +25,7 @@ public partial class ApiService : IApiService
     _httpClient.DefaultRequestHeaders.Add("X-Tenant-Id", _configs["TENANT_ID"]);
   }
 
-  public async Task<ApiResponse<T>> GET<T>(string requestUri, string? token, bool hasCurrentTenant)
+  public async Task<ApiResponse<T>> GET<T>(string requestUri)
   {
     try
     {
@@ -42,7 +42,7 @@ public partial class ApiService : IApiService
     }
   }
 
-  public async Task<ApiResponse<T>> POST<T>(string requestUri, string? token, dynamic requestData, bool hasCurrentTenant)
+  public async Task<ApiResponse<T>> POST<T>(string requestUri, dynamic requestData)
   {
     try
     {
@@ -60,7 +60,7 @@ public partial class ApiService : IApiService
     }
   }
 
-  public async Task<ApiResponse<T>> PATCH<T>(string requestUri, string? token, dynamic requestData, bool hasCurrentTenant)
+  public async Task<ApiResponse<T>> PATCH<T>(string requestUri, dynamic requestData)
   {
     try
     {

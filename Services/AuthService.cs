@@ -2,18 +2,20 @@ using ServiPuntos.uy_mobile.Models;
 using ServiPuntos.uy_mobile.Services.Interfaces;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
+using ServiPuntos.uy_mobile.Models.Enums;
 
 namespace ServiPuntos.uy_mobile.Services;
 
 public class AuthService(IConfiguration configs) : ApiService(configs), IAuthService
 {
-  private const string Uri = "login";
+  private const string Uri = "auth/";
   public async Task<ApiResponse<SessionData>> Login(string email, string password)
   {
     try
     {
       var payload = new { Email = email, Password = password };
-      return await POST<SessionData>(Uri, null, payload, true);
+      return await POST<SessionData>($"{Uri}login", payload);
     }
     catch (Exception ex)
     {
@@ -28,7 +30,7 @@ public class AuthService(IConfiguration configs) : ApiService(configs), IAuthSer
 
     var requestUri = $"{Uri}/OAuthLogin?siteAccess={accessType}";
 
-    return await POST<SessionData>(requestUri, null, null, true);
+    return await POST<SessionData>(requestUri, null);
   }
 
   public async Task<ApiResponse<SessionData>?> Signup(string name, string email, string password)
@@ -36,7 +38,7 @@ public class AuthService(IConfiguration configs) : ApiService(configs), IAuthSer
     var requestUri = $"{Uri}/BasicSignup?siteAccess";
     var payload = new { Name = name, Email = email, Password = password };
 
-    return await POST<SessionData>(requestUri, null, payload, true);
+    return await POST<SessionData>(requestUri, payload);
   }
 
   public async Task Logout()
@@ -48,6 +50,6 @@ public class AuthService(IConfiguration configs) : ApiService(configs), IAuthSer
   public async Task SaveSession(SessionData sessionData)
   {
     var sessionJson = JsonConvert.SerializeObject(sessionData);
-    await SecureStorage.SetAsync("SESSION", sessionJson);
+    await SecureStorage.SetAsync(SecureStorageType.Session.ToString(), sessionJson);
   }
 }

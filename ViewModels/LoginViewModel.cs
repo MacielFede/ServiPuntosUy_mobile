@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ServiPuntos.uy_mobile.Services.Interfaces;
@@ -35,6 +36,12 @@ public partial class LoginViewModel(IAuthService authService) : ObservableObject
     {
       await Shell.Current.DisplayAlert("Error en el inicio de sesión", e.Message, "OK");
     }
+  }
+
+  public void Reset()
+  {
+    Email = null;
+    Password = null;
   }
 
   // [RelayCommand]

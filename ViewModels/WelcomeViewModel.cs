@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using ServiPuntos.uy_mobile.Models;
+using ServiPuntos.uy_mobile.Models.Enums;
 using ServiPuntos.uy_mobile.Views;
 
 namespace ServiPuntos.uy_mobile.ViewModels;
@@ -23,10 +24,10 @@ public partial class WelcomeViewModel : ObservableObject
   public async Task CheckUserSession()
   {
     var sessionData =
-        JsonConvert.DeserializeObject<SessionData>(await SecureStorage.GetAsync("SESSION") ??
+        JsonConvert.DeserializeObject<SessionData>(await SecureStorage.GetAsync(SecureStorageType.Session.ToString()) ??
                                                    string.Empty);
 
-    if (sessionData != null && sessionData.Expiration > DateTime.Now.AddMinutes(15))
+    if (sessionData != null /* && sessionData.Expiration > DateTime.Now.AddMinutes(15) */)
     {
       await GoToLoginPage();
     }

@@ -174,7 +174,7 @@
         "android-x64": {
           "#import": []
         },
-        "iossimulator-x64": {
+        "iossimulator-arm64": {
           "#import": []
         }
       }

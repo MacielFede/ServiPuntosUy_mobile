@@ -9,4 +9,9 @@ public partial class LoginPage : ContentPage
     InitializeComponent();
     BindingContext = loginViewModel;
   }
+  protected override void OnDisappearing()
+  {
+    base.OnDisappearing();
+    (BindingContext as LoginViewModel)?.Reset();
+  }
 }
