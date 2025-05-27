@@ -13,4 +13,5 @@ public interface IAuthService
   public Task Logout();
 
   public Task SaveSession(SessionData sessionData);
+  public Task<ApiResponse<User>> VerifyIdentity(Document document);
 }
