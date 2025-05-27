@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:ServiPuntos.uy_mobile.ViewModels"
+             xmlns:icons="http://www.aathifmahir.com/dotnet/2022/maui/icons"
+             x:Class="ServiPuntos.uy_mobile.Views.IdentityVerificationPage"
+             x:DataType="viewModel:IdentityVerificationViewModel">
+
+  <ScrollView>
+    <VerticalStackLayout
+      Padding="30,0"
+      Margin="20">
+
+      <Label
+        Text="Verificación de identidad ✓"
+        Style="{StaticResource Headline}"
+        SemanticProperties.HeadingLevel="Level1"
+        Margin="40"/>
+
+      <Entry
+        Keyboard="Numeric"
+        MaxLength="9"
+        x:Name="DocumentNumberEntry"
+        Placeholder="Numero de documento"
+        Text="{Binding DocumentNumber}"
+        Margin="0, 0, 0, 20"/>
+
+      <Entry
+        x:Name="SerialNumberEntry"
+        Keyboard="Numeric"
+        MaxLength="6"
+        Placeholder="Numero de serie"
+        Text="{Binding SerialNumber}"
+        Margin="0, 0, 0, 20"/>
+      <Label Text="Donde encontrar tu numero de serie:"
+             Margin="0"
+             Padding="0"
+             TextDecorations="Underline"/>
+      <ImageButton Source="serial_number.png"
+                   Padding="0"
+                   Margin="0"
+                   BorderWidth="0"
+                   CornerRadius="0"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Start"
+                   Aspect="Fill"
+                   Background="Red"/>
+
+      <Button
+        x:Name="VerifyIdentityBtn"
+        Text="Verificar identidad"
+        SemanticProperties.Hint="Verify Identity"
+        Command="{Binding Path=VerifyIdentityCommand}"
+        HorizontalOptions="Fill"
+        Margin="0, 0, 0, 10"/>
+    </VerticalStackLayout>
+  </ScrollView>
+
+</ContentPage>

@@ -31,4 +31,8 @@ public partial class HomePage : ContentPage
       await Shell.Current.GoToAsync(nameof(ProductDetailPage), navParams);
     }
   }
+  private async void OnAvatarClicked(object sender, EventArgs eventArgs)
+  {
+    await Shell.Current.GoToAsync(nameof(IdentityVerificationPage));
+  }
 }

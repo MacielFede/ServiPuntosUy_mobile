@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
@@ -26,10 +27,9 @@ public partial class WelcomeViewModel : ObservableObject
     var sessionData =
         JsonConvert.DeserializeObject<SessionData>(await SecureStorage.GetAsync(SecureStorageType.Session.ToString()) ??
                                                    string.Empty);
-
     if (sessionData != null /* && sessionData.Expiration > DateTime.Now.AddMinutes(15) */)
     {
-      await GoToLoginPage();
+      await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
     }
   }
 }

@@ -20,7 +20,8 @@
                 Margin="20">
       <ImageButton Source="avatar.png"
                    WidthRequest="50"
-                   HeightRequest="50"/>
+                   HeightRequest="50"
+                   Clicked="OnAvatarClicked"/>
       <Label Text="Productos"
              FontSize="24"
              VerticalOptions="Center"/>

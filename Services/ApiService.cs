@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using ServiPuntos.uy_mobile.Services.Interfaces;
 using Microsoft.Maui.Storage;
 using ServiPuntos.uy_mobile.Models;
+using ServiPuntos.uy_mobile.Models.Enums;
 
 namespace ServiPuntos.uy_mobile.Services;
 
@@ -47,11 +48,12 @@ public partial class ApiService : IApiService
     try
     {
       var storedToken = await GetTokenAsync();
-      if (storedToken != null)
+      if (storedToken is not null)
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
       var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
       var response = await _httpClient.PostAsync(requestUri, content);
       var responseContent = await response.Content.ReadAsStringAsync();
+      Debug.WriteLine($"ESTOY 1 {responseContent}");
       return JsonConvert.DeserializeObject<ApiResponse<T>>(responseContent) ?? new ApiResponse<T>(true, default, "Error interno, intenta nuevamente más tarde.");
     }
     catch (Exception ex)
@@ -85,7 +87,7 @@ public partial class ApiService : IApiService
 
   private static async Task<string?> GetTokenAsync()
   {
-    string? sessionJson = await SecureStorage.GetAsync("SessionData");
+    string? sessionJson = await SecureStorage.GetAsync(SecureStorageType.Session.ToString());
     if (string.IsNullOrWhiteSpace(sessionJson))
       return null;
     var sessionData = JsonConvert.DeserializeObject<SessionData>(sessionJson);
