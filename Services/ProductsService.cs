@@ -30,4 +30,16 @@ public class ProductsService(IConfiguration configs) : ApiService(configs), IPro
       return new ApiResponse<Product>(true, null, ex.Message);
     }
   }
+
+  public ApiResponse<int> GetGasPrice()
+  {
+    try
+    {
+      return new ApiResponse<int>(false, 3000, "Precio actualizado con exito");
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<int>(true, 100, ex.Message);
+    }
+  }
 }
