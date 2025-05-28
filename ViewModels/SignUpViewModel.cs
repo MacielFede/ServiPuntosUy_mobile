@@ -14,17 +14,28 @@ public partial class SignUpViewModel(IAuthService authService) : ObservableObjec
   [RelayCommand]
   private async Task Signup()
   {
-    await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
-    return;
-    var registerResult = await authService.Signup(Name, Email, Password);
-
-    if (registerResult is { Error: false })
+    if (Name is null || Email is null || Password is null)
     {
-      await authService.SaveSession(registerResult.Data);
+      await Shell.Current.DisplayAlert("Error en el registro", "Debes ingresar todos los datos", "OK");
+      return;
     }
-    else
+    try
     {
-      await Shell.Current.DisplayAlert("Error on signup", registerResult.Message, "OK");
+      var registerResult = await authService.Signup(Name, Email, Password);
+
+      if (registerResult is { Error: false, Data: not null })
+      {
+        await authService.SaveSession(registerResult.Data);
+        await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+      }
+      else
+      {
+        await Shell.Current.DisplayAlert("Error en el registro", registerResult?.Message, "OK");
+      }
+    }
+    catch (Exception ex)
+    {
+      await Shell.Current.DisplayAlert("Error en el registro", ex.Message, "OK");
     }
   }
 }
