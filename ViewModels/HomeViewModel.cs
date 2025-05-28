@@ -13,6 +13,8 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
   private readonly IAuthService _authService = authService;
   [ObservableProperty]
   private ObservableCollection<Product> products = [];
+  [ObservableProperty]
+  private int gasPrice;
 
   public async Task LoadProducts()
   {
@@ -27,6 +29,22 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
     catch (Exception ex)
     {
       await Shell.Current.DisplayAlert("Error obteniendo productos", ex.Message, "OK");
+    }
+  }
+
+  public async Task GetGasPrice()
+  {
+    try
+    {
+      var gasPriceResponse = _productService.GetGasPrice();
+      if (gasPriceResponse is { Error: false })
+        GasPrice = gasPriceResponse.Data;
+      else
+        await Shell.Current.DisplayAlert("Error obteniendo productos", gasPriceResponse.Message, "OK");
+    }
+    catch (Exception ex)
+    {
+      await Shell.Current.DisplayAlert("Error obteniendo precio del combustible", ex.Message, "OK");
     }
   }
 

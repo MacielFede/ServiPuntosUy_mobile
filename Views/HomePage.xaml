@@ -13,23 +13,33 @@
     </Grid.RowDefinitions>
 
     <!-- Header with Avatar -->
-    <FlexLayout AlignContent="SpaceEvenly"
+    <FlexLayout AlignContent="SpaceBetween"
                 AlignItems="Center"
                 JustifyContent="SpaceBetween"
                 Padding="10"
-                Margin="20">
+                Margin="10,10,10,30">
       <ImageButton Source="avatar.png"
                    WidthRequest="50"
                    HeightRequest="50"
                    Clicked="OnAvatarClicked"/>
-      <Label Text="Productos"
-             FontSize="24"
-             VerticalOptions="Center"/>
+      <Label
+        FontSize="16"
+        VerticalOptions="Center">
+        <Label.FormattedText>
+          <FormattedString>
+            <Span Text="1L de combustible: "/>
+            <Span Text="{Binding GasPrice}"
+                  FontAttributes="Bold"
+                  TextColor="DarkGreen"/>
+          </FormattedString>
+        </Label.FormattedText>
+      </Label>
       <Button Text="Logout"
               VerticalOptions="Center"
               BackgroundColor="DarkRed"
               Command="{Binding LogoutCommand}"/>
     </FlexLayout>
+
 
     <!-- Product List -->
     <CollectionView Grid.Row="1"

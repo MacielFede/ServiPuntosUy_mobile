@@ -16,6 +16,7 @@ public partial class HomePage : ContentPage
     base.OnAppearing();
     if (BindingContext is HomeViewModel homeViewModel)
     {
+      _ = homeViewModel.GetGasPrice();
       _ = homeViewModel.LoadProducts();
     }
   }
