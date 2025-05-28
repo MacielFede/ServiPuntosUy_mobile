@@ -38,6 +38,11 @@ public partial class LoginViewModel(IAuthService authService, IConfiguration _co
       await Shell.Current.DisplayAlert("Error en el inicio de sesión", e.Message, "OK");
     }
   }
+  [RelayCommand]
+  private async Task SignleSignOn()
+  {
+    await Shell.Current.DisplayAlert("Error en contraseña unica", "Tamos trabajando en esto", "OK");
+  }
 
   public void Reset()
   {
