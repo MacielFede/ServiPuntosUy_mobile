@@ -9,7 +9,7 @@ namespace ServiPuntos.uy_mobile.Converters
       if (value is bool isRestricted)
         return isRestricted ? "+18" : "todas las edades";
 
-      return "Ni idea";
+      return "ni idea";
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

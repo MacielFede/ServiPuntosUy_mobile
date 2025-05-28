@@ -11,8 +11,20 @@ public partial class ProductDetailViewModel : ObservableObject
   private Product? product;
 
   [RelayCommand]
-  private static void Buy()
+  private async Task Buy()
   {
-    // Add your buy logic here
+    if (Product is not null)
+    {
+      await Shell.Current.DisplayAlert("Carrito de compras", $"Gracias por comprar {Product.Name}!", "OK");
+    }
+  }
+
+  [RelayCommand]
+  private async Task UsePoints()
+  {
+    if (Product is not null)
+    {
+      await Shell.Current.DisplayAlert("Carrito de compras", $"Canjeaste {Product.Name} usando 200(HACERLO DINAMICO) puntos", "OK");
+    }
   }
 }

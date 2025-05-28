@@ -24,7 +24,13 @@
               <Label Text="{Binding Product.AgeRestricted, Converter={StaticResource BoolToAgeRestrictedConverter}, StringFormat='Producto disponible para {0}'}"
                      FontSize="18"
                      TextColor="DarkRed"/>
-              <Button Text="Comprar"
-                      Command="{Binding BuyCommand}"/>
+              <StackLayout Padding="10"
+                           Spacing="10">
+                     <Button Text="Comprar"
+                             BackgroundColor="Green"
+                             Command="{Binding BuyCommand}"/>
+                     <Button Text="Canjear"
+                             Command="{Binding UsePointsCommand}"/>
+              </StackLayout>
        </StackLayout>
 </ContentPage>
