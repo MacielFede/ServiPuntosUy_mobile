@@ -36,23 +36,34 @@
                     ItemsSource="{Binding Products}"
                     SelectionMode="Single"
                     SelectionChanged="OnProductSelected">
+      <CollectionView.ItemsLayout>
+        <GridItemsLayout
+          Orientation="Vertical"
+          Span="2"
+          HorizontalItemSpacing="0"
+          VerticalItemSpacing="10"/>
+      </CollectionView.ItemsLayout>
       <CollectionView.ItemTemplate>
         <DataTemplate x:DataType="models:Product">
-          <StackLayout Orientation="Horizontal"
-                       Padding="10"
-                       Spacing="10">
-            <Image Source="{Binding ImageUrl}"
-                   WidthRequest="50"
-                   HeightRequest="50"/>
-            <StackLayout VerticalOptions="Center">
+          <Border Stroke="LightGray"
+                  StrokeThickness="1"
+                  Padding="10"
+                  Margin="5"
+                  HorizontalOptions="Fill"
+                  BackgroundColor="White"
+                  StrokeShape="RoundRectangle 10">
+
+            <StackLayout>
+              <Image Source="{Binding ImageUrl}"
+                     WidthRequest="50"
+                     HeightRequest="50"/>
               <Label Text="{Binding Name}"
                      FontSize="18"
                      FontAttributes="Bold"/>
-              <Label Text="{Binding Description}"
-                     FontSize="14"
-                     TextColor="Gray"/>
+              <Label Text="{Binding Price, StringFormat='${0:F2}'}"
+                     TextColor="SeaGreen"/>
             </StackLayout>
-          </StackLayout>
+          </Border>
         </DataTemplate>
       </CollectionView.ItemTemplate>
     </CollectionView>
