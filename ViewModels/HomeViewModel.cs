@@ -16,8 +16,18 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
 
   public async Task LoadProducts()
   {
-    var productsList = await _productService.GetProductsAsync();
-    Products = new ObservableCollection<Product>(productsList);
+    try
+    {
+      var productsList = await _productService.GetProductsAsync();
+      if (productsList is { Error: false, Data: not null })
+        Products = new ObservableCollection<Product>(productsList.Data);
+      else
+        await Shell.Current.DisplayAlert("Error obteniendo productos", productsList.Message, "OK");
+    }
+    catch (Exception ex)
+    {
+      await Shell.Current.DisplayAlert("Error obteniendo productos", ex.Message, "OK");
+    }
   }
 
   [RelayCommand]

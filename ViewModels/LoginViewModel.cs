@@ -1,13 +1,15 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Configuration;
 using ServiPuntos.uy_mobile.Services.Interfaces;
 using ServiPuntos.uy_mobile.Views;
 
 namespace ServiPuntos.uy_mobile.ViewModels;
 
-public partial class LoginViewModel(IAuthService authService) : ObservableObject
+public partial class LoginViewModel(IAuthService authService, IConfiguration _configs) : ObservableObject
 {
   [ObservableProperty] private string? _email;
+  [ObservableProperty] private string? _TenantName;
   [ObservableProperty] private string? _password;
 
   [RelayCommand]
@@ -41,6 +43,11 @@ public partial class LoginViewModel(IAuthService authService) : ObservableObject
   {
     Email = null;
     Password = null;
+  }
+
+  public void GetTenantName()
+  {
+    TenantName = _configs["TENANT_NAME"] ?? "interno";
   }
 
   // [RelayCommand]

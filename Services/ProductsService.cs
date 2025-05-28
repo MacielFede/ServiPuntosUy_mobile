@@ -1,20 +1,33 @@
+using Microsoft.Extensions.Configuration;
 using ServiPuntos.uy_mobile.Models;
 using ServiPuntos.uy_mobile.Services.Interfaces;
 
-namespace ServiPuntos.uy_mobile.Services
+namespace ServiPuntos.uy_mobile.Services;
+
+public class ProductsService(IConfiguration configs) : ApiService(configs), IProductsService
 {
-  public class ProductsService : IProductsService
+  public async Task<ApiResponse<Product[]>> GetProductsAsync()
   {
-    public Task<List<Product>> GetProductsAsync()
+    try
     {
-      // Simulate fetching data from an API or database
-      var products = new List<Product>
-            {
-                new(1,"Product 1","Description of Product 1", null),
-                new(2,"Product 2","Description of Product 2", null),
-                new(3,"Product 3","Description of Product 3", null)
-            };
-      return Task.FromResult(products);
+      return await GET<Product[]>("product");
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<Product[]>(true, null, ex.Message);
+    }
+  }
+
+  public async Task<ApiResponse<Product>> GetProductInfo(int id)
+  {
+    try
+    {
+      var response = await GET<Product>($"product/{id}");
+      return response;
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<Product>(true, null, ex.Message);
     }
   }
 }

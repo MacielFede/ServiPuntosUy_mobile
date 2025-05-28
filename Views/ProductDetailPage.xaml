@@ -3,19 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:ServiPuntos.uy_mobile.ViewModels"
              x:Class="ServiPuntos.uy_mobile.Views.ProductDetailPage"
-             x:DataType="viewModel:ProductDetailViewModel">
+             x:DataType="viewModel:ProductDetailViewModel"
+             xmlns:converters="clr-namespace:ServiPuntos.uy_mobile.Converters">
+       <ContentPage.Resources>
+              <ResourceDictionary>
+                     <converters:BoolToAgeRestrictedConverter x:Key="BoolToAgeRestrictedConverter"/>
+              </ResourceDictionary>
+       </ContentPage.Resources>
 
        <StackLayout Padding="20">
               <Image Source="{Binding Product.ImageUrl}"
-                     WidthRequest="50"
-                     HeightRequest="50"/>
+                     WidthRequest="150"
+                     HeightRequest="150"/>
               <Label Text="{Binding Product.Name}"
                      FontSize="24"/>
               <Label Text="{Binding Product.Description}"
                      FontSize="18"/>
-              <!-- <Label Text="{Binding Product.Price, StringFormat='Price: {0:C}'}"
-                            FontSize="18"/> -->
-              <Button Text="Buy"
-                      Command="{Binding BuyCommand}"/>
+              <Label Text="{Binding Product.Price, StringFormat='Price: {0:C}'}"
+                     FontSize="18"/>
+              <Label Text="{Binding Product.AgeRestricted, Converter={StaticResource BoolToAgeRestrictedConverter}, StringFormat='Producto disponible para {0}'}"
+                     FontSize="18"
+                     TextColor="DarkRed"/>
+              <StackLayout Padding="10"
+                           Spacing="10">
+                     <Button Text="Comprar"
+                             BackgroundColor="Green"
+                             Command="{Binding BuyCommand}"/>
+                     <Button Text="Canjear"
+                             Command="{Binding UsePointsCommand}"/>
+              </StackLayout>
        </StackLayout>
 </ContentPage>
