@@ -17,7 +17,7 @@
                 Aspect="AspectFit" />  -->
 
             <Label
-                Text="NOMBRE TENANT"
+                Text="{Binding TenantName, StringFormat='Usuario {0}'}"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1"
                 Margin="40"/>

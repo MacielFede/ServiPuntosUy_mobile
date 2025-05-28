@@ -4,6 +4,7 @@ namespace ServiPuntos.uy_mobile.Services.Interfaces;
 
 public interface IProductsService
 {
-  Task<List<Product>> GetProductsAsync();
+  public Task<ApiResponse<Product[]>> GetProductsAsync();
+  public Task<ApiResponse<Product>> GetProductInfo(int id);
 }
 

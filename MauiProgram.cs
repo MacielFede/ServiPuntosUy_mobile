@@ -16,7 +16,8 @@ public static class MauiProgram
 		var configDic = new Dictionary<string, string?>
 		{
 			{"API_URL" ,"http://10.0.2.2:5162/api/"},
-			{"TENANT_ID" ,"central"}
+			{"TENANT_ID" ,"1"},
+			{"TENANT_NAME" ,"Ancap"},
 		};
 		var config = new ConfigurationBuilder().AddInMemoryCollection(configDic).Build();
 		var builder = MauiApp.CreateBuilder();

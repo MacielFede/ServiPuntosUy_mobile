@@ -2,9 +2,7 @@ using ServiPuntos.uy_mobile.Models;
 using ServiPuntos.uy_mobile.Services.Interfaces;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
-using System.Diagnostics;
 using ServiPuntos.uy_mobile.Models.Enums;
-using System.Threading.Tasks;
 
 namespace ServiPuntos.uy_mobile.Services;
 

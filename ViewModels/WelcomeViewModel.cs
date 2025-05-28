@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using ServiPuntos.uy_mobile.Models;
 using ServiPuntos.uy_mobile.Models.Enums;
@@ -8,9 +9,10 @@ using ServiPuntos.uy_mobile.Views;
 
 namespace ServiPuntos.uy_mobile.ViewModels;
 
-public partial class WelcomeViewModel : ObservableObject
+public partial class WelcomeViewModel(IConfiguration _configs) : ObservableObject
 {
 
+  [ObservableProperty] private string? _TenantName;
   [RelayCommand]
   private async Task GoToLoginPage()
   {
@@ -31,6 +33,10 @@ public partial class WelcomeViewModel : ObservableObject
     {
       await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
     }
+  }
+  public void GetTenantName()
+  {
+    TenantName = _configs["TENANT_NAME"] ?? "interno";
   }
 }
 
