@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ServiPuntos.uy_mobile.Views.HistoryPage">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- Header with Avatar -->
+    <FlexLayout AlignContent="SpaceBetween"
+                AlignItems="Center"
+                JustifyContent="SpaceBetween"
+                Padding="10"
+                Margin="10,10,10,30">
+      <ImageButton Source="avatar.png"
+                   WidthRequest="50"
+                   HeightRequest="50"/>
+    </FlexLayout>
+  </Grid>
+</ContentPage>

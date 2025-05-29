@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:ServiPuntos.uy_mobile.ViewModels"
@@ -9,22 +8,29 @@
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
+      <!-- Header -->
+      <RowDefinition Height="Auto"/>
+      <!-- Ofertas flash Label -->
+      <RowDefinition Height="150"/>
+      <!-- Ofertas flash Carousel fixed height -->
+      <RowDefinition Height="Auto"/>
+      <!-- Productos Label -->
       <RowDefinition Height="*"/>
+      <!-- Products CollectionView fills remaining space -->
     </Grid.RowDefinitions>
 
     <!-- Header with Avatar -->
-    <FlexLayout AlignContent="SpaceBetween"
-                AlignItems="Center"
-                JustifyContent="SpaceBetween"
-                Padding="10"
-                Margin="10,10,10,30">
+    <FlexLayout Grid.Row="0"
+        AlignItems="Center"
+        JustifyContent="SpaceBetween"
+        Padding="10"
+        Margin="20,10,20,10">
       <ImageButton Source="avatar.png"
                    WidthRequest="50"
                    HeightRequest="50"
                    Clicked="OnAvatarClicked"/>
-      <Label
-        FontSize="16"
-        VerticalOptions="Center">
+      <Label FontSize="16"
+             VerticalOptions="Center">
         <Label.FormattedText>
           <FormattedString>
             <Span Text="1L de combustible: "/>
@@ -40,18 +46,69 @@
               Command="{Binding LogoutCommand}"/>
     </FlexLayout>
 
+    <!-- Ofertas flash Label -->
+    <Label Grid.Row="1"
+           Text="Ofertas flash ⚡️"
+           FontSize="20"
+           FontAttributes="Bold"
+           Margin="20,0,20,5"/>
 
-    <!-- Product List -->
-    <CollectionView Grid.Row="1"
+    <!-- Ofertas flash Carousel -->
+    <CollectionView Grid.Row="2"
+                    ItemsSource="{Binding FlashOffers}"
+                    SelectionMode="Single"
+                    HorizontalScrollBarVisibility="Always"
+                    ItemsUpdatingScrollMode="KeepScrollOffset"
+                    HeightRequest="150">
+      <CollectionView.ItemsLayout>
+        <LinearItemsLayout Orientation="Horizontal"
+                           ItemSpacing="10"/>
+      </CollectionView.ItemsLayout>
+      <CollectionView.ItemTemplate>
+        <DataTemplate x:DataType="models:Product">
+          <Border Stroke="LightGray"
+                  StrokeThickness="1"
+                  Padding="10"
+                  Margin="5"
+                  WidthRequest="200"
+                  BackgroundColor="White"
+                  StrokeShape="RoundRectangle 10">
+            <StackLayout HorizontalOptions="Center"
+                VerticalOptions="Center">
+              <Image Source="{Binding ImageUrl}"
+                     WidthRequest="120"
+                     HeightRequest="80"
+                     Aspect="AspectFill"/>
+              <Label Text="{Binding Name}"
+                     FontSize="16"
+                     FontAttributes="Bold"
+                     HorizontalOptions="Center"/>
+              <Label Text="{Binding Price, StringFormat='${0:F2}'}"
+                     TextColor="SeaGreen"
+                     HorizontalOptions="Center"/>
+            </StackLayout>
+          </Border>
+        </DataTemplate>
+      </CollectionView.ItemTemplate>
+    </CollectionView>
+
+    <!-- Productos Label -->
+    <Label Grid.Row="3"
+           Text="Productos"
+           FontSize="20"
+           FontAttributes="Bold"
+           Margin="20,10,20,5"/>
+
+    <!-- Products CollectionView -->
+    <CollectionView Grid.Row="4"
                     ItemsSource="{Binding Products}"
                     SelectionMode="Single"
                     SelectionChanged="OnProductSelected">
       <CollectionView.ItemsLayout>
-        <GridItemsLayout
-          Orientation="Vertical"
-          Span="2"
-          HorizontalItemSpacing="0"
-          VerticalItemSpacing="10"/>
+        <GridItemsLayout Orientation="Vertical"
+                         Span="2"
+                         HorizontalItemSpacing="10"
+                         VerticalItemSpacing="10"/>
       </CollectionView.ItemsLayout>
       <CollectionView.ItemTemplate>
         <DataTemplate x:DataType="models:Product">
@@ -62,7 +119,6 @@
                   HorizontalOptions="Fill"
                   BackgroundColor="White"
                   StrokeShape="RoundRectangle 10">
-
             <StackLayout>
               <Image Source="{Binding ImageUrl}"
                      WidthRequest="50"
@@ -77,5 +133,6 @@
         </DataTemplate>
       </CollectionView.ItemTemplate>
     </CollectionView>
+
   </Grid>
 </ContentPage>

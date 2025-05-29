@@ -1,6 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
 using ServiPuntos.uy_mobile.Models;
+using ServiPuntos.uy_mobile.Models.Enums;
 
 namespace ServiPuntos.uy_mobile.ViewModels;
 
@@ -9,6 +11,19 @@ public partial class ProductDetailViewModel : ObservableObject
 {
   [ObservableProperty]
   private Product? product;
+  [ObservableProperty]
+  private int userPoints;
+
+  public async Task GetUserPoints()
+  {
+    string? userData = await SecureStorage.GetAsync(SecureStorageType.User.ToString());
+    if (string.IsNullOrWhiteSpace(userData))
+    {
+      UserPoints = 0;
+      return;
+    }
+    UserPoints = JsonConvert.DeserializeObject<User>(userData)?.PointBalance ?? 0;
+  }
 
   [RelayCommand]
   private async Task Buy()

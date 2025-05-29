@@ -5,25 +5,27 @@
              x:Class="ServiPuntos.uy_mobile.Views.WelcomePage"
              x:DataType="viewModel:WelcomeViewModel">
 
-    <ScrollView>
+    <FlexLayout
+        JustifyContent="SpaceEvenly"
+        Direction="Column">
         <VerticalStackLayout
-            Padding="30,0"
-            Margin="20"
             Spacing="25">
             <!-- TODO: Agregar imagen del tenant -->
             <!-- <Image
                     Source="tupencauy_logo.png"
                     HeightRequest="185"
                     Aspect="AspectFit"/> -->
-
             <Label
                 Text="{Binding TenantName}"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1"/>
             <Label
                 Text="Debes iniciar sesión para poder comprar nuestros productos y ver nuestras ofertas."
-                SemanticProperties.HeadingLevel="Level1"/>
-
+                MaximumWidthRequest="300"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout
+            Margin="20"
+            Spacing="25">
             <Button
                 x:Name="LoginBtn"
                 Text="Usuario interno"
@@ -44,6 +46,6 @@
                 HorizontalOptions="Fill"
                 BackgroundColor="Red"/>
         </VerticalStackLayout>
-    </ScrollView>
+    </FlexLayout>
 
 </ContentPage>

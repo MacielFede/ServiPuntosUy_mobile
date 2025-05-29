@@ -10,4 +10,10 @@ public partial class ProductDetailPage : ContentPage
     InitializeComponent();
     BindingContext = productDetailViewModel;
   }
+
+  protected override void OnAppearing()
+  {
+    base.OnAppearing();
+    (BindingContext as ProductDetailViewModel)?.GetUserPoints();
+  }
 }

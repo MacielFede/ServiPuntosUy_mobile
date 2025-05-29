@@ -5,6 +5,10 @@ namespace ServiPuntos.uy_mobile.Views;
 
 public partial class HomePage : ContentPage
 {
+  public HomePage()
+  {
+    InitializeComponent();
+  }
   public HomePage(HomeViewModel homeViewModel)
   {
     InitializeComponent();

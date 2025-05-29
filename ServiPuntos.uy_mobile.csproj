@@ -84,6 +84,9 @@
 		<MauiXaml Update="Views\IdentityVerificationPage.xaml">
 			<SubType>Designer</SubType>
 		</MauiXaml>
+		<MauiXaml Update="Views\MainTabPage.xaml">
+			<SubType>Designer</SubType>
+		</MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -117,6 +120,10 @@
 		</Compile>
 		<Compile Update="Views\IdentityVerificationPage.xaml.cs">
 			<DependentUpon>IdentityVerificationPage.xaml</DependentUpon>
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\MainTabPage.xaml.cs">
+			<DependentUpon>MainTabPage.xaml</DependentUpon>
 			<SubType>Code</SubType>
 		</Compile>
 	</ItemGroup>

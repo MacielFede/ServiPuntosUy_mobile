@@ -39,7 +39,7 @@ public partial class LoginViewModel(IAuthService authService, IConfiguration _co
     }
   }
   [RelayCommand]
-  private async Task SignleSignOn()
+  private async Task SingleSignOn()
   {
     await Shell.Current.DisplayAlert("Error en contraseña unica", "Tamos trabajando en esto", "OK");
   }

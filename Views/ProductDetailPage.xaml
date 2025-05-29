@@ -10,8 +10,19 @@
                      <converters:BoolToAgeRestrictedConverter x:Key="BoolToAgeRestrictedConverter"/>
               </ResourceDictionary>
        </ContentPage.Resources>
-
        <StackLayout Padding="20">
+              <StackLayout Orientation="Horizontal">
+                     <Label Style="{StaticResource SubHeadline}">
+                            <Label.FormattedText>
+                                   <FormattedString>
+                                          <Span Text="Puntos acumulados: "/>
+                                          <Span Text="{Binding UserPoints}"
+                                                FontAttributes="Bold"
+                                                TextColor="DarkGreen"/>
+                                   </FormattedString>
+                            </Label.FormattedText>
+                     </Label>
+              </StackLayout>
               <Image Source="{Binding Product.ImageUrl}"
                      WidthRequest="150"
                      HeightRequest="150"/>

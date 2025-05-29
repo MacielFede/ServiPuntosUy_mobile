@@ -23,7 +23,7 @@ public partial class ApiService : IApiService
     {
       BaseAddress = new Uri(_configs["API_URL"]!),
     };
-    _httpClient.DefaultRequestHeaders.Add("X-Tenant-Id", _configs["TENANT_ID"]);
+    _httpClient.DefaultRequestHeaders.Add("X-Tenant-Name", _configs["TENANT_NAME"]);
   }
 
   public async Task<ApiResponse<T>> GET<T>(string requestUri)
@@ -53,7 +53,6 @@ public partial class ApiService : IApiService
       var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
       var response = await _httpClient.PostAsync(requestUri, content);
       var responseContent = await response.Content.ReadAsStringAsync();
-      Debug.WriteLine($"ESTOY 1 {responseContent}");
       return JsonConvert.DeserializeObject<ApiResponse<T>>(responseContent) ?? new ApiResponse<T>(true, default, "Error interno, intenta nuevamente más tarde.");
     }
     catch (Exception ex)
