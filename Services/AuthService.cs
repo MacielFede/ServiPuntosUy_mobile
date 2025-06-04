@@ -33,8 +33,7 @@ public class AuthService(IConfiguration configs) : ApiService(configs), IAuthSer
 
   public async Task<ApiResponse<SessionData>?> Signup(string name, string email, string password)
   {
-    // TODO: Eliminar el TenantId
-    var payload = new { Name = name, Email = email, Password = password, TenantId = 1 };
+    var payload = new { Name = name, Email = email, Password = password };
     return await POST<SessionData>("auth/signup", payload);
   }
 

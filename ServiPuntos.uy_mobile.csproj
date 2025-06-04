@@ -27,6 +27,7 @@
 			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion
 			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -84,7 +85,7 @@
 		<MauiXaml Update="Views\IdentityVerificationPage.xaml">
 			<SubType>Designer</SubType>
 		</MauiXaml>
-		<MauiXaml Update="Views\MainTabPage.xaml">
+		<MauiXaml Update="Views\TransactionsHistoryPage.xaml">
 			<SubType>Designer</SubType>
 		</MauiXaml>
 	</ItemGroup>
@@ -122,8 +123,8 @@
 			<DependentUpon>IdentityVerificationPage.xaml</DependentUpon>
 			<SubType>Code</SubType>
 		</Compile>
-		<Compile Update="Views\MainTabPage.xaml.cs">
-			<DependentUpon>MainTabPage.xaml</DependentUpon>
+		<Compile Update="Views\TransactionsHistoryPage.xaml.cs">
+			<DependentUpon>TransactionsHistoryPage.xaml</DependentUpon>
 			<SubType>Code</SubType>
 		</Compile>
 	</ItemGroup>

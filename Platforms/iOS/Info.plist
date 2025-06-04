@@ -32,5 +32,10 @@
 		<array>
 			<string>fetch</string>
 		</array>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>We need your location to find the nearest stores.</string>
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>We need your location to find the nearest stores, even when the app is in the
+			background.</string>
 	</dict>
 </plist>

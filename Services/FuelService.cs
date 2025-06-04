@@ -1,0 +1,35 @@
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using ServiPuntos.uy_mobile.Enums;
+using ServiPuntos.uy_mobile.Models;
+using ServiPuntos.uy_mobile.Services.Interfaces;
+
+namespace ServiPuntos.uy_mobile.Services;
+
+public class FuelService(IConfiguration configs, IBranchService branchService) : ApiService(configs), IFuelService
+{
+  private readonly IBranchService _branchService = branchService;
+  public async Task<FuelPrice[]> GetFuelPrices()
+  {
+    int? branchId = (_branchService?.ClosestLocation?.Id) ?? throw new Exception("Estamos trabajando para obtener el precio de los combustibles mas cercanos a ti.");
+    ApiResponse<FuelPrice> fetchedFuelprice;
+    List<FuelPrice> activePrices = [];
+    foreach (var type in Enum.GetValues<FuelType>())
+    {
+      try
+      {
+        fetchedFuelprice = await GET<FuelPrice>($"fuel/{branchId}/price/{type}");
+        Debug.WriteLine($"ESTOY {fetchedFuelprice.Data}");
+        if (fetchedFuelprice is { Error: false, Data: not null }) activePrices.Add(fetchedFuelprice.Data);
+        else throw new Exception(fetchedFuelprice.Message);
+      }
+      catch (Exception ex)
+      {
+        Debug.WriteLine($"ESTOY: No pude obtener el precio del tipo de combustible {type}: {ex.Message}");
+      }
+    }
+    return activePrices.Count == 0 ? throw new Exception("Estamos trabajando para obtener el precio de los combustibles mas cercanos a ti.") : [.. activePrices];
+  }
+}
+

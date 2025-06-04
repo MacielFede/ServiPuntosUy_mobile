@@ -7,6 +7,7 @@ namespace ServiPuntos.uy_mobile.ViewModels;
 
 public partial class SignUpViewModel(IAuthService authService) : ObservableObject
 {
+  public static event EventHandler? SignUpSuccessfully;
   [ObservableProperty] private string? _name;
   [ObservableProperty] private string? _email;
   [ObservableProperty] private string? _password;
@@ -26,6 +27,7 @@ public partial class SignUpViewModel(IAuthService authService) : ObservableObjec
       if (registerResult is { Error: false, Data: not null })
       {
         await authService.SaveSession(registerResult.Data);
+        SignUpSuccessfully?.Invoke(this, EventArgs.Empty);
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
       }
       else

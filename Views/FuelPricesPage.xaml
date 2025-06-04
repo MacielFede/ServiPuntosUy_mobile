@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:ServiPuntos.uy_mobile.ViewModels"
+             xmlns:models="clr-namespace:ServiPuntos.uy_mobile.Models"
+             x:Class="ServiPuntos.uy_mobile.Views.FuelPricesPage"
+             x:DataType="viewModel:FuelPricesViewModel"
+             xmlns:converters="clr-namespace:ServiPuntos.uy_mobile.Converters"
+             Title="Precios de combustible actualizado">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:BoolToAgeRestrictedConverter x:Key="StringToBooleanConverter"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <StackLayout Padding="10"
+               HorizontalOptions="Fill"
+               VerticalOptions="Center">
+    <Label Text="{Binding Error}"
+           IsVisible="{Binding Error, Converter={StaticResource StringToBooleanConverter}}"
+           TextColor="Red"
+           HorizontalOptions="Center"/>
+
+    <CollectionView ItemsSource="{Binding FuelPrices}"
+                    IsVisible="{Binding Error, Converter={StaticResource StringToBooleanConverter}, ConverterParameter='invert'}">
+      <CollectionView.ItemTemplate>
+        <DataTemplate x:DataType="models:FuelPrice">
+          <Border Stroke="#ccc"
+                  StrokeThickness="1"
+                  BackgroundColor="#f5f5f5"
+                  Padding="15"
+                  Margin="10"
+                  StrokeShape="RoundRectangle 10">
+            <StackLayout Margin="5">
+              <Label Text="{Binding FuelType}"
+                     FontAttributes="Bold"
+                     HorizontalOptions="Center"/>
+              <Label Text="{Binding Price, StringFormat='Price: {0:C}'}"
+                     TextColor="Green"
+                     HorizontalOptions="Center"/>
+            </StackLayout>
+          </Border>
+        </DataTemplate>
+      </CollectionView.ItemTemplate>
+    </CollectionView>
+  </StackLayout>
+</ContentPage>

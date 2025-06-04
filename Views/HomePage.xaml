@@ -21,40 +21,26 @@
 
     <!-- Header with Avatar -->
     <FlexLayout Grid.Row="0"
-        AlignItems="Center"
-        JustifyContent="SpaceBetween"
-        Padding="10"
-        Margin="20,10,20,10">
+                AlignItems="Center"
+                JustifyContent="SpaceBetween"
+                Padding="10"
+                Margin="20,10,20,10">
       <ImageButton Source="avatar.png"
                    WidthRequest="50"
                    HeightRequest="50"
                    Clicked="OnAvatarClicked"/>
-      <Label FontSize="16"
-             VerticalOptions="Center">
-        <Label.FormattedText>
-          <FormattedString>
-            <Span Text="1L de combustible: "/>
-            <Span Text="{Binding GasPrice}"
-                  FontAttributes="Bold"
-                  TextColor="DarkGreen"/>
-          </FormattedString>
-        </Label.FormattedText>
-      </Label>
       <Button Text="Logout"
               VerticalOptions="Center"
               BackgroundColor="DarkRed"
               Command="{Binding LogoutCommand}"/>
     </FlexLayout>
 
-    <!-- Ofertas flash Label -->
     <Label Grid.Row="1"
            Text="Ofertas flash ⚡️"
            FontSize="20"
            FontAttributes="Bold"
            Margin="20,0,20,5"/>
-
-    <!-- Ofertas flash Carousel -->
-    <CollectionView Grid.Row="2"
+    <!-- <CollectionView Grid.Row="2"
                     ItemsSource="{Binding FlashOffers}"
                     SelectionMode="Single"
                     HorizontalScrollBarVisibility="Always"
@@ -74,7 +60,7 @@
                   BackgroundColor="White"
                   StrokeShape="RoundRectangle 10">
             <StackLayout HorizontalOptions="Center"
-                VerticalOptions="Center">
+                         VerticalOptions="Center">
               <Image Source="{Binding ImageUrl}"
                      WidthRequest="120"
                      HeightRequest="80"
@@ -90,16 +76,13 @@
           </Border>
         </DataTemplate>
       </CollectionView.ItemTemplate>
-    </CollectionView>
+    </CollectionView> -->
 
-    <!-- Productos Label -->
     <Label Grid.Row="3"
            Text="Productos"
            FontSize="20"
            FontAttributes="Bold"
            Margin="20,10,20,5"/>
-
-    <!-- Products CollectionView -->
     <CollectionView Grid.Row="4"
                     ItemsSource="{Binding Products}"
                     SelectionMode="Single"

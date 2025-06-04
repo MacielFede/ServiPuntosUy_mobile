@@ -6,6 +6,5 @@ public interface IProductsService
 {
   public Task<ApiResponse<Product[]>> GetProductsAsync();
   public Task<ApiResponse<Product>> GetProductInfo(int id);
-  public ApiResponse<int> GetGasPrice();
 }
 

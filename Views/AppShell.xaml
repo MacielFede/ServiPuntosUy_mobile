@@ -20,8 +20,16 @@
             Route="HomePage"
             Icon="home_icon.png"/>
         <ShellContent
-            ContentTemplate="{DataTemplate views:HistoryPage}"
-            Route="HistoryPage"
+            ContentTemplate="{DataTemplate views:FuelPricesPage}"
+            Route="FuelPricesPage"
+            Icon="gas_icon.png"/>
+        <ShellContent
+            ContentTemplate="{DataTemplate views:LocationsPage}"
+            Route="LocationsPage"
+            Icon="location_icon.png"/>
+        <ShellContent
+            ContentTemplate="{DataTemplate views:TransactionsHistoryPage}"
+            Route="TransactionsHistoryPage"
             Icon="history_icon.png"/>
     </TabBar>
 

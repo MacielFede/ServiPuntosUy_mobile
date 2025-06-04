@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ServiPuntos.uy_mobile.Models;
@@ -7,14 +8,19 @@ using ServiPuntos.uy_mobile.Views;
 
 namespace ServiPuntos.uy_mobile.ViewModels;
 
-public partial class HomeViewModel(IProductsService productsService, IAuthService authService) : ObservableObject
+public partial class HomeViewModel(IProductsService productsService, IAuthService authService, IBranchService branchService) : ObservableObject
 {
   private readonly IProductsService _productService = productsService;
   private readonly IAuthService _authService = authService;
+  private readonly IBranchService _branchService = branchService;
   [ObservableProperty]
   private ObservableCollection<Product> products = [];
-  [ObservableProperty]
-  private int gasPrice;
+  [RelayCommand]
+  public async Task Logout()
+  {
+    await _authService.Logout();
+    await Shell.Current.GoToAsync($"//{nameof(WelcomePage)}");
+  }
 
   public async Task LoadProducts()
   {
@@ -30,28 +36,5 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
     {
       await Shell.Current.DisplayAlert("Error obteniendo productos", ex.Message, "OK");
     }
-  }
-
-  public async Task GetGasPrice()
-  {
-    try
-    {
-      var gasPriceResponse = _productService.GetGasPrice();
-      if (gasPriceResponse is { Error: false })
-        GasPrice = gasPriceResponse.Data;
-      else
-        await Shell.Current.DisplayAlert("Error obteniendo productos", gasPriceResponse.Message, "OK");
-    }
-    catch (Exception ex)
-    {
-      await Shell.Current.DisplayAlert("Error obteniendo precio del combustible", ex.Message, "OK");
-    }
-  }
-
-  [RelayCommand]
-  public async Task Logout()
-  {
-    await _authService.Logout();
-    await Shell.Current.GoToAsync($"//{nameof(WelcomePage)}");
   }
 }
