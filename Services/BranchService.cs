@@ -1,4 +1,3 @@
-using AndroidX.ConstraintLayout.Core.Widgets.Analyzer;
 using Microsoft.Extensions.Configuration;
 using ServiPuntos.uy_mobile.Models;
 using ServiPuntos.uy_mobile.Services.Interfaces;
@@ -7,58 +6,40 @@ using System.Diagnostics;
 
 namespace ServiPuntos.uy_mobile.Services;
 
-public class BranchService(IConfiguration configs) : ApiService(configs), IBranchService
+public class BranchService(IConfiguration configs, IGeoService geoService) : ApiService(configs), IBranchService
 {
-  private Location? UserLocation { get; set; }
-  private List<Branch>? _allLocations;
-  private Branch? _closestLocation;
-  public event EventHandler? LocationDataLoaded;
+  private readonly IGeoService _geoService = geoService;
+  public Location UserLocation { get; set; } = new(-34.9011, -56.1645);
+  private List<Branch>? _allBranches;
 
-  public ReadOnlyCollection<Branch>? AllLocations
+  public ReadOnlyCollection<Branch>? AllBranches
   {
     get
     {
-      return _allLocations?.AsReadOnly();
+      return _allBranches?.AsReadOnly();
     }
   }
 
-  public Branch? ClosestLocation
+  public Branch? ClosestBranch
   {
     get
     {
       if (UserLocation is not null)
       {
-        if (_allLocations is null) return null;
+        if (_allBranches is null) return null;
         Branch? closestBranch = null;
-        double distanceToClosestBranch = double.PositiveInfinity;
-        foreach (Branch location in _allLocations)
-        {
-          if (closestBranch is null)
-          {
-            closestBranch = location;
-            distanceToClosestBranch = Location.CalculateDistance(location.Latitud, location.Longitud, UserLocation, DistanceUnits.Kilometers);
-          }
-          else
-          {
-            var distanceToBranch = Location.CalculateDistance(location.Latitud, location.Longitud, UserLocation, DistanceUnits.Kilometers);
-            if (distanceToBranch < distanceToClosestBranch)
-            {
-              closestBranch = location;
-              distanceToClosestBranch = distanceToBranch;
-            }
-          }
-        }
-        _closestLocation = closestBranch;
+        closestBranch = _allBranches
+          .OrderBy(branch => Location.CalculateDistance(branch.Latitud, branch.Longitud, UserLocation, DistanceUnits.Kilometers))
+          .FirstOrDefault();
         return closestBranch;
       }
-      _closestLocation = _allLocations?.First();
-      return _allLocations?.First();
+      return _allBranches != null ? _allBranches?.First() : null;
     }
   }
 
-  public async Task LoadLocationsAsync()
+  public async Task LoadBranchesAsync()
   {
-    if (_allLocations?.Count > 0)
+    if (_allBranches?.Count > 0)
     {
       return;
     }
@@ -67,22 +48,33 @@ public class BranchService(IConfiguration configs) : ApiService(configs), IBranc
       ApiResponse<List<Branch>> branches = await GET<List<Branch>>("branch");
       if (branches is { Error: false, Data: not null })
       {
-        _allLocations = branches.Data;
-        Debug.WriteLine($"ESTOY lleno {branches}");
-        LocationDataLoaded?.Invoke(this, EventArgs.Empty);
+        _allBranches = branches.Data;
       }
       else
       {
-        _allLocations = [];
-        Debug.WriteLine($"ESTOY vacio {branches.Message}");
+        Debug.WriteLine($"Error obteniendo estaciones: {branches.Message}");
+        _allBranches = [];
       }
     }
     catch (Exception ex)
     {
-      _allLocations = [];
-      Debug.WriteLine($"ESTOY Error: {ex.Message}");
+      _allBranches = [];
+      Debug.WriteLine($"Error obteniendo estaciones: {ex.Message}");
     }
   }
 
-  public Branch? GetLocationById(int id) => _allLocations?.FirstOrDefault(s => s.Id == id);
+  public Branch? GetBranchById(int id) => _allBranches?.FirstOrDefault(s => s.Id == id);
+
+  public async Task LoadUserLocationAsync()
+  {
+    try
+    {
+      var (lat, lng) = await _geoService.GetCurrentLocationAsync();
+      UserLocation = new Location(lat, lng);
+    }
+    catch (Exception ex)
+    {
+      Debug.WriteLine($"Error obteniendo tu ubicacion, vamos a usar una por defecto: {ex.Message}");
+    }
+  }
 }

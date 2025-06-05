@@ -8,6 +8,12 @@ namespace ServiPuntos.uy_mobile.Services;
 
 public class AuthService(IConfiguration configs) : ApiService(configs), IAuthService
 {
+  public event EventHandler? SessionCreatedSuccessfully;
+  public void TriggerSessionCreatedEvent()
+  {
+    SessionCreatedSuccessfully?.Invoke(this, EventArgs.Empty);
+  }
+
   public async Task<ApiResponse<SessionData>> Login(string email, string password)
   {
     try
@@ -60,4 +66,7 @@ public class AuthService(IConfiguration configs) : ApiService(configs), IAuthSer
       return new ApiResponse<User>(true, null, ex.Message);
     }
   }
+
+  public async Task<SessionData?> GetSessionData() => JsonConvert.DeserializeObject<SessionData>(await SecureStorage.GetAsync(SecureStorageType.Session.ToString()) ??
+                                                   string.Empty);
 }

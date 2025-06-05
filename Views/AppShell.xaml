@@ -24,8 +24,8 @@
             Route="FuelPricesPage"
             Icon="gas_icon.png"/>
         <ShellContent
-            ContentTemplate="{DataTemplate views:LocationsPage}"
-            Route="LocationsPage"
+            ContentTemplate="{DataTemplate views:BranchesPage}"
+            Route="BranchesPage"
             Icon="location_icon.png"/>
         <ShellContent
             ContentTemplate="{DataTemplate views:TransactionsHistoryPage}"

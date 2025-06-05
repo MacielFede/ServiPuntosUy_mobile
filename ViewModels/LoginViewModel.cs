@@ -8,7 +8,6 @@ namespace ServiPuntos.uy_mobile.ViewModels;
 
 public partial class LoginViewModel(IAuthService authService, IConfiguration _configs) : ObservableObject
 {
-  public static event EventHandler? LoggedInSuccessfully;
   [ObservableProperty] private string? _email;
   [ObservableProperty] private string? _TenantName;
   [ObservableProperty] private string? _password;
@@ -27,7 +26,7 @@ public partial class LoginViewModel(IAuthService authService, IConfiguration _co
       if (loginResult is { Error: false, Data: not null })
       {
         await authService.SaveSession(loginResult.Data);
-        LoggedInSuccessfully?.Invoke(this, EventArgs.Empty);
+        authService.TriggerSessionCreatedEvent();
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
       }
       else

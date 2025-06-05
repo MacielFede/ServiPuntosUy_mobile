@@ -13,7 +13,7 @@
 		<ApplicationTitle>ServiPuntos</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.servipuntos.uy_mobile</ApplicationId>
+		<ApplicationId>com.servipuntos.uy</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -28,6 +28,7 @@
 		<SupportedOSPlatformVersion
 			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+		<AndroidManifestPlaceholders>GEO_API_KEY=$(GEO_API_KEY)</AndroidManifestPlaceholders>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -54,7 +55,9 @@
 		<PackageReference Include="DotNetEnv" Version="3.1.1" />
 		<PackageReference Include="DotNetMeteor.HotReload.Plugin" Version="3.*" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.2" />
+		<PackageReference Include="CommunityToolkit.Maui.Maps" Version="3.0.2" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="Microsoft.Extensions.Primitives" Version="9.0.5" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
@@ -86,6 +89,12 @@
 			<SubType>Designer</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\TransactionsHistoryPage.xaml">
+			<SubType>Designer</SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\BranchesPage.xaml">
+			<SubType>Designer</SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\FuelPricesPage.xaml">
 			<SubType>Designer</SubType>
 		</MauiXaml>
 	</ItemGroup>
@@ -125,6 +134,14 @@
 		</Compile>
 		<Compile Update="Views\TransactionsHistoryPage.xaml.cs">
 			<DependentUpon>TransactionsHistoryPage.xaml</DependentUpon>
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\BranchesPage.xaml.cs">
+			<DependentUpon>BranchesPage.xaml</DependentUpon>
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\FuelPricesPage.xaml.cs">
+			<DependentUpon>FuelPricesPage.xaml</DependentUpon>
 			<SubType>Code</SubType>
 		</Compile>
 	</ItemGroup>

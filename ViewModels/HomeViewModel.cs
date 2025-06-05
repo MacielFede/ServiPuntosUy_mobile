@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ServiPuntos.uy_mobile.Models;
@@ -8,11 +7,10 @@ using ServiPuntos.uy_mobile.Views;
 
 namespace ServiPuntos.uy_mobile.ViewModels;
 
-public partial class HomeViewModel(IProductsService productsService, IAuthService authService, IBranchService branchService) : ObservableObject
+public partial class HomeViewModel(IProductsService productsService, IAuthService authService) : ObservableObject
 {
   private readonly IProductsService _productService = productsService;
   private readonly IAuthService _authService = authService;
-  private readonly IBranchService _branchService = branchService;
   [ObservableProperty]
   private ObservableCollection<Product> products = [];
   [RelayCommand]

@@ -12,9 +12,22 @@
       <converters:BoolToAgeRestrictedConverter x:Key="StringToBooleanConverter"/>
     </ResourceDictionary>
   </ContentPage.Resources>
-  <StackLayout Padding="10"
-               HorizontalOptions="Fill"
-               VerticalOptions="Center">
+  <FlexLayout Padding="10"
+              HorizontalOptions="Fill"
+              JustifyContent="Center"
+              Direction="Column">
+    <Label FontSize="20"
+           IsVisible="{Binding Error, Converter={StaticResource StringToBooleanConverter},ConverterParameter='invert'}"
+           Padding="15"
+           Margin="10">
+      <Label.FormattedText>
+        <FormattedString>
+          <Span Text="Estos son los precios de nuestra estacion más cercana, ubicada en: "/>
+          <Span Text="{Binding NearestBranchAddress}"
+                FontAttributes="Bold"/>
+        </FormattedString>
+      </Label.FormattedText>
+    </Label>
     <Label Text="{Binding Error}"
            IsVisible="{Binding Error, Converter={StaticResource StringToBooleanConverter}}"
            TextColor="Red"
@@ -42,5 +55,5 @@
         </DataTemplate>
       </CollectionView.ItemTemplate>
     </CollectionView>
-  </StackLayout>
+  </FlexLayout>
 </ContentPage>

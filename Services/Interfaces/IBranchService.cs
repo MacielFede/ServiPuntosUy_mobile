@@ -5,13 +5,13 @@ namespace ServiPuntos.uy_mobile.Services.Interfaces;
 
 public interface IBranchService
 {
-  ReadOnlyCollection<Branch>? AllLocations { get; }
+  ReadOnlyCollection<Branch>? AllBranches { get; }
+  Location UserLocation { get; set; }
 
-  Branch? ClosestLocation { get; }
+  Branch? ClosestBranch { get; }
 
-  event EventHandler LocationDataLoaded;
+  Task LoadBranchesAsync();
 
-  Task LoadLocationsAsync();
-
-  Branch? GetLocationById(int id);
+  Branch? GetBranchById(int id);
+  Task LoadUserLocationAsync();
 }

@@ -12,7 +12,7 @@ public class FuelService(IConfiguration configs, IBranchService branchService) :
   private readonly IBranchService _branchService = branchService;
   public async Task<FuelPrice[]> GetFuelPrices()
   {
-    int? branchId = (_branchService?.ClosestLocation?.Id) ?? throw new Exception("Estamos trabajando para obtener el precio de los combustibles mas cercanos a ti.");
+    int? branchId = (_branchService?.ClosestBranch?.Id) ?? throw new Exception("Estamos trabajando para obtener el precio de los combustibles mas cercanos a ti.");
     ApiResponse<FuelPrice> fetchedFuelprice;
     List<FuelPrice> activePrices = [];
     foreach (var type in Enum.GetValues<FuelType>())

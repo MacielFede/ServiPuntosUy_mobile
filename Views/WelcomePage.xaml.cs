@@ -14,6 +14,5 @@ public partial class WelcomePage : ContentPage
 	{
 		base.OnAppearing();
 		(BindingContext as WelcomeViewModel)?.GetTenantName();
-		_ = (BindingContext as WelcomeViewModel)?.CheckUserSession();
 	}
 }

@@ -13,28 +13,35 @@ public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
 	{
+		// TODO: GLOBAL CONFIGS
 		var configDic = new Dictionary<string, string?>
-		{
-			{"API_URL" ,"http://10.0.2.2:5162/api/"},
-			{"TENANT_NAME" ,"Ancap"},
-		};
+				{
+						{"API_URL" ,"http://10.0.2.2:5162/api/"},
+						{"TENANT_NAME" ,"Ancap"},
+				};
 		var config = new ConfigurationBuilder().AddInMemoryCollection(configDic).Build();
 		var builder = MauiApp.CreateBuilder();
 		builder
-			.UseMauiApp<App>()
+				.UseMauiApp<App>()
 #if DEBUG
-		.EnableHotReload()
+				.EnableHotReload()
 #endif
-			.ConfigureFonts(fonts =>
-			{
-				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-			}).UseMauiCommunityToolkit().Configuration.AddConfiguration(config);
+				.ConfigureFonts(fonts =>
+				{
+					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+					fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+				})
+				.UseMauiCommunityToolkit()
+				.UseMauiMaps()
+				.Configuration.AddConfiguration(config);
+
 		// Services
 		builder.Services.AddSingleton<IAuthService, AuthService>();
 		builder.Services.AddSingleton<IProductsService, ProductsService>();
 		builder.Services.AddSingleton<IBranchService, BranchService>();
 		builder.Services.AddSingleton<IFuelService, FuelService>();
+		builder.Services.AddSingleton<IGeoService, GeoService>();
+
 		// Pages
 		builder.Services.AddSingleton<WelcomePage>();
 		builder.Services.AddSingleton<SignUpPage>();
@@ -43,8 +50,9 @@ public static class MauiProgram
 		builder.Services.AddSingleton<ProductDetailPage>();
 		builder.Services.AddSingleton<IdentityVerificationPage>();
 		builder.Services.AddSingleton<FuelPricesPage>();
-		builder.Services.AddSingleton<LocationsPage>();
+		builder.Services.AddSingleton<BranchesPage>();
 		builder.Services.AddSingleton<TransactionsHistoryPage>();
+
 		// ViewModels
 		builder.Services.AddSingleton<WelcomeViewModel>();
 		builder.Services.AddSingleton<SignUpViewModel>();
@@ -53,6 +61,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IdentityVerificationViewModel>();
 		builder.Services.AddSingleton<LoginViewModel>();
 		builder.Services.AddSingleton<FuelPricesViewModel>();
+		builder.Services.AddSingleton<BranchesViewModel>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

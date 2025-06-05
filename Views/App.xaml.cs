@@ -5,18 +5,17 @@ namespace ServiPuntos.uy_mobile.Views;
 
 public partial class App : Application
 {
+	private readonly IAuthService _authService;
 	private readonly IBranchService _branchService;
-	public App(IBranchService branchService)
+	public App(IBranchService branchService, IAuthService authService)
 	{
 		InitializeComponent();
 		_branchService = branchService;
-		LoginViewModel.LoggedInSuccessfully += async (s, e) =>
+		_authService = authService;
+		_authService.SessionCreatedSuccessfully += async (s, e) =>
 		{
-			await branchService.LoadLocationsAsync();
-		};
-		SignUpViewModel.SignUpSuccessfully += async (s, e) =>
-		{
-			await branchService.LoadLocationsAsync();
+			await _branchService.LoadBranchesAsync();
+			await _branchService.LoadUserLocationAsync();
 		};
 	}
 
@@ -28,6 +27,16 @@ public partial class App : Application
 	protected override void OnStart()
 	{
 		base.OnStart();
-		_branchService.LoadLocationsAsync();
+		_ = CheckUserSession();
+	}
+
+	private async Task CheckUserSession()
+	{
+		var sessionData = await _authService.GetSessionData();
+		if (sessionData != null /* && sessionData.Expiration > DateTime.Now.AddMinutes(15) */)
+		{
+			_authService.TriggerSessionCreatedEvent();
+			await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+		}
 	}
 }
