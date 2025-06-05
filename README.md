@@ -2,7 +2,11 @@
 
 ## First setup
 
-Execute the file `./setup-hooks.sh` to setup the git pre-commit hook
+Execute the file `./setup-hooks.sh` to setup the git pre-commit hook.
+If you can't run the file, give it permission:
+```bash
+chmod +x .git/hooks/pre-commit
+```
 
 ## Google Maps API Key Configuration
 
