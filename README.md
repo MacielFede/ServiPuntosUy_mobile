@@ -1,5 +1,9 @@
 # ServiPuntos.uy Mobile App
 
+## First setup
+
+Execute the file `./setup-hooks.sh` to setup the git pre-commit hook
+
 ## Google Maps API Key Configuration
 
 This project requires a Google Maps API key to be injected into the Android build process.
