@@ -10,11 +10,6 @@
       <VerticalStackLayout
         Padding="30,0"
         Margin="20">
-        <!-- <Image
-                    Source="Serviclr-namespace:ServiPuntos.uy_mobile_logo.png"
-                    HeightRequest="185"
-                    Aspect="AspectFit"/> -->
-
         <Label
           Text="Registrarse"
           Style="{StaticResource Headline}"
@@ -45,7 +40,8 @@
           Text="Registrarse"
           SemanticProperties.Hint="SignUp"
           Command="{Binding Path=SignupCommand}"
-          HorizontalOptions="Fill"/>
+          HorizontalOptions="Fill"
+          Style="{StaticResource PrimaryButtonStyle}"/>
       </VerticalStackLayout>
     </ScrollView>
   </ContentPage.Content>

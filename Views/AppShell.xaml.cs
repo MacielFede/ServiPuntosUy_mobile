@@ -1,4 +1,6 @@
-﻿namespace ServiPuntos.uy_mobile.Views;
+﻿using ServiPuntos.uy_mobile.Helpers;
+
+namespace ServiPuntos.uy_mobile.Views;
 
 public partial class AppShell : Shell
 {
@@ -12,5 +14,16 @@ public partial class AppShell : Shell
 		Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
 		Routing.RegisterRoute(nameof(ProductDetailPage), typeof(ProductDetailPage));
 		Routing.RegisterRoute(nameof(IdentityVerificationPage), typeof(IdentityVerificationPage));
+
+		SetDynamicUnselectedColor();
+	}
+	private static void SetDynamicUnselectedColor()
+	{
+		// Get the primary color
+		if (Application.Current is not null && Application.Current.Resources.TryGetValue("PrimaryColor", out var primaryColorObj) &&
+				primaryColorObj is Color primaryColor)
+		{
+			Application.Current.Resources["TabBarUnselectedColor"] = ColorHelper.GetBlackOrWhiteBasedOn(primaryColor);
+		}
 	}
 }

@@ -31,7 +31,8 @@
     <Label Text="{Binding Error}"
            IsVisible="{Binding Error, Converter={StaticResource StringToBooleanConverter}}"
            TextColor="Red"
-           HorizontalOptions="Center"/>
+           Padding="15"
+           Margin="10"/>
 
     <CollectionView ItemsSource="{Binding FuelPrices}"
                     IsVisible="{Binding Error, Converter={StaticResource StringToBooleanConverter}, ConverterParameter='invert'}">

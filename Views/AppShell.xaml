@@ -11,10 +11,9 @@
         Title="Bienvenido"
         ContentTemplate="{DataTemplate views:WelcomePage}"
         Route="WelcomePage"/>
-    <TabBar       Shell.TabBarBackgroundColor="CornflowerBlue"
-                  Shell.TabBarTitleColor="Black"
-                  Shell.TabBarUnselectedColor="AntiqueWhite"
-                  Shell.TabBarForegroundColor="Red">
+    <TabBar       Shell.TabBarBackgroundColor="{DynamicResource PrimaryColor}"
+                  Shell.TabBarUnselectedColor="{DynamicResource TabBarUnselectedColor}"
+                  Shell.TabBarForegroundColor="{DynamicResource SecondaryColor}">
         <ShellContent
             ContentTemplate="{DataTemplate views:HomePage}"
             Route="HomePage"

@@ -17,6 +17,7 @@ public static class MauiProgram
 		var configDic = new Dictionary<string, string?>
 				{
 						{"API_URL" ,"http://10.0.2.2:5162/api/"},
+						{"TENANT_ID" ,"1"},
 						{"TENANT_NAME" ,"Ancap"},
 				};
 		var config = new ConfigurationBuilder().AddInMemoryCollection(configDic).Build();
@@ -41,6 +42,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IBranchService, BranchService>();
 		builder.Services.AddSingleton<IFuelService, FuelService>();
 		builder.Services.AddSingleton<IGeoService, GeoService>();
+		builder.Services.AddSingleton<ITenantService, TenantService>();
 
 		// Pages
 		builder.Services.AddSingleton<WelcomePage>();

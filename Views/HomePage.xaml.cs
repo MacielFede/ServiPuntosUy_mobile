@@ -20,6 +20,7 @@ public partial class HomePage : ContentPage
     base.OnAppearing();
     if (BindingContext is HomeViewModel homeViewModel)
     {
+      _ = homeViewModel.GetUserPoints();
       _ = homeViewModel.LoadProducts();
     }
   }

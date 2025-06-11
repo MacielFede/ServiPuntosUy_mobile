@@ -3,6 +3,7 @@ using ServiPuntos.uy_mobile.Services.Interfaces;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using ServiPuntos.uy_mobile.Models.Enums;
+using System.Diagnostics;
 
 namespace ServiPuntos.uy_mobile.Services;
 
@@ -69,4 +70,27 @@ public class AuthService(IConfiguration configs) : ApiService(configs), IAuthSer
 
   public async Task<SessionData?> GetSessionData() => JsonConvert.DeserializeObject<SessionData>(await SecureStorage.GetAsync(SecureStorageType.Session.ToString()) ??
                                                    string.Empty);
+
+  public async Task LoadUserData()
+  {
+    try
+    {
+      var userResponse = await GET<User>("auth/me");
+      if (userResponse is { Error: false, Data: not null })
+      {
+        var userJson = JsonConvert.SerializeObject(userResponse.Data);
+        await SecureStorage.SetAsync(SecureStorageType.User.ToString(), userJson);
+      }
+      else
+      {
+        Debug.WriteLine($"Error obteniendo informacion del usuario: {userResponse?.Message}");
+      }
+    }
+    catch (Exception ex)
+    {
+      Debug.WriteLine($"Error obteniendo informacion del usuario: {ex}");
+    }
+  }
+
+
 }

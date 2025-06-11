@@ -7,14 +7,17 @@ public partial class App : Application
 {
 	private readonly IAuthService _authService;
 	private readonly IBranchService _branchService;
-	public App(IBranchService branchService, IAuthService authService)
+	private readonly ITenantService _tenantService;
+	public App(IBranchService branchService, IAuthService authService, ITenantService tenantService)
 	{
 		InitializeComponent();
 		_branchService = branchService;
 		_authService = authService;
+		_tenantService = tenantService;
 		_authService.SessionCreatedSuccessfully += async (s, e) =>
 		{
 			await _branchService.LoadBranchesAsync();
+			await _authService.LoadUserData();
 			await _branchService.LoadUserLocationAsync();
 		};
 	}
@@ -27,6 +30,7 @@ public partial class App : Application
 	protected override void OnStart()
 	{
 		base.OnStart();
+		_ = _tenantService.LoadTenantUIAsync();
 		_ = CheckUserSession();
 	}
 

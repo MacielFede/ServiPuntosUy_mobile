@@ -5,117 +5,126 @@
              x:Class="ServiPuntos.uy_mobile.Views.HomePage"
              x:DataType="viewModel:HomeViewModel">
 
-  <Grid>
+  <Grid RowSpacing="0">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
-      <!-- Header -->
-      <RowDefinition Height="Auto"/>
-      <!-- Ofertas flash Label -->
-      <RowDefinition Height="150"/>
-      <!-- Ofertas flash Carousel fixed height -->
-      <RowDefinition Height="Auto"/>
-      <!-- Productos Label -->
+      <!-- Fixed header -->
       <RowDefinition Height="*"/>
-      <!-- Products CollectionView fills remaining space -->
+      <!-- Scrollable content -->
     </Grid.RowDefinitions>
 
-    <!-- Header with Avatar -->
+    <!-- HEADER -->
     <FlexLayout Grid.Row="0"
                 AlignItems="Center"
                 JustifyContent="SpaceBetween"
                 Padding="10"
-                Margin="20,10,20,10">
+                Margin="20,10,20,10"
+                BackgroundColor="White">
       <ImageButton Source="avatar.png"
                    WidthRequest="50"
                    HeightRequest="50"
                    Clicked="OnAvatarClicked"/>
+      <Label>
+        <Label.FormattedText>
+          <FormattedString>
+            <Span Text="Puntos acumulados: "/>
+            <Span Text="{Binding UserPoints}"
+                  FontAttributes="Bold"
+                  TextColor="DarkGreen"/>
+          </FormattedString>
+        </Label.FormattedText>
+      </Label>
       <Button Text="Logout"
               VerticalOptions="Center"
               BackgroundColor="DarkRed"
               Command="{Binding LogoutCommand}"/>
     </FlexLayout>
 
-    <Label Grid.Row="1"
-           Text="Ofertas flash ⚡️"
-           FontSize="20"
-           FontAttributes="Bold"
-           Margin="20,0,20,5"/>
-    <!-- <CollectionView Grid.Row="2"
-                    ItemsSource="{Binding FlashOffers}"
-                    SelectionMode="Single"
-                    HorizontalScrollBarVisibility="Always"
-                    ItemsUpdatingScrollMode="KeepScrollOffset"
-                    HeightRequest="150">
-      <CollectionView.ItemsLayout>
-        <LinearItemsLayout Orientation="Horizontal"
-                           ItemSpacing="10"/>
-      </CollectionView.ItemsLayout>
-      <CollectionView.ItemTemplate>
-        <DataTemplate x:DataType="models:Product">
-          <Border Stroke="LightGray"
-                  StrokeThickness="1"
-                  Padding="10"
-                  Margin="5"
-                  WidthRequest="200"
-                  BackgroundColor="White"
-                  StrokeShape="RoundRectangle 10">
-            <StackLayout HorizontalOptions="Center"
-                         VerticalOptions="Center">
-              <Image Source="{Binding ImageUrl}"
-                     WidthRequest="120"
-                     HeightRequest="80"
-                     Aspect="AspectFill"/>
-              <Label Text="{Binding Name}"
-                     FontSize="16"
-                     FontAttributes="Bold"
-                     HorizontalOptions="Center"/>
-              <Label Text="{Binding Price, StringFormat='${0:F2}'}"
-                     TextColor="SeaGreen"
-                     HorizontalOptions="Center"/>
-            </StackLayout>
-          </Border>
-        </DataTemplate>
-      </CollectionView.ItemTemplate>
-    </CollectionView> -->
+    <!-- SCROLLABLE CONTENT -->
+    <ScrollView Grid.Row="1">
+      <StackLayout Padding="20"
+                   Spacing="15">
 
-    <Label Grid.Row="3"
-           Text="Productos"
-           FontSize="20"
-           FontAttributes="Bold"
-           Margin="20,10,20,5"/>
-    <CollectionView Grid.Row="4"
-                    ItemsSource="{Binding Products}"
-                    SelectionMode="Single"
-                    SelectionChanged="OnProductSelected">
-      <CollectionView.ItemsLayout>
-        <GridItemsLayout Orientation="Vertical"
-                         Span="2"
-                         HorizontalItemSpacing="10"
-                         VerticalItemSpacing="10"/>
-      </CollectionView.ItemsLayout>
-      <CollectionView.ItemTemplate>
-        <DataTemplate x:DataType="models:Product">
-          <Border Stroke="LightGray"
-                  StrokeThickness="1"
-                  Padding="10"
-                  Margin="5"
-                  HorizontalOptions="Fill"
-                  BackgroundColor="White"
-                  StrokeShape="RoundRectangle 10">
-            <StackLayout>
-              <Image Source="{Binding ImageUrl}"
-                     WidthRequest="50"
-                     HeightRequest="50"/>
-              <Label Text="{Binding Name}"
-                     FontSize="18"
-                     FontAttributes="Bold"/>
-              <Label Text="{Binding Price, StringFormat='${0:F2}'}"
-                     TextColor="SeaGreen"/>
-            </StackLayout>
-          </Border>
-        </DataTemplate>
-      </CollectionView.ItemTemplate>
-    </CollectionView>
+        <!-- Ofertas Flash (conditionally visible) -->
+        <StackLayout IsVisible="{Binding HasFlashOffers}">
+          <Label Text="Ofertas flash ⚡️"
+                 FontSize="20"
+                 FontAttributes="Bold"/>
+          <CollectionView ItemsSource="{Binding FlashOffers}"
+                          HeightRequest="150"
+                          HorizontalScrollBarVisibility="Always">
+            <CollectionView.ItemsLayout>
+              <LinearItemsLayout Orientation="Horizontal"
+                                 ItemSpacing="10"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+              <DataTemplate x:DataType="models:Product">
+                <Border Stroke="LightGray"
+                        StrokeThickness="1"
+                        Padding="10"
+                        Margin="5"
+                        WidthRequest="200"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle 10">
+                  <StackLayout HorizontalOptions="Center"
+                               VerticalOptions="Center">
+                    <Image Source="{Binding ImageUrl}"
+                           WidthRequest="120"
+                           HeightRequest="80"
+                           Aspect="AspectFill"/>
+                    <Label Text="{Binding Name}"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"/>
+                    <Label Text="{Binding Price, StringFormat='${0:F2}'}"
+                           TextColor="SeaGreen"
+                           HorizontalOptions="Center"/>
+                  </StackLayout>
+                </Border>
+              </DataTemplate>
+            </CollectionView.ItemTemplate>
+          </CollectionView>
+        </StackLayout>
 
+        <!-- Productos -->
+        <Label Text="Productos"
+               FontSize="20"
+               FontAttributes="Bold"
+               Margin="0,10,0,0"/>
+        <CollectionView ItemsSource="{Binding Products}"
+                        SelectionMode="Single"
+                        SelectionChanged="OnProductSelected">
+          <CollectionView.ItemsLayout>
+            <GridItemsLayout Orientation="Vertical"
+                             Span="2"
+                             HorizontalItemSpacing="10"
+                             VerticalItemSpacing="10"/>
+          </CollectionView.ItemsLayout>
+          <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="models:Product">
+              <Border Stroke="LightGray"
+                      StrokeThickness="1"
+                      Padding="10"
+                      Margin="5"
+                      HorizontalOptions="Fill"
+                      BackgroundColor="White"
+                      StrokeShape="RoundRectangle 10">
+                <StackLayout>
+                  <Image Source="{Binding ImageUrl}"
+                         WidthRequest="50"
+                         HeightRequest="50"/>
+                  <Label Text="{Binding Name}"
+                         FontSize="18"
+                         FontAttributes="Bold"/>
+                  <Label Text="{Binding Price, StringFormat='${0:F2}'}"
+                         TextColor="SeaGreen"/>
+                </StackLayout>
+              </Border>
+            </DataTemplate>
+          </CollectionView.ItemTemplate>
+        </CollectionView>
+
+      </StackLayout>
+    </ScrollView>
   </Grid>
 </ContentPage>

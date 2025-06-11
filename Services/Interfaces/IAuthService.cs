@@ -15,6 +15,7 @@ public interface IAuthService
 
   public Task SaveSession(SessionData sessionData);
   public Task<ApiResponse<User>> VerifyIdentity(Document document);
+  public Task LoadUserData();
   public Task<SessionData?> GetSessionData();
   public void TriggerSessionCreatedEvent();
 }

@@ -4,4 +4,7 @@ public enum SecureStorageType
 {
   Session,
   User,
+  PrimaryColor,
+  SecondaryColor,
+  LogoUrl,
 }

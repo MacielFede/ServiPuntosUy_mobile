@@ -10,11 +10,10 @@
         Direction="Column">
         <VerticalStackLayout
             Spacing="25">
-            <!-- TODO: Agregar imagen del tenant -->
-            <!-- <Image
-                    Source="tupencauy_logo.png"
-                    HeightRequest="185"
-                    Aspect="AspectFit"/> -->
+            <Image
+                Source="{DynamicResource LogoUrl}"
+                HeightRequest="185"
+                Aspect="AspectFit"/>
             <Label
                 Text="{Binding TenantName}"
                 Style="{StaticResource Headline}"
@@ -31,6 +30,7 @@
                 Text="Usuario interno"
                 SemanticProperties.Hint="Continue"
                 Command="{Binding GoToLoginPageCommand}"
+                Style="{StaticResource PrimaryButtonStyle}"
                 HorizontalOptions="Fill"/>
             <Button
                 x:Name="SignUpBtn"
@@ -38,7 +38,8 @@
                 SemanticProperties.Hint="Continue"
                 Command="{Binding GoToSignUpPageCommand}"
                 HorizontalOptions="Fill"
-                BackgroundColor="Black"/>
+                Style="{StaticResource SecondaryButtonStyle}"
+                BackgroundColor="{DynamicResource SecondaryColor}"/>
             <Button
                 x:Name="FirebaseBtn"
                 Text="Continuar con Google"
