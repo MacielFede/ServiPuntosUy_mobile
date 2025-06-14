@@ -1,10 +1,12 @@
 using ServiPuntos.uy_mobile.ViewModels;
 using ServiPuntos.uy_mobile.Models;
+using System.Diagnostics;
 
 namespace ServiPuntos.uy_mobile.Views;
 
 public partial class HomePage : ContentPage
 {
+  private CancellationTokenSource? _pollingCancellationTokenSource;
   public HomePage()
   {
     InitializeComponent();
@@ -15,14 +17,20 @@ public partial class HomePage : ContentPage
     BindingContext = homeViewModel;
   }
 
-  protected override void OnAppearing()
+  protected override async void OnAppearing()
   {
     base.OnAppearing();
     if (BindingContext is HomeViewModel homeViewModel)
     {
-      _ = homeViewModel.GetUserPoints();
-      _ = homeViewModel.LoadProducts();
+      await homeViewModel.LoadProducts();
+      StartPolling();
     }
+  }
+
+  protected override void OnDisappearing()
+  {
+    base.OnDisappearing();
+    StopPolling();
   }
 
   private async void OnProductSelected(object sender, SelectionChangedEventArgs selection)
@@ -39,5 +47,45 @@ public partial class HomePage : ContentPage
   private async void OnAvatarClicked(object sender, EventArgs eventArgs)
   {
     await Shell.Current.GoToAsync(nameof(IdentityVerificationPage));
+  }
+
+  private void StartPolling()
+  {
+    _pollingCancellationTokenSource = new CancellationTokenSource();
+
+    Task.Run(async () =>
+    {
+      while (!_pollingCancellationTokenSource.IsCancellationRequested)
+      {
+        try
+        {
+          if (BindingContext is HomeViewModel homeViewModel && homeViewModel.UserPoints == 0)
+          {
+            await homeViewModel.GetUserPoints();
+          }
+          else
+          {
+            StopPolling();
+          }
+          // Wait 5 seconds before the next poll
+          await Task.Delay(TimeSpan.FromSeconds(1), _pollingCancellationTokenSource.Token);
+        }
+        catch (TaskCanceledException)
+        {
+          // Normal case when polling is stopped
+        }
+        catch (Exception ex)
+        {
+          Debug.WriteLine($"Error en polling: {ex.Message}");
+        }
+      }
+    }, _pollingCancellationTokenSource.Token);
+  }
+
+  private void StopPolling()
+  {
+    _pollingCancellationTokenSource?.Cancel();
+    _pollingCancellationTokenSource?.Dispose();
+    _pollingCancellationTokenSource = null;
   }
 }

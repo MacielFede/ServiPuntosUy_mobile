@@ -273,3 +273,5 @@ System.*/
 
 **/obj/
 **/bin/
+
+appsettings.json

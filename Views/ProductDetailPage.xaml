@@ -2,46 +2,108 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:ServiPuntos.uy_mobile.ViewModels"
+             xmlns:converters="clr-namespace:ServiPuntos.uy_mobile.Converters"
              x:Class="ServiPuntos.uy_mobile.Views.ProductDetailPage"
-             x:DataType="viewModel:ProductDetailViewModel"
-             xmlns:converters="clr-namespace:ServiPuntos.uy_mobile.Converters">
+             x:DataType="viewModel:ProductDetailViewModel">
+
        <ContentPage.Resources>
               <ResourceDictionary>
                      <converters:BoolToAgeRestrictedConverter x:Key="BoolToAgeRestrictedConverter"/>
               </ResourceDictionary>
        </ContentPage.Resources>
-       <StackLayout Padding="20">
-              <StackLayout Orientation="Horizontal">
-                     <Label Style="{StaticResource SubHeadline}">
-                            <Label.FormattedText>
-                                   <FormattedString>
-                                          <Span Text="Puntos acumulados: "/>
-                                          <Span Text="{Binding UserPoints}"
-                                                FontAttributes="Bold"
-                                                TextColor="DarkGreen"/>
-                                   </FormattedString>
-                            </Label.FormattedText>
-                     </Label>
-              </StackLayout>
-              <Image Source="{Binding Product.ImageUrl}"
-                     WidthRequest="150"
-                     HeightRequest="150"/>
-              <Label Text="{Binding Product.Name}"
-                     FontSize="24"/>
-              <Label Text="{Binding Product.Description}"
-                     FontSize="18"/>
-              <Label Text="{Binding Product.Price, StringFormat='Price: {0:C}'}"
-                     FontSize="18"/>
-              <Label Text="{Binding Product.AgeRestricted, Converter={StaticResource BoolToAgeRestrictedConverter}, StringFormat='Producto disponible para {0}'}"
-                     FontSize="18"
-                     TextColor="DarkRed"/>
-              <StackLayout Padding="10"
-                           Spacing="10">
-                     <Button Text="Comprar"
-                             BackgroundColor="Green"
-                             Command="{Binding BuyCommand}"/>
-                     <Button Text="Canjear"
-                             Command="{Binding UsePointsCommand}"/>
-              </StackLayout>
-       </StackLayout>
+
+       <Grid>
+              <!-- Main content -->
+              <ScrollView>
+                     <VerticalStackLayout Padding="20"
+                                          Spacing="16">
+                            <HorizontalStackLayout>
+                                   <Label Style="{StaticResource SubHeadline}">
+                                          <Label.FormattedText>
+                                                 <FormattedString>
+                                                        <Span Text="Puntos acumulados: "/>
+                                                        <Span Text="{Binding UserPoints}"
+                                                              FontAttributes="Bold"
+                                                              TextColor="DarkGreen"/>
+                                                 </FormattedString>
+                                          </Label.FormattedText>
+                                   </Label>
+                            </HorizontalStackLayout>
+
+                            <Image Source="{Binding Product.ImageUrl}"
+                                   WidthRequest="150"
+                                   HeightRequest="150"/>
+
+                            <Label Text="{Binding Product.Name}"
+                                   FontSize="24"/>
+
+                            <Label Text="{Binding Product.Description}"
+                                   FontSize="18"/>
+
+                            <HorizontalStackLayout VerticalOptions="Center"
+                                                   Margin="0,10,0,10">
+                                   <Label Text="Cantidad:"
+                                          FontSize="18"
+                                          VerticalOptions="Center"/>
+                                   <Stepper Minimum="1"
+                                            Maximum="100"
+                                            Value="{Binding Quantity}"
+                                            HorizontalOptions="Fill"/>
+                                   <Label Text="{Binding Quantity}"
+                                          FontSize="18"
+                                          VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <Label Text="Selecciona donde lo retiras:"
+                                   FontSize="18"
+                                   VerticalOptions="Center"/>
+                            <Picker x:DataType="viewModel:ProductDetailViewModel"
+                                    ItemsSource="{Binding Branches}"
+                                    SelectedItem="{Binding SelectedBranch}"
+                                    ItemDisplayBinding="{Binding Address}"
+                                    Title="Elegí una sucursal"/>
+
+                            <Label Text="{Binding TotalPrice, StringFormat='Precio: {0:C}'}"
+                                   FontSize="18"
+                                   FontAttributes="Bold"/>
+
+                            <Label Text="{Binding TotalPrice, StringFormat='En puntos: {0:C}'}"
+                                   FontSize="18"
+                                   FontAttributes="Italic"/>
+
+                            <VerticalStackLayout Padding="10"
+                                                 Spacing="10">
+                                   <Button Text="Comprar"
+                                           BackgroundColor="Green"
+                                           Command="{Binding BuyCommand}"/>
+                                   <Button Text="Usa tus puntos!"
+                                           Command="{Binding UsePointsCommand}"
+                                           Style="{StaticResource PrimaryButtonStyle}"/>
+                            </VerticalStackLayout>
+                     </VerticalStackLayout>
+              </ScrollView>
+
+              <ContentView x:Name="QrOverlay"
+                           IsVisible="False"
+                           BackgroundColor="#80000000"
+                           HorizontalOptions="Fill"
+                           VerticalOptions="Fill">
+                     <Grid HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           BackgroundColor="White"
+                           Padding="20"
+                           WidthRequest="300"
+                           HeightRequest="300">
+                            <VerticalStackLayout HorizontalOptions="Center"
+                                                 VerticalOptions="Center"
+                                                 Spacing="10">
+                                   <Image Source="{Binding QrImage}"
+                                          WidthRequest="200"
+                                          HeightRequest="200"/>
+                                   <Button Text="Cerrar"
+                                           Style="{StaticResource SecondaryButtonStyle}"
+                                           Clicked="CloseQrOverlay_Clicked"/>
+                            </VerticalStackLayout>
+                     </Grid>
+              </ContentView>
+       </Grid>
 </ContentPage>

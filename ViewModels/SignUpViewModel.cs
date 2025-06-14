@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ServiPuntos.uy_mobile.Services.Interfaces;
@@ -16,7 +18,7 @@ public partial class SignUpViewModel(IAuthService authService) : ObservableObjec
   {
     if (Name is null || Email is null || Password is null)
     {
-      await Shell.Current.DisplayAlert("Error en el registro", "Debes ingresar todos los datos", "OK");
+      await Toast.Make("Debes ingresar todos los datos", ToastDuration.Short).Show();
       return;
     }
     try
@@ -31,12 +33,12 @@ public partial class SignUpViewModel(IAuthService authService) : ObservableObjec
       }
       else
       {
-        await Shell.Current.DisplayAlert("Error en el registro", registerResult?.Message, "OK");
+        await Toast.Make(registerResult.Message, ToastDuration.Short).Show();
       }
     }
     catch (Exception ex)
     {
-      await Shell.Current.DisplayAlert("Error en el registro", ex.Message, "OK");
+      await Toast.Make(ex.Message, ToastDuration.Short).Show();
     }
   }
 }

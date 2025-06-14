@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +21,7 @@ public partial class LoginViewModel(IAuthService authService, IConfiguration _co
     {
       if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
       {
-        await Shell.Current.DisplayAlert("Error en el inicio de sesión", "Debes ingresar email y contraseña", "OK");
+        await Toast.Make("Debes ingresar email y contraseña", ToastDuration.Short).Show();
         return;
       }
       var loginResult = await authService.Login(Email, Password);
@@ -31,18 +33,18 @@ public partial class LoginViewModel(IAuthService authService, IConfiguration _co
       }
       else
       {
-        await Shell.Current.DisplayAlert("Error en el inicio de sesión", loginResult?.Message, "OK");
+        await Toast.Make(loginResult.Message, ToastDuration.Short).Show();
       }
     }
     catch (Exception e)
     {
-      await Shell.Current.DisplayAlert("Error en el inicio de sesión", e.Message, "OK");
+      await Toast.Make(e.Message, ToastDuration.Short).Show();
     }
   }
   [RelayCommand]
-  private async Task SingleSignOn()
+  private static async Task SingleSignOn()
   {
-    await Shell.Current.DisplayAlert("Error en contraseña unica", "Tamos trabajando en esto", "OK");
+    await Toast.Make("Tamos trabajando en esto", ToastDuration.Short).Show();
   }
 
   public void Reset()
@@ -55,31 +57,4 @@ public partial class LoginViewModel(IAuthService authService, IConfiguration _co
   {
     TenantName = _configs["TENANT_NAME"] ?? "interno";
   }
-
-  // [RelayCommand]
-  // private async Task LoginAuth0()
-  // {
-  //   var siteResult = await authService.ValidateSite();
-
-  //   if (siteResult == null || siteResult.Error)
-  //   {
-  //     await Application.Current.MainPage.DisplayAlert("Site error", siteResult.Message, "OK");
-  //     return;
-  //   }
-
-  //   var accessType = siteResult.Data.AccessType;
-
-  //   var loginResult = await authService.LoginAuth0(, accessType);
-
-  //   if (loginResult is { Error: false })
-  //   {
-  //     await authService.SaveSession(loginResult.Data, );
-  //     await Shell.Current.GoToAsync($"///{nameof(EventsPage)}");
-  //   }
-  //   else
-  //   {
-  //     await Application.Current.MainPage.DisplayAlert("Login error", loginResult.Message, "OK");
-  //   }
-  // }
-
 }

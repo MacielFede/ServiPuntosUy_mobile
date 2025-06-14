@@ -1,52 +1,72 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:ServiPuntos.uy_mobile.ViewModels"
              x:Class="ServiPuntos.uy_mobile.Views.WelcomePage"
              x:DataType="viewModel:WelcomeViewModel">
 
-    <FlexLayout
-        JustifyContent="SpaceEvenly"
-        Direction="Column">
-        <VerticalStackLayout
-            Spacing="25">
-            <Image
-                Source="{DynamicResource LogoUrl}"
-                HeightRequest="185"
-                Aspect="AspectFit"/>
-            <Label
-                Text="{Binding TenantName}"
-                Style="{StaticResource Headline}"
-                SemanticProperties.HeadingLevel="Level1"/>
-            <Label
-                Text="Debes iniciar sesión para poder comprar nuestros productos y ver nuestras ofertas."
-                MaximumWidthRequest="300"/>
-        </VerticalStackLayout>
-        <VerticalStackLayout
-            Margin="20"
-            Spacing="25">
-            <Button
-                x:Name="LoginBtn"
-                Text="Usuario interno"
-                SemanticProperties.Hint="Continue"
-                Command="{Binding GoToLoginPageCommand}"
-                Style="{StaticResource PrimaryButtonStyle}"
-                HorizontalOptions="Fill"/>
-            <Button
-                x:Name="SignUpBtn"
-                Text="Registrarse"
-                SemanticProperties.Hint="Continue"
-                Command="{Binding GoToSignUpPageCommand}"
-                HorizontalOptions="Fill"
-                Style="{StaticResource SecondaryButtonStyle}"
-                BackgroundColor="{DynamicResource SecondaryColor}"/>
-            <Button
-                x:Name="FirebaseBtn"
-                Text="Continuar con Google"
-                SemanticProperties.Hint="Continue"
-                HorizontalOptions="Fill"
-                BackgroundColor="Red"/>
-        </VerticalStackLayout>
-    </FlexLayout>
+    <Grid>
+        <!-- Main UI -->
+        <FlexLayout JustifyContent="SpaceEvenly"
+                    Direction="Column">
+            <VerticalStackLayout Spacing="25">
+                <Image
+                    Source="{DynamicResource LogoUrl}"
+                    HeightRequest="185"
+                    Aspect="AspectFit"/>
+                <Label
+                    Text="{Binding TenantName}"
+                    Style="{StaticResource Headline}"
+                    SemanticProperties.HeadingLevel="Level1"/>
+                <Label
+                    Text="Debes iniciar sesión para poder comprar nuestros productos y ver nuestras ofertas."
+                    MaximumWidthRequest="300"/>
+            </VerticalStackLayout>
 
+            <VerticalStackLayout Margin="20"
+                                 Spacing="25">
+                <Button
+                    x:Name="LoginBtn"
+                    Text="Usuario interno"
+                    Command="{Binding GoToLoginPageCommand}"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    HorizontalOptions="Fill"/>
+                <Button
+                    x:Name="SignUpBtn"
+                    Text="Registrarse"
+                    Command="{Binding GoToSignUpPageCommand}"
+                    HorizontalOptions="Fill"
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    BackgroundColor="{DynamicResource SecondaryColor}"/>
+                <Button
+                    x:Name="GoogleSignInButton"
+                    Command="{Binding LoginWithGoogleCommand}"
+                    HeightRequest="50"
+                    BackgroundColor="White"
+                    TextColor="Black"
+                    BorderColor="#DDDDDD"
+                    BorderWidth="1"
+                    CornerRadius="8"
+                    Padding="12"
+                    ImageSource="google_logo.png"
+                    Text="Continuar con redes sociales"/>
+            </VerticalStackLayout>
+        </FlexLayout>
+
+        <!-- Spinner Overlay -->
+        <Grid x:Name="LoadingOverlay"
+              IsVisible="{Binding SigningWithGoogle}"
+              BackgroundColor="#80000000"
+              InputTransparent="False"
+              VerticalOptions="Fill"
+              HorizontalOptions="Fill"
+              ZIndex="10">
+            <ActivityIndicator
+                IsRunning="True"
+                Color="White"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                WidthRequest="60"
+                HeightRequest="60"/>
+        </Grid>
+    </Grid>
 </ContentPage>

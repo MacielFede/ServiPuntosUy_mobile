@@ -16,8 +16,8 @@ public partial class App : Application
 		_tenantService = tenantService;
 		_authService.SessionCreatedSuccessfully += async (s, e) =>
 		{
-			await _branchService.LoadBranchesAsync();
 			await _authService.LoadUserData();
+			await _branchService.LoadBranchesAsync();
 			await _branchService.LoadUserLocationAsync();
 		};
 	}
@@ -27,11 +27,11 @@ public partial class App : Application
 		return new Window(new AppShell());
 	}
 
-	protected override void OnStart()
+	protected override async void OnStart()
 	{
 		base.OnStart();
-		_ = _tenantService.LoadTenantUIAsync();
-		_ = CheckUserSession();
+		await _tenantService.LoadTenantUIAsync();
+		await CheckUserSession();
 	}
 
 	private async Task CheckUserSession()

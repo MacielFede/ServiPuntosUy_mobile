@@ -25,9 +25,8 @@ public partial class FuelPricesViewModel(IFuelService fuelService, IBranchServic
       if (address is null && _branchService is not null)
       {
         await _branchService.LoadBranchesAsync();
-        throw new Exception("Estamos trabajando para obtener el precio de los combustibles mas cercanos a ti.");
       }
-
+      NearestBranchAddress = address ?? _branchService?.ClosestBranch?.Address ?? ""; ;
       Error = "";
     }
     catch (Exception ex)

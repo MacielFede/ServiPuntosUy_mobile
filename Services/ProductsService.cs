@@ -30,4 +30,51 @@ public class ProductsService(IConfiguration configs) : ApiService(configs), IPro
       return new ApiResponse<Product>(true, null, ex.Message);
     }
   }
+
+  public async Task<ApiResponse<Transaction>> PurchaseProduct(ProductForTransaction[] products, int branchId)
+  {
+    try
+    {
+      return await POST<Transaction>("transaction", new { BranchId = branchId, products });
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<Transaction>(true, null, ex.Message);
+    }
+  }
+  public async Task<ApiResponse<SessionData>> CreateProductRedemption(int productId, int branchId)
+  {
+    try
+    {
+      return await POST<SessionData>("redemption/generate-token", new { BranchId = branchId, ProductId = productId });
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<SessionData>(true, null, ex.Message);
+    }
+  }
+
+  public async Task<ApiResponse<Transaction[]>> GetTransactionHistory()
+  {
+    try
+    {
+      return await GET<Transaction[]>("transaction/history");
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<Transaction[]>(true, null, ex.Message);
+    }
+  }
+
+  public async Task<ApiResponse<TransactionItem[]>> GetTransactionDetails(int transactionId)
+  {
+    try
+    {
+      return await GET<TransactionItem[]>($"transaction/{transactionId}/items");
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<TransactionItem[]>(true, null, ex.Message);
+    }
+  }
 }

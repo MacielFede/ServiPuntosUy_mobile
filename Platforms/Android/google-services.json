@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "374216483819",
+    "project_id": "login-be4bd",
+    "storage_bucket": "login-be4bd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374216483819:android:59f7628e67d9d54b5e2fae",
+        "android_client_info": {
+          "package_name": "com.servipuntos.uy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "374216483819-9sk1qcihmk37nl9fpi2u70hvah9122dh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.servipuntos.uy",
+            "certificate_hash": "9ad6dbb37e50417ea04bcd67e026f22e47a0e79a"
+          }
+        },
+        {
+          "client_id": "374216483819-fap5h7t48tqiagkms98jtpeq8k2e9isu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJawRlHJtksr6Qc_1cegR8tyULAcuSQOc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "374216483819-fap5h7t48tqiagkms98jtpeq8k2e9isu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "374216483819-4gqtbk1mc4ushmppltlhebobpsjha7gj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.servipuntos.uy"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

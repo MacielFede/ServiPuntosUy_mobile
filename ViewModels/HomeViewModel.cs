@@ -1,4 +1,6 @@
 using System.Collections.ObjectModel;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
@@ -13,7 +15,8 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
 {
   private readonly IProductsService _productService = productsService;
   private readonly IAuthService _authService = authService;
-  public ObservableCollection<Product> FlashOffers { get; } = [];
+  [ObservableProperty]
+  private ObservableCollection<Product> flashOffers = [];
 
   public bool HasFlashOffers => FlashOffers.Any();
   [ObservableProperty]
@@ -24,7 +27,7 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
   [RelayCommand]
   public async Task Logout()
   {
-    await _authService.Logout();
+    _authService.Logout();
     await Shell.Current.GoToAsync($"//{nameof(WelcomePage)}");
   }
 
@@ -32,15 +35,15 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
   {
     try
     {
-      var productsList = await _productService.GetProductsAsync();
-      if (productsList is { Error: false, Data: not null })
-        Products = new ObservableCollection<Product>(productsList.Data);
+      var response = await _productService.GetProductsAsync();
+      if (response is { Error: false, Data: not null })
+        Products = new ObservableCollection<Product>(response.Data);
       else
-        await Shell.Current.DisplayAlert("Error obteniendo productos", productsList.Message, "OK");
+        await Toast.Make($"{response.Message}", ToastDuration.Short).Show();
     }
     catch (Exception ex)
     {
-      await Shell.Current.DisplayAlert("Error obteniendo productos", ex.Message, "OK");
+      await Toast.Make($"{ex.Message}", ToastDuration.Short).Show();
     }
   }
 

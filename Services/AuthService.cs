@@ -4,11 +4,13 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using ServiPuntos.uy_mobile.Models.Enums;
 using System.Diagnostics;
+using Auth0.OidcClient;
 
 namespace ServiPuntos.uy_mobile.Services;
 
-public class AuthService(IConfiguration configs) : ApiService(configs), IAuthService
+public class AuthService(IConfiguration configs, Auth0Client auth0Client) : ApiService(configs), IAuthService
 {
+  private readonly Auth0Client _auth0Client = auth0Client;
   public event EventHandler? SessionCreatedSuccessfully;
   public void TriggerSessionCreatedEvent()
   {
@@ -28,26 +30,41 @@ public class AuthService(IConfiguration configs) : ApiService(configs), IAuthSer
     }
   }
 
-  public async Task<ApiResponse<SessionData>?> LoginAuth0(int accessType)
+  public async Task<ApiResponse<SessionData>> LoginGoogle()
   {
-    // var loginResult = await auth0Client.LoginAsync();
-    // var payload = new { Token = loginResult.TokenResponse.IdentityToken, IsAllowedRegister = true };
-
-    var requestUri = "auth/OAuthLogin?siteAccess={accessType}";
-
-    return await POST<SessionData>(requestUri, null);
+    try
+    {
+      var loginResult = await _auth0Client.LoginAsync();
+      Debug.WriteLine($"ESTOY {loginResult.ErrorDescription}");
+      if (!loginResult.IsError)
+      {
+        Debug.WriteLine($"ESTOY LOGIN SUCCESS {loginResult.User.Identity?.Name}");
+        Debug.WriteLine($"ESTOY LOGIN SUCCESS {loginResult.User.Claims.First(c => c.Type == "email")?.Value}");
+        return await POST<SessionData>("auth/signup", loginResult.AccessToken);
+      }
+      else
+      {
+        Debug.WriteLine($"ESTOY Login failed: {loginResult.ErrorDescription}");
+        return new ApiResponse<SessionData>(true, null, loginResult.ErrorDescription);
+      }
+    }
+    catch (Exception ex)
+    {
+      Debug.WriteLine($"ESTOY Login failed: {ex.Message}");
+      return new ApiResponse<SessionData>(true, null, ex.Message);
+    }
   }
 
-  public async Task<ApiResponse<SessionData>?> Signup(string name, string email, string password)
+  public async Task<ApiResponse<SessionData>> Signup(string name, string email, string password)
   {
     var payload = new { Name = name, Email = email, Password = password };
     return await POST<SessionData>("auth/signup", payload);
   }
 
-  public async Task Logout()
+  public void Logout()
   {
-    // await auth0Client.LogoutAsync();
-    SecureStorage.RemoveAll();
+    SecureStorage.Remove(SecureStorageType.Session.ToString());
+    SecureStorage.Remove(SecureStorageType.User.ToString());
   }
 
   public async Task SaveSession(SessionData sessionData)

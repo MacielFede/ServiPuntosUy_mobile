@@ -6,6 +6,9 @@ using ServiPuntos.uy_mobile.ViewModels;
 using ServiPuntos.uy_mobile.Services;
 using ServiPuntos.uy_mobile.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Auth0.OidcClient;
+using System.Reflection;
+using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace ServiPuntos.uy_mobile;
 
@@ -13,17 +16,14 @@ public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
 	{
-		// TODO: GLOBAL CONFIGS
-		var configDic = new Dictionary<string, string?>
-				{
-						{"API_URL" ,"http://10.0.2.2:5162/api/"},
-						{"TENANT_ID" ,"1"},
-						{"TENANT_NAME" ,"Ancap"},
-				};
-		var config = new ConfigurationBuilder().AddInMemoryCollection(configDic).Build();
+		using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ServiPuntos.uy_mobile.appsettings.json") ?? throw new Exception("The specified appsettings.json file can't be loaded");
+		var config = new ConfigurationBuilder()
+			.AddJsonStream(stream)
+			.Build();
 		var builder = MauiApp.CreateBuilder();
 		builder
 				.UseMauiApp<App>()
+				.UseSkiaSharp()
 #if DEBUG
 				.EnableHotReload()
 #endif
@@ -37,6 +37,14 @@ public static class MauiProgram
 				.Configuration.AddConfiguration(config);
 
 		// Services
+		builder.Services.AddSingleton(new Auth0Client(new()
+		{
+			Domain = config["AUTH_DOMAIN"],
+			ClientId = config["AUTH_CLIENTID"],
+			RedirectUri = "myapp://callback/",
+			PostLogoutRedirectUri = "myapp://callback/",
+			Scope = "openid profile email"
+		}));
 		builder.Services.AddSingleton<IAuthService, AuthService>();
 		builder.Services.AddSingleton<IProductsService, ProductsService>();
 		builder.Services.AddSingleton<IBranchService, BranchService>();
@@ -64,6 +72,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<LoginViewModel>();
 		builder.Services.AddSingleton<FuelPricesViewModel>();
 		builder.Services.AddSingleton<BranchesViewModel>();
+		builder.Services.AddSingleton<TransactionsHistoryViewModel>();
 
 #if DEBUG
 		builder.Logging.AddDebug();
