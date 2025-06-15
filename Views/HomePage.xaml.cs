@@ -57,15 +57,15 @@ public partial class HomePage : ContentPage
         {
           if (BindingContext is HomeViewModel homeViewModel && homeViewModel.UserPoints == 0)
           {
-            await homeViewModel.GetUserPoints();
             await CurrencyFormatConverter.InitializeCurrencySymbolAsync();
+            await homeViewModel.GetUserPoints();
           }
           else
           {
             StopPolling();
           }
           // Wait 5 seconds before the next poll
-          await Task.Delay(TimeSpan.FromSeconds(1), _pollingCancellationTokenSource.Token);
+          await Task.Delay(TimeSpan.FromSeconds(0.5), _pollingCancellationTokenSource.Token);
         }
         catch (TaskCanceledException)
         {

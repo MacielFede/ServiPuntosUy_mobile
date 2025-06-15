@@ -138,6 +138,11 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
       }
     }
   }
+
+  public void Reset()
+  {
+    Quantity = 1;
+  }
 }
 
 public static class QrCodeService

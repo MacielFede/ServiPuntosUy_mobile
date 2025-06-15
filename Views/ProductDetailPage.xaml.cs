@@ -33,6 +33,7 @@ public partial class ProductDetailPage : ContentPage
     if (viewModel is not null)
     {
       viewModel.QrGenerated -= OnQrGenerated;
+      viewModel.Reset();
     }
   }
 

@@ -75,7 +75,7 @@ public partial class TransactionsHistoryViewModel(IProductsService productsServi
     sb.AppendLine("---------------------------------------");
     foreach (var item in items)
     {
-      sb.AppendLine($"● {item.ProductName} | {currencySymbol}{item.UnitPrice:C} | Cantidad: {item.Quantity}");
+      sb.AppendLine($"● {item.ProductName} | {currencySymbol}{item.UnitPrice} | Cantidad: {item.Quantity}");
     }
     return sb.ToString();
   }
