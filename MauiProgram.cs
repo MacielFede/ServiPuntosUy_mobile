@@ -1,40 +1,49 @@
 ﻿using Microsoft.Extensions.Logging;
-using ServiPuntos.uy_mobile.Views;
+using ServiPuntosUy_mobile.Views;
 using DotNet.Meteor.HotReload.Plugin;
 using CommunityToolkit.Maui;
-using ServiPuntos.uy_mobile.ViewModels;
-using ServiPuntos.uy_mobile.Services;
-using ServiPuntos.uy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.ViewModels;
+using ServiPuntosUy_mobile.Services;
+using ServiPuntosUy_mobile.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Auth0.OidcClient;
 using System.Reflection;
 using SkiaSharp.Views.Maui.Controls.Hosting;
+using Microsoft.Maui.LifecycleEvents;
+using Plugin.Firebase.CloudMessaging;
 
-namespace ServiPuntos.uy_mobile;
+#if IOS
+using Plugin.Firebase.Core.Platforms.iOS;
+#elif ANDROID
+using Plugin.Firebase.Core.Platforms.Android;
+#endif
+
+namespace ServiPuntosUy_mobile;
 
 public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
 	{
-		using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ServiPuntos.uy_mobile.appsettings.json") ?? throw new Exception("The specified appsettings.json file can't be loaded");
+		using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ServiPuntosUy_mobile.appsettings.json") ?? throw new Exception("The specified appsettings.json file can't be loaded");
 		var config = new ConfigurationBuilder()
 			.AddJsonStream(stream)
 			.Build();
 		var builder = MauiApp.CreateBuilder();
-		builder
-				.UseMauiApp<App>()
-				.UseSkiaSharp()
 #if DEBUG
-				.EnableHotReload()
+		builder.Logging.AddDebug();
+		builder.EnableHotReload()
 #endif
+				.UseMauiApp<App>()
+				.RegisterFirebaseServices()
+				.UseSkiaSharp()
 				.ConfigureFonts(fonts =>
-				{
-					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-					fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-				})
-				.UseMauiCommunityToolkit()
-				.UseMauiMaps()
-				.Configuration.AddConfiguration(config);
+		{
+			fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+			fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+		})
+		.UseMauiCommunityToolkit()
+		.UseMauiMaps()
+		.Configuration.AddConfiguration(config);
 
 		// Services
 		builder.Services.AddSingleton(new Auth0Client(new()
@@ -73,11 +82,24 @@ public static class MauiProgram
 		builder.Services.AddSingleton<FuelPricesViewModel>();
 		builder.Services.AddSingleton<BranchesViewModel>();
 		builder.Services.AddSingleton<TransactionsHistoryViewModel>();
-
-#if DEBUG
-		builder.Logging.AddDebug();
-#endif
-
 		return builder.Build();
+	}
+
+	private static MauiAppBuilder RegisterFirebaseServices(this MauiAppBuilder builder)
+	{
+		builder.ConfigureLifecycleEvents(events =>
+		{
+#if IOS
+            events.AddiOS(iOS => iOS.WillFinishLaunching((_,__) => {
+                CrossFirebase.Initialize();
+								FirebaseCloudMessagingImplementation.Initialize();
+                return false;
+            }));
+#elif ANDROID
+			events.AddAndroid(android => android.OnCreate((activity, _) =>
+					CrossFirebase.Initialize(activity)));
+#endif
+		});
+		return builder;
 	}
 }

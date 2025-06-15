@@ -1,10 +1,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.Models.Enums;
-using ServiPuntos.uy_mobile.Services.Interfaces;
-using ServiPuntos.uy_mobile.Views;
+using ServiPuntosUy_mobile.Models;
+using ServiPuntosUy_mobile.Models.Enums;
+using ServiPuntosUy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Views;
 using QRCoder;
 using SkiaSharp;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +12,7 @@ using System.Diagnostics;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Alerts;
 
-namespace ServiPuntos.uy_mobile.ViewModels;
+namespace ServiPuntosUy_mobile.ViewModels;
 
 [QueryProperty(nameof(Product), "Product")]
 public partial class ProductDetailViewModel(IConfiguration configuration, IBranchService branchService, IProductsService productsService, ITenantService tenantService) : ObservableObject

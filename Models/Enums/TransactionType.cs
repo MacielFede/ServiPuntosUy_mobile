@@ -1,4 +1,4 @@
-namespace ServiPuntos.uy_mobile.Models.Enums;
+namespace ServiPuntosUy_mobile.Models.Enums;
 
 public enum TransactionType
 {

@@ -3,10 +3,10 @@ using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
-using ServiPuntos.uy_mobile.Services.Interfaces;
-using ServiPuntos.uy_mobile.Views;
+using ServiPuntosUy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Views;
 
-namespace ServiPuntos.uy_mobile.ViewModels;
+namespace ServiPuntosUy_mobile.ViewModels;
 
 public partial class LoginViewModel(IAuthService authService, IConfiguration _configs) : ObservableObject
 {

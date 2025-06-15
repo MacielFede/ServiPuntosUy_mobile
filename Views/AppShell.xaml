@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="ServiPuntos.uy_mobile.Views.AppShell"
+    x:Class="ServiPuntosUy_mobile.Views.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:ServiPuntos.uy_mobile.Views"
-    Title="ServiPuntos.uy"
+    xmlns:views="clr-namespace:ServiPuntosUy_mobile.Views"
+    Title="ServiPuntosUy"
     FlyoutBehavior="Disabled">
 
     <ShellContent

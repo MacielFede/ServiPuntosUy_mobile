@@ -1,11 +1,11 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using ServiPuntos.uy_mobile.Enums;
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Enums;
+using ServiPuntosUy_mobile.Models;
+using ServiPuntosUy_mobile.Services.Interfaces;
 
-namespace ServiPuntos.uy_mobile.Services;
+namespace ServiPuntosUy_mobile.Services;
 
 public class FuelService(IConfiguration configs, IBranchService branchService) : ApiService(configs), IFuelService
 {

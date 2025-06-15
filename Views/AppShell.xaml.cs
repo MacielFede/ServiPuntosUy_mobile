@@ -1,6 +1,6 @@
-﻿using ServiPuntos.uy_mobile.Helpers;
+﻿using ServiPuntosUy_mobile.Helpers;
 
-namespace ServiPuntos.uy_mobile.Views;
+namespace ServiPuntosUy_mobile.Views;
 
 public partial class AppShell : Shell
 {

@@ -1,6 +1,6 @@
-using ServiPuntos.uy_mobile.Models.Enums;
+using ServiPuntosUy_mobile.Models.Enums;
 
-namespace ServiPuntos.uy_mobile.Models;
+namespace ServiPuntosUy_mobile.Models;
 
 public class Transaction
 {

@@ -4,10 +4,11 @@ using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
-using ServiPuntos.uy_mobile.Services.Interfaces;
-using ServiPuntos.uy_mobile.Views;
+using Plugin.Firebase.CloudMessaging;
+using ServiPuntosUy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Views;
 
-namespace ServiPuntos.uy_mobile.ViewModels;
+namespace ServiPuntosUy_mobile.ViewModels;
 
 public partial class WelcomeViewModel(IConfiguration _configs, IAuthService authService) : ObservableObject
 {
@@ -29,6 +30,11 @@ public partial class WelcomeViewModel(IConfiguration _configs, IAuthService auth
   {
     try
     {
+      await CrossFirebaseCloudMessaging.Current.CheckIfValidAsync();
+      var token = await CrossFirebaseCloudMessaging.Current.GetTokenAsync();
+      Debug.WriteLine($"ESTOY {token}");
+      return;
+
       SigningWithGoogle = true;
       var loginResult = await _authService.LoginGoogle();
       Debug.WriteLine($"ESTOY {loginResult.Message}");

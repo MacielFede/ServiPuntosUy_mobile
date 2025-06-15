@@ -1,13 +1,13 @@
 using Microsoft.Extensions.Configuration;
-using ServiPuntos.uy_mobile.Services.Interfaces;
-using ServiPuntos.uy_mobile.Models;
+using ServiPuntosUy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Models;
 using System.Diagnostics;
-using ServiPuntos.uy_mobile.Models.Enums;
-using ServiPuntos.uy_mobile.Helpers;
+using ServiPuntosUy_mobile.Models.Enums;
+using ServiPuntosUy_mobile.Helpers;
 using Newtonsoft.Json;
-using ServiPuntos.uy_mobile.Converters;
+using ServiPuntosUy_mobile.Converters;
 
-namespace ServiPuntos.uy_mobile.Services;
+namespace ServiPuntosUy_mobile.Services;
 
 public class TenantService(IConfiguration configs) : ApiService(configs), ITenantService
 {

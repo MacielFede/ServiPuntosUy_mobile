@@ -1,4 +1,4 @@
-namespace ServiPuntos.uy_mobile.Enums;
+namespace ServiPuntosUy_mobile.Enums;
 
 public enum FuelType
 {

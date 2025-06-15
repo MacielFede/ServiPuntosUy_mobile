@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace ServiPuntos.uy_mobile.Converters;
+namespace ServiPuntosUy_mobile.Converters;
 
 public class StringToBooleanConverter : IValueConverter
 {

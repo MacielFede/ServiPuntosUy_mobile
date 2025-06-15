@@ -1,12 +1,12 @@
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Models;
+using ServiPuntosUy_mobile.Services.Interfaces;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
-using ServiPuntos.uy_mobile.Models.Enums;
+using ServiPuntosUy_mobile.Models.Enums;
 using System.Diagnostics;
 using Auth0.OidcClient;
 
-namespace ServiPuntos.uy_mobile.Services;
+namespace ServiPuntosUy_mobile.Services;
 
 public class AuthService(IConfiguration configs, Auth0Client auth0Client) : ApiService(configs), IAuthService
 {

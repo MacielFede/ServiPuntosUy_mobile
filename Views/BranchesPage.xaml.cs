@@ -1,10 +1,10 @@
 using Map = Microsoft.Maui.Controls.Maps.Map;
-using ServiPuntos.uy_mobile.ViewModels;
+using ServiPuntosUy_mobile.ViewModels;
 using Microsoft.Maui.Maps;
 using Microsoft.Maui.Controls.Maps;
 using System.Diagnostics;
 
-namespace ServiPuntos.uy_mobile.Views;
+namespace ServiPuntosUy_mobile.Views;
 
 public partial class BranchesPage : ContentPage
 {

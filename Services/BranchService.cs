@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Configuration;
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Models;
+using ServiPuntosUy_mobile.Services.Interfaces;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
-namespace ServiPuntos.uy_mobile.Services;
+namespace ServiPuntosUy_mobile.Services;
 
 public class BranchService(IConfiguration configs, IGeoService geoService) : ApiService(configs), IBranchService
 {

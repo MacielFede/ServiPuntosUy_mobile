@@ -1,6 +1,6 @@
-using ServiPuntos.uy_mobile.Enums;
+using ServiPuntosUy_mobile.Enums;
 
-namespace ServiPuntos.uy_mobile.Models;
+namespace ServiPuntosUy_mobile.Models;
 
 public class FuelPrice(FuelType fuelType, decimal price)
 {

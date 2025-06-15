@@ -1,4 +1,4 @@
-# ServiPuntos.uy Mobile App
+# ServiPuntosUy Mobile App
 
 ## First setup
 

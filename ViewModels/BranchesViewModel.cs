@@ -1,9 +1,9 @@
 using System.Diagnostics;
-using ServiPuntos.uy_mobile.Services.Interfaces;
-using ServiPuntos.uy_mobile.Models;
+using ServiPuntosUy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace ServiPuntos.uy_mobile.ViewModels;
+namespace ServiPuntosUy_mobile.ViewModels;
 
 public class BranchesViewModel(IBranchService branchService) : ObservableObject
 {

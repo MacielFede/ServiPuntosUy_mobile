@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace ServiPuntos.uy_mobile;
+namespace ServiPuntosUy_mobile;
 
 [Application]
 public class MainApplication : MauiApplication

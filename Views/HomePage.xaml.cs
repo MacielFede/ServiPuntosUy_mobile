@@ -1,9 +1,9 @@
-using ServiPuntos.uy_mobile.ViewModels;
-using ServiPuntos.uy_mobile.Models;
+using ServiPuntosUy_mobile.ViewModels;
+using ServiPuntosUy_mobile.Models;
 using System.Diagnostics;
-using ServiPuntos.uy_mobile.Converters;
+using ServiPuntosUy_mobile.Converters;
 
-namespace ServiPuntos.uy_mobile.Views;
+namespace ServiPuntosUy_mobile.Views;
 
 public partial class HomePage : ContentPage
 {

@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Configuration;
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Models;
+using ServiPuntosUy_mobile.Services.Interfaces;
 
-namespace ServiPuntos.uy_mobile.Services;
+namespace ServiPuntosUy_mobile.Services;
 
 public class ProductsService(IConfiguration configs) : ApiService(configs), IProductsService
 {

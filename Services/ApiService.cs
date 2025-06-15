@@ -4,12 +4,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using ServiPuntos.uy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Services.Interfaces;
 using Microsoft.Maui.Storage;
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.Models.Enums;
+using ServiPuntosUy_mobile.Models;
+using ServiPuntosUy_mobile.Models.Enums;
 
-namespace ServiPuntos.uy_mobile.Services;
+namespace ServiPuntosUy_mobile.Services;
 
 public partial class ApiService : IApiService
 {

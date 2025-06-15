@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace ServiPuntos.uy_mobile;
+namespace ServiPuntosUy_mobile;
 
 public class Program
 {

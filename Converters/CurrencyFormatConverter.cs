@@ -1,8 +1,8 @@
 using System;
 using System.Globalization;
-using ServiPuntos.uy_mobile.Helpers;
+using ServiPuntosUy_mobile.Helpers;
 
-namespace ServiPuntos.uy_mobile.Converters;
+namespace ServiPuntosUy_mobile.Converters;
 
 public class CurrencyFormatConverter : IValueConverter
 {

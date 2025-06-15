@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using Newtonsoft.Json;
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.Models.Enums;
+using ServiPuntosUy_mobile.Models;
+using ServiPuntosUy_mobile.Models.Enums;
 
-namespace ServiPuntos.uy_mobile.Helpers;
+namespace ServiPuntosUy_mobile.Helpers;
 
 public static class TenantParameterHelper
 {

@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
-using ServiPuntos.uy_mobile.Models;
+using ServiPuntosUy_mobile.Models;
 
-namespace ServiPuntos.uy_mobile.Services.Interfaces
+namespace ServiPuntosUy_mobile.Services.Interfaces
 {
   public interface IApiService
   {

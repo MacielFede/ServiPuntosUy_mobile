@@ -1,14 +1,14 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ServiPuntos.uy_mobile.Services.Interfaces;
-using ServiPuntos.uy_mobile.Models;
+using ServiPuntosUy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Models;
 using Newtonsoft.Json;
-using ServiPuntos.uy_mobile.Models.Enums;
+using ServiPuntosUy_mobile.Models.Enums;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Alerts;
 
 
-namespace ServiPuntos.uy_mobile.ViewModels;
+namespace ServiPuntosUy_mobile.ViewModels;
 
 public partial class IdentityVerificationViewModel(IAuthService authService) : ObservableObject
 {

@@ -1,5 +1,5 @@
 
-namespace ServiPuntos.uy_mobile.Services.Interfaces
+namespace ServiPuntosUy_mobile.Services.Interfaces
 {
   public interface IGeoService
   {

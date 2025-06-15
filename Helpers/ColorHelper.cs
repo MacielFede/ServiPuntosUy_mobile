@@ -1,4 +1,4 @@
-namespace ServiPuntos.uy_mobile.Helpers;
+namespace ServiPuntosUy_mobile.Helpers;
 
 public static class ColorHelper
 {

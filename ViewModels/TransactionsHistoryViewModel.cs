@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using ServiPuntos.uy_mobile.Services.Interfaces;
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.Models.Enums;
+using ServiPuntosUy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Models;
+using ServiPuntosUy_mobile.Models.Enums;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
@@ -9,9 +9,9 @@ using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using System.Text;
-using ServiPuntos.uy_mobile.Helpers;
+using ServiPuntosUy_mobile.Helpers;
 
-namespace ServiPuntos.uy_mobile.ViewModels;
+namespace ServiPuntosUy_mobile.ViewModels;
 
 public partial class TransactionsHistoryViewModel(IProductsService productsService, IBranchService branchService) : ObservableObject
 {

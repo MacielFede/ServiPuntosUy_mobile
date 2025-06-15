@@ -1,4 +1,4 @@
-namespace ServiPuntos.uy_mobile.Models;
+namespace ServiPuntosUy_mobile.Models;
 
 public class Branch
 {
