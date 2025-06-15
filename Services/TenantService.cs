@@ -4,12 +4,13 @@ using ServiPuntos.uy_mobile.Models;
 using System.Diagnostics;
 using ServiPuntos.uy_mobile.Models.Enums;
 using ServiPuntos.uy_mobile.Helpers;
+using Newtonsoft.Json;
+using ServiPuntos.uy_mobile.Converters;
 
 namespace ServiPuntos.uy_mobile.Services;
 
 public class TenantService(IConfiguration configs) : ApiService(configs), ITenantService
 {
-  private readonly IConfiguration _config = configs;
   public async Task LoadTenantUIAsync()
   {
     try
@@ -62,6 +63,49 @@ public class TenantService(IConfiguration configs) : ApiService(configs), ITenan
     catch (Exception ex)
     {
       Debug.WriteLine($"Estoy : {ex.Message}");
+    }
+  }
+
+  public async Task LoadTenantParameters()
+  {
+    try
+    {
+      var response = await GET<TenantParameter[]>("generalParameter");
+      if (response is { Error: false, Data: not null })
+      {
+        var json = JsonConvert.SerializeObject(response.Data);
+        await SecureStorage.SetAsync(SecureStorageType.TenantParameters.ToString(), json);
+        await CurrencyFormatConverter.InitializeCurrencySymbolAsync();
+      }
+      else
+      {
+        Debug.WriteLine(response.Message);
+      }
+    }
+    catch (Exception ex)
+    {
+      Debug.WriteLine(ex.Message);
+    }
+  }
+  public async Task<int> GetTenantPointValue()
+  {
+    try
+    {
+      var response = await GET<TenantLoyaltyProgram>("loyaltyProgram");
+      if (response is { Error: false, Data: not null })
+      {
+        return response.Data.PointsValue;
+      }
+      else
+      {
+        Debug.WriteLine(response.Message);
+        return 0;
+      }
+    }
+    catch (Exception ex)
+    {
+      Debug.WriteLine(ex.Message);
+      return 0;
     }
   }
 }

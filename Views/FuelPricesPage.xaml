@@ -9,7 +9,8 @@
              Title="Precios de combustible actualizado">
   <ContentPage.Resources>
     <ResourceDictionary>
-      <converters:BoolToAgeRestrictedConverter x:Key="StringToBooleanConverter"/>
+      <converters:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
+      <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
     </ResourceDictionary>
   </ContentPage.Resources>
   <FlexLayout Padding="10"
@@ -48,9 +49,15 @@
               <Label Text="{Binding FuelType}"
                      FontAttributes="Bold"
                      HorizontalOptions="Center"/>
-              <Label Text="{Binding Price, StringFormat='Price: {0:C}'}"
-                     TextColor="Green"
-                     HorizontalOptions="Center"/>
+              <Label HorizontalOptions="Center">
+                <Label.FormattedText>
+                  <FormattedString>
+                    <Span Text="Precio: "/>
+                    <Span Text="{Binding Price, Converter={StaticResource CurrencyFormatConverter}}"
+                          TextColor="Green"/>
+                  </FormattedString>
+                </Label.FormattedText>
+              </Label>
             </StackLayout>
           </Border>
         </DataTemplate>

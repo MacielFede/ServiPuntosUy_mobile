@@ -7,4 +7,6 @@ public enum SecureStorageType
   PrimaryColor,
   SecondaryColor,
   LogoUrl,
+  TenantParameters,
+  TenantLoyaltyProgram,
 }

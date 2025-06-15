@@ -9,6 +9,7 @@ using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using System.Text;
+using ServiPuntos.uy_mobile.Helpers;
 
 namespace ServiPuntos.uy_mobile.ViewModels;
 
@@ -53,27 +54,28 @@ public partial class TransactionsHistoryViewModel(IProductsService productsServi
       var response = await _productService.GetTransactionDetails(transactionId);
       if (response is { Error: false, Data: not null })
       {
-        await Shell.Current.DisplayAlert("Detalle", FormatTransactionItems(response.Data), "Volver");
+        await Shell.Current.DisplayAlert("Detalle", await FormatTransactionItems(response.Data), "Volver");
       }
       else
       {
-        await Toast.Make($"Tuvimos un error obteniendo el detalle de la transaccion, {response.Message}", ToastDuration.Short).Show();
+        await Toast.Make(response.Message, ToastDuration.Short).Show();
       }
     }
     catch (Exception ex)
     {
-      await Toast.Make($"Tuvimos un error obteniendo el detalle de la transaccion, {ex.Message}", ToastDuration.Short).Show();
+      await Toast.Make(ex.Message, ToastDuration.Short).Show();
     }
   }
 
-  private static string FormatTransactionItems(TransactionItem[] items)
+  private static async Task<string> FormatTransactionItems(TransactionItem[] items)
   {
+    var currencySymbol = await TenantParameterHelper.GetCurrencyLabelAsync();
     var sb = new StringBuilder();
     sb.AppendLine($"Cantidad de productos: {items.Length}");
     sb.AppendLine("---------------------------------------");
     foreach (var item in items)
     {
-      sb.AppendLine($"● {item.ProductName} | {item.UnitPrice:C} | Cantidad: {item.Quantity}");
+      sb.AppendLine($"● {item.ProductName} | {currencySymbol}{item.UnitPrice:C} | Cantidad: {item.Quantity}");
     }
     return sb.ToString();
   }

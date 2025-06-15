@@ -5,13 +5,11 @@
              xmlns:converters="clr-namespace:ServiPuntos.uy_mobile.Converters"
              x:Class="ServiPuntos.uy_mobile.Views.ProductDetailPage"
              x:DataType="viewModel:ProductDetailViewModel">
-
        <ContentPage.Resources>
               <ResourceDictionary>
-                     <converters:BoolToAgeRestrictedConverter x:Key="BoolToAgeRestrictedConverter"/>
+                     <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
               </ResourceDictionary>
        </ContentPage.Resources>
-
        <Grid>
               <!-- Main content -->
               <ScrollView>
@@ -62,11 +60,11 @@
                                     ItemDisplayBinding="{Binding Address}"
                                     Title="Elegí una sucursal"/>
 
-                            <Label Text="{Binding TotalPrice, StringFormat='Precio: {0:C}'}"
+                            <Label Text="{Binding TotalPrice, Converter={StaticResource CurrencyFormatConverter}}"
                                    FontSize="18"
                                    FontAttributes="Bold"/>
 
-                            <Label Text="{Binding TotalPrice, StringFormat='En puntos: {0:C}'}"
+                            <Label Text="{Binding TotalPointsPrice, StringFormat='Precio total en puntos: {0}'}"
                                    FontSize="18"
                                    FontAttributes="Italic"/>
 

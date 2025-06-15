@@ -15,11 +15,12 @@ using CommunityToolkit.Maui.Alerts;
 namespace ServiPuntos.uy_mobile.ViewModels;
 
 [QueryProperty(nameof(Product), "Product")]
-public partial class ProductDetailViewModel(IConfiguration configuration, IBranchService branchService, IProductsService productsService) : ObservableObject
+public partial class ProductDetailViewModel(IConfiguration configuration, IBranchService branchService, IProductsService productsService, ITenantService tenantService) : ObservableObject
 {
   private readonly IConfiguration _configs = configuration;
   private readonly IProductsService _productsService = productsService;
   private readonly IBranchService _branchService = branchService;
+  private readonly ITenantService _tenantService = tenantService;
   public event Action? QrGenerated;
   [ObservableProperty]
   private ImageSource? qrImage;
@@ -36,18 +37,27 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
   [ObservableProperty]
   private int quantity = 1;
 
-  public decimal TotalPrice => Product is not null ? Product.Price * Quantity : 0;
 
   [ObservableProperty]
   private int userPoints;
+  public decimal TotalPrice => Product is not null ? Product.Price * Quantity : 0;
+  [ObservableProperty]
+  private int tenantPointsValue;
+  public int TotalPointsPrice => Product is not null && TenantPointsValue > 0 ? ((int)Product.Price) / TenantPointsValue * Quantity : 0;
   partial void OnQuantityChanged(int value)
   {
     OnPropertyChanged(nameof(TotalPrice));
+    OnPropertyChanged(nameof(TotalPointsPrice));
   }
 
   partial void OnProductChanged(Product? value)
   {
     OnPropertyChanged(nameof(TotalPrice));
+    OnPropertyChanged(nameof(TotalPointsPrice));
+  }
+  partial void OnTenantPointsValueChanged(int value)
+  {
+    OnPropertyChanged(nameof(TotalPointsPrice));
   }
 
   [RelayCommand]
@@ -58,6 +68,10 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
     SelectedBranch = _branchService.ClosestBranch;
   }
 
+  public async Task GetTenantPointsValue()
+  {
+    TenantPointsValue = await _tenantService.GetTenantPointValue();
+  }
   public async Task GetUserPoints()
   {
     string? userData = await SecureStorage.GetAsync(SecureStorageType.User.ToString());

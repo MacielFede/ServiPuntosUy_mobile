@@ -3,7 +3,13 @@
              xmlns:viewModel="clr-namespace:ServiPuntos.uy_mobile.ViewModels"
              xmlns:models="clr-namespace:ServiPuntos.uy_mobile.Models"
              x:Class="ServiPuntos.uy_mobile.Views.HomePage"
+             xmlns:converters="clr-namespace:ServiPuntos.uy_mobile.Converters"
              x:DataType="viewModel:HomeViewModel">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
 
   <Grid RowSpacing="0">
     <Grid.RowDefinitions>
@@ -76,7 +82,7 @@
                            FontSize="16"
                            FontAttributes="Bold"
                            HorizontalOptions="Center"/>
-                    <Label Text="{Binding Price, StringFormat='${0:F2}'}"
+                    <Label Text="{Binding Price, Converter={StaticResource CurrencyFormatConverter}}"
                            TextColor="SeaGreen"
                            HorizontalOptions="Center"/>
                   </StackLayout>
@@ -116,7 +122,7 @@
                   <Label Text="{Binding Name}"
                          FontSize="18"
                          FontAttributes="Bold"/>
-                  <Label Text="{Binding Price, StringFormat='${0:F2}'}"
+                  <Label Text="{Binding Price, Converter={StaticResource CurrencyFormatConverter}}"
                          TextColor="SeaGreen"/>
                 </StackLayout>
               </Border>

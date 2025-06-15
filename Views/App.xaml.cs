@@ -1,5 +1,4 @@
 ﻿using ServiPuntos.uy_mobile.Services.Interfaces;
-using ServiPuntos.uy_mobile.ViewModels;
 
 namespace ServiPuntos.uy_mobile.Views;
 
@@ -16,9 +15,12 @@ public partial class App : Application
 		_tenantService = tenantService;
 		_authService.SessionCreatedSuccessfully += async (s, e) =>
 		{
-			await _authService.LoadUserData();
-			await _branchService.LoadBranchesAsync();
-			await _branchService.LoadUserLocationAsync();
+			await Task.WhenAll([
+				_authService.LoadUserData(),
+				_branchService.LoadBranchesAsync(),
+				_branchService.LoadUserLocationAsync(),
+				_tenantService.LoadTenantParameters(),
+			]);
 		};
 	}
 
@@ -30,14 +32,16 @@ public partial class App : Application
 	protected override async void OnStart()
 	{
 		base.OnStart();
-		await _tenantService.LoadTenantUIAsync();
-		await CheckUserSession();
+		await Task.WhenAll([
+		_tenantService.LoadTenantUIAsync(),
+		CheckUserSession(),
+		]);
 	}
 
 	private async Task CheckUserSession()
 	{
 		var sessionData = await _authService.GetSessionData();
-		if (sessionData != null /* && sessionData.Expiration > DateTime.Now.AddMinutes(15) */)
+		if (sessionData != null)
 		{
 			_authService.TriggerSessionCreatedEvent();
 			await Shell.Current.GoToAsync($"//{nameof(HomePage)}");

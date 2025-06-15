@@ -4,7 +4,13 @@
              xmlns:viewModel="clr-namespace:ServiPuntos.uy_mobile.ViewModels"
              xmlns:models="clr-namespace:ServiPuntos.uy_mobile.Models"
              x:Class="ServiPuntos.uy_mobile.Views.TransactionsHistoryPage"
+             xmlns:converters="clr-namespace:ServiPuntos.uy_mobile.Converters"
              Title="Historial de transacciones">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
   <ScrollView>
     <ScrollView.Content>
       <CollectionView x:DataType="viewModel:TransactionsHistoryViewModel"
@@ -42,9 +48,15 @@
                     HorizontalOptions="Fill">
                     <Label Text="{Binding CreatedAt, StringFormat='Fecha: {0:MM/dd/yyyy}'}"
                            FontSize="14"/>
-                    <Label Text="{Binding Amount, StringFormat='Precio total: {0:C}'}"
-                           FontSize="14"
-                           IsVisible="{Binding IsCompra}"/>
+                    <Label FontSize="14"
+                           IsVisible="{Binding IsCompra}">
+                      <Label.FormattedText>
+                        <FormattedString>
+                          <Span Text="Precio total: "/>
+                          <Span Text="{Binding Amount, Converter={StaticResource CurrencyFormatConverter}}"/>
+                        </FormattedString>
+                      </Label.FormattedText>
+                    </Label>
                   </FlexLayout>
                   <Label Text="{Binding BranchAddress, StringFormat='Lugar de retiro: {0}'}"
                          FontSize="14"

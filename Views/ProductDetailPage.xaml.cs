@@ -18,8 +18,11 @@ public partial class ProductDetailPage : ContentPage
     var viewModel = BindingContext as ProductDetailViewModel;
     if (viewModel is not null)
     {
-      await viewModel.GetUserPoints();
-      await viewModel.LoadBranchesAsync();
+      await Task.WhenAll([
+      viewModel.GetUserPoints(),
+      viewModel.LoadBranchesAsync(),
+      viewModel.GetTenantPointsValue()
+      ]);
     }
   }
 
