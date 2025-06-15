@@ -30,11 +30,6 @@ public partial class WelcomeViewModel(IConfiguration _configs, IAuthService auth
   {
     try
     {
-      await CrossFirebaseCloudMessaging.Current.CheckIfValidAsync();
-      var token = await CrossFirebaseCloudMessaging.Current.GetTokenAsync();
-      Debug.WriteLine($"ESTOY {token}");
-      return;
-
       SigningWithGoogle = true;
       var loginResult = await _authService.LoginGoogle();
       Debug.WriteLine($"ESTOY {loginResult.Message}");

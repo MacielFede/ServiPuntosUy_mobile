@@ -1,22 +1,31 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Maui.Views;
-using Firebase.Messaging;
+using Microsoft.Extensions.Configuration;
 using Plugin.Firebase.CloudMessaging;
+using ServiPuntosUy_mobile.Popups;
 using ServiPuntosUy_mobile.Services.Interfaces;
+#if ANDROID
+using Android.App;
+using Android.Content;
+#elif IOS
+using UIKit;
+#endif
 
 namespace ServiPuntosUy_mobile.Views;
 
-public partial class App : Application
+public partial class App : Microsoft.Maui.Controls.Application
 {
 	private readonly IAuthService _authService;
 	private readonly IBranchService _branchService;
 	private readonly ITenantService _tenantService;
-	public App(IBranchService branchService, IAuthService authService, ITenantService tenantService)
+	private readonly IConfiguration _configs;
+	public App(IBranchService branchService, IAuthService authService, ITenantService tenantService, IConfiguration configs)
 	{
 		InitializeComponent();
 		_branchService = branchService;
 		_authService = authService;
 		_tenantService = tenantService;
+		_configs = configs;
 		_authService.SessionCreatedSuccessfully += async (s, e) =>
 		{
 			await Task.WhenAll([
@@ -40,6 +49,8 @@ public partial class App : Application
 		_tenantService.LoadTenantUIAsync(),
 		CheckUserSession(),
 		]);
+		await RequestNotificationPermission();
+		ClearNotifications();
 		SubscribeToTopic();
 		SetupNotificationHandlers();
 	}
@@ -54,17 +65,17 @@ public partial class App : Application
 		}
 	}
 
-	private static async void SubscribeToTopic()
+	private async void SubscribeToTopic()
 	{
 		try
 		{
 			await CrossFirebaseCloudMessaging.Current.CheckIfValidAsync();
-			await CrossFirebaseCloudMessaging.Current.SubscribeToTopicAsync("ofertas");
-			System.Diagnostics.Debug.WriteLine("Subscribed to topic: ofertas");
+			await CrossFirebaseCloudMessaging.Current.SubscribeToTopicAsync($"ofertas_{_configs["TENANT_NAME"]!}");
+			Debug.WriteLine($"Subscribed to topic: ofertas_{_configs["TENANT_NAME"]!}");
 		}
 		catch (Exception ex)
 		{
-			System.Diagnostics.Debug.WriteLine($"Failed to subscribe to topic: {ex.Message}");
+			Debug.WriteLine($"Failed to subscribe to topic: {ex.Message}");
 		}
 	}
 
@@ -74,22 +85,36 @@ public partial class App : Application
 		{
 			MainThread.BeginInvokeOnMainThread(async () =>
 					{
-						Debug.WriteLine("ESTOY llego noti");
-						// await Shell.Current.ShowPopupAsync(new Label
-						// {
-						// 	Text = e.Notification.Body
-						// });
-
-						//DisplayAlert("Oferta!", e.Notification.Body, "OK");
+						var popup = new NotificationPopup(e.Notification.Body, e.Notification.ImageUrl);
+						ClearNotifications();
+						await Shell.Current.ShowPopupAsync(popup);
 					});
 		};
 		CrossFirebaseCloudMessaging.Current.NotificationTapped += (s, e) =>
 		{
 			MainThread.BeginInvokeOnMainThread(async () =>
 					{
-						Debug.WriteLine("ESTOY toque noti");
-						await Shell.Current.DisplayAlert("Oferta!", e.Notification.Body, "OK");
+						var popup = new NotificationPopup(e.Notification.Body, e.Notification.ImageUrl);
+						ClearNotifications();
+						await Shell.Current.ShowPopupAsync(popup);
 					});
 		};
+	}
+
+	public static async Task<bool> RequestNotificationPermission()
+	{
+		var status = await Permissions.RequestAsync<Permissions.PostNotifications>();
+		return status == PermissionStatus.Granted;
+	}
+
+	public static void ClearNotifications()
+	{
+#if ANDROID
+		var notificationManager = Android.App.Application.Context.GetSystemService(Context.NotificationService) as NotificationManager;
+		notificationManager?.CancelAll();
+#elif IOS
+UNUserNotificationCenter.Current.RemoveAllDeliveredNotifications();
+UNUserNotificationCenter.Current.RemoveAllPendingNotificationRequests();
+#endif
 	}
 }

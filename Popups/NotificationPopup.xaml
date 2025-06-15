@@ -3,15 +3,21 @@
            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
            xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
            x:Class="ServiPuntosUy_mobile.Popups.NotificationPopup"
-           CanBeDismissedByTappingOutsideOfPopup="False"
-           Size="300, 300">
-  <VerticalStackLayout BackgroundColor="White">
-    <Label
-      Text="Welcome to .NET MAUI!"
+           CanBeDismissedByTappingOutsideOfPopup="True">
+  <VerticalStackLayout BackgroundColor="White"
+                       Padding="20"
+                       Spacing="10">
+    <Image
+      x:Name="NotificationImage"
       VerticalOptions="Center"
       HorizontalOptions="Center"/>
-
-    <Button Text="Close"
-            Clicked="Button_Clicked"/>
+    <Label
+      x:Name="NotificationText"
+      VerticalOptions="Center"
+      HorizontalOptions="Center"
+      FontSize="18"/>
+    <Button Text="Descartar"
+            Clicked="Close_Clicked"
+            Style="{StaticResource SecondaryButtonStyle}"/>
   </VerticalStackLayout>
 </mct:Popup>

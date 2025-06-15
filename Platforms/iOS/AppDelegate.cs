@@ -11,6 +11,7 @@ public class AppDelegate : MauiUIApplicationDelegate
 	public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 	{
 		App.Configure();
+		app.RegisterForRemoteNotifications();
 		return base.FinishedLaunching(app, options);
 	}
 }
