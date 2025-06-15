@@ -1,22 +1,18 @@
 using ServiPuntos.uy_mobile.ViewModels;
 using ServiPuntos.uy_mobile.Models;
 using System.Diagnostics;
+using ServiPuntos.uy_mobile.Converters;
 
 namespace ServiPuntos.uy_mobile.Views;
 
 public partial class HomePage : ContentPage
 {
   private CancellationTokenSource? _pollingCancellationTokenSource;
-  public HomePage()
-  {
-    InitializeComponent();
-  }
   public HomePage(HomeViewModel homeViewModel)
   {
     InitializeComponent();
     BindingContext = homeViewModel;
   }
-
   protected override async void OnAppearing()
   {
     base.OnAppearing();
@@ -62,6 +58,7 @@ public partial class HomePage : ContentPage
           if (BindingContext is HomeViewModel homeViewModel && homeViewModel.UserPoints == 0)
           {
             await homeViewModel.GetUserPoints();
+            await CurrencyFormatConverter.InitializeCurrencySymbolAsync();
           }
           else
           {

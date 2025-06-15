@@ -75,7 +75,6 @@ public class TenantService(IConfiguration configs) : ApiService(configs), ITenan
       {
         var json = JsonConvert.SerializeObject(response.Data);
         await SecureStorage.SetAsync(SecureStorageType.TenantParameters.ToString(), json);
-        await CurrencyFormatConverter.InitializeCurrencySymbolAsync();
       }
       else
       {
