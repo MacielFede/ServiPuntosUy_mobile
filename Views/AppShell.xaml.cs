@@ -14,7 +14,7 @@ public partial class AppShell : Shell
 		Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
 		Routing.RegisterRoute(nameof(ProductDetailPage), typeof(ProductDetailPage));
 		Routing.RegisterRoute(nameof(IdentityVerificationPage), typeof(IdentityVerificationPage));
-		// Routing.RegisterRoute(nameof(TransactionsHistoryPage), typeof(TransactionsHistoryPage));
+		Routing.RegisterRoute(nameof(PromotionDetailPage), typeof(PromotionDetailPage));
 
 		SetDynamicUnselectedColor();
 	}

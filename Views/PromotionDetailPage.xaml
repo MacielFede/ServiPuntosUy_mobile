@@ -4,42 +4,65 @@
              xmlns:viewModel="clr-namespace:ServiPuntosUy_mobile.ViewModels"
              xmlns:model="clr-namespace:ServiPuntosUy_mobile.Models"
              xmlns:converters="clr-namespace:ServiPuntosUy_mobile.Converters"
-             x:Class="ServiPuntosUy_mobile.Views.ProductDetailPage"
-             x:DataType="viewModel:ProductDetailViewModel"
-             Title="{Binding Product.Name}">
+             x:Class="ServiPuntosUy_mobile.Views.PromotionDetailPage"
+             x:DataType="viewModel:PromotionDetailViewModel"
+             Title="{Binding UserPoints, StringFormat='Tus puntos: {0}'}">
        <ContentPage.Resources>
               <ResourceDictionary>
                      <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
               </ResourceDictionary>
        </ContentPage.Resources>
        <Grid>
-              <!-- Main content -->
               <ScrollView>
                      <VerticalStackLayout Padding="20"
                                           Spacing="10">
-                            <HorizontalStackLayout>
-                                   <Label Style="{StaticResource SubHeadline}">
-                                          <Label.FormattedText>
-                                                 <FormattedString>
-                                                        <Span Text="Puntos acumulados: "/>
-                                                        <Span Text="{Binding UserPoints}"
-                                                              FontAttributes="Bold"
-                                                              TextColor="DarkGreen"/>
-                                                 </FormattedString>
-                                          </Label.FormattedText>
-                                   </Label>
-                            </HorizontalStackLayout>
+                            <Label Text="{Binding Promotion.Description}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding Promotion.StartDate, StringFormat='Fecha de inicio: {0:MM/dd/yyyy}'}"
+                                   FontSize="14"/>
+                            <Label Text="{Binding Promotion.EndDate, StringFormat='Fecha de finalizacion: {0:MM/dd/yyyy}'}"
+                                   FontSize="14"/>
+                            <Label Text="Productos y precios originales:"
+                                   FontSize="18"
+                                   FontAttributes="Bold"/>
+                            <CollectionView ItemsSource="{Binding Products}"
+                                            SelectionMode="None"
+                                            Margin="5">
+                                   <CollectionView.ItemTemplate>
+                                          <DataTemplate x:DataType="model:Product">
+                                                 <StackLayout Orientation="Horizontal"
+                                                              Spacing="3">
+                                                        <Label>
+                                                               <Label.FormattedText>
+                                                                      <FormattedString>
+                                                                             <Span Text="{Binding Name}"/>
+                                                                             <Span Text=" | "/>
+                                                                             <Span Text="{Binding Price, Converter={StaticResource CurrencyFormatConverter}}"
+                                                                                   FontAttributes="Bold"
+                                                                                   TextColor="DarkGreen"/>
+                                                                      </FormattedString>
+                                                               </Label.FormattedText>
+                                                        </Label>
+                                                 </StackLayout>
+                                          </DataTemplate>
+                                   </CollectionView.ItemTemplate>
 
-                            <Image Source="{Binding Product.ImageUrl}"
-                                   WidthRequest="150"
-                                   HeightRequest="150"/>
-                            <Label Text="{Binding Product.Description}"
-                                   FontSize="18"/>
-                            <HorizontalStackLayout VerticalOptions="Center"
-                                                   Margin="0,10,0,10">
+                            </CollectionView>
+                            <VerticalStackLayout>
+                                   <Label Text="Selecciona donde lo retiras:"
+                                          FontSize="18"
+                                          FontAttributes="Bold"/>
+                                   <Picker ItemsSource="{Binding Branches}"
+                                           SelectedItem="{Binding SelectedBranch}"
+                                           ItemDisplayBinding="{Binding Address, x:DataType=model:Branch}"
+                                           Title="Elegí una sucursal"/>
+                            </VerticalStackLayout>
+                            <HorizontalStackLayout VerticalOptions="Center">
                                    <Label Text="Cantidad:"
                                           FontSize="18"
-                                          VerticalOptions="Center"/>
+                                          VerticalOptions="Center"
+                                                 FontAttributes="Bold"/>
                                    <Stepper Minimum="1"
                                             Maximum="100"
                                             Value="{Binding Quantity}"
@@ -48,22 +71,12 @@
                                           FontSize="18"
                                           VerticalOptions="Center"/>
                             </HorizontalStackLayout>
-                            <Label Text="Selecciona donde lo retiras:"
-                                   FontSize="18"
-                                   VerticalOptions="Center"/>
-                            <Picker ItemsSource="{Binding Branches}"
-                                    SelectedItem="{Binding SelectedBranch}"
-                                    ItemDisplayBinding="{Binding Address, x:DataType=model:Branch}"
-                                    Title="Elegí una sucursal"/>
-
                             <Label Text="{Binding TotalPrice, Converter={StaticResource CurrencyFormatConverter}}"
                                    FontSize="18"
                                    FontAttributes="Bold"/>
-
                             <Label Text="{Binding TotalPointsPrice, StringFormat='Precio total en puntos: {0}'}"
                                    FontSize="16"
                                    FontAttributes="Italic"/>
-
                             <VerticalStackLayout Padding="10"
                                                  Spacing="10">
                                    <Button Text="Comprar"

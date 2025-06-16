@@ -15,12 +15,23 @@ public class CurrencyFormatConverter : IValueConverter
 
   public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
   {
-    if (value is decimal decimalValue)
+    decimal decimalValue;
+    switch (value)
     {
-      return $"{CurrencySymbol}{decimalValue:N2}";
+      case decimal d:
+        decimalValue = d;
+        break;
+      case double dbl:
+        decimalValue = (decimal)dbl;
+        break;
+      case int i:
+        decimalValue = i;
+        break;
+      default:
+        return value?.ToString() ?? "";
     }
 
-    return value?.ToString() ?? "";
+    return $"{CurrencySymbol} {decimalValue:N2}";
   }
 
   public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

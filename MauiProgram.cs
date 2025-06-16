@@ -60,6 +60,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IFuelService, FuelService>();
 		builder.Services.AddSingleton<IGeoService, GeoService>();
 		builder.Services.AddSingleton<ITenantService, TenantService>();
+		builder.Services.AddTransient<IQrCodeService, QrCodeService>();
 
 		// Pages
 		builder.Services.AddSingleton<WelcomePage>();
@@ -71,6 +72,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<FuelPricesPage>();
 		builder.Services.AddSingleton<BranchesPage>();
 		builder.Services.AddSingleton<TransactionsHistoryPage>();
+		builder.Services.AddSingleton<PromotionDetailPage>();
 
 		// ViewModels
 		builder.Services.AddSingleton<WelcomeViewModel>();
@@ -82,6 +84,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<FuelPricesViewModel>();
 		builder.Services.AddSingleton<BranchesViewModel>();
 		builder.Services.AddSingleton<TransactionsHistoryViewModel>();
+		builder.Services.AddSingleton<PromotionDetailViewModel>();
 		return builder.Build();
 	}
 
@@ -90,11 +93,12 @@ public static class MauiProgram
 		builder.ConfigureLifecycleEvents(events =>
 		{
 #if IOS
-            events.AddiOS(iOS => iOS.WillFinishLaunching((_,__) => {
-                CrossFirebase.Initialize();
-								FirebaseCloudMessagingImplementation.Initialize();
-                return false;
-            }));
+			events.AddiOS(iOS => iOS.WillFinishLaunching((_, __) =>
+			{
+				CrossFirebase.Initialize();
+				FirebaseCloudMessagingImplementation.Initialize();
+				return false;
+			}));
 #elif ANDROID
 			events.AddAndroid(android => android.OnCreate((activity, _) =>
 					CrossFirebase.Initialize(activity)));

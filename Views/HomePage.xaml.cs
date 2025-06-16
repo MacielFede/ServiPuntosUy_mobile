@@ -18,7 +18,7 @@ public partial class HomePage : ContentPage
     base.OnAppearing();
     if (BindingContext is HomeViewModel homeViewModel)
     {
-      await homeViewModel.LoadProducts();
+      await Task.WhenAll([homeViewModel.LoadProducts(), homeViewModel.LoadPromotions()]);
       StartPolling();
     }
   }
@@ -38,6 +38,17 @@ public partial class HomePage : ContentPage
         { "Product", selectedProduct }
     };
       await Shell.Current.GoToAsync(nameof(ProductDetailPage), navParams);
+    }
+  }
+  private async void OnPromotionSelected(object sender, SelectionChangedEventArgs selection)
+  {
+    if (selection.CurrentSelection.FirstOrDefault() is Promotion selectedPromotion)
+    {
+      var navParams = new Dictionary<string, object>
+    {
+        { "Promotion", selectedPromotion }
+    };
+      await Shell.Current.GoToAsync(nameof(PromotionDetailPage), navParams);
     }
   }
   private async void OnAvatarClicked(object sender, EventArgs eventArgs)

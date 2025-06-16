@@ -5,6 +5,7 @@ namespace ServiPuntosUy_mobile.Services.Interfaces;
 public interface IProductsService
 {
   public Task<ApiResponse<Product[]>> GetProductsAsync();
+  public Task<ApiResponse<Promotion[]>> GetPromotionsAsync();
   public Task<ApiResponse<Product>> GetProductInfo(int id);
   public Task<ApiResponse<Transaction>> PurchaseProduct(ProductForTransaction[] products, int branchId);
   public Task<ApiResponse<SessionData>> CreateProductRedemption(int productId, int branchId);

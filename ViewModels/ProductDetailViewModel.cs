@@ -5,22 +5,20 @@ using ServiPuntosUy_mobile.Models;
 using ServiPuntosUy_mobile.Models.Enums;
 using ServiPuntosUy_mobile.Services.Interfaces;
 using ServiPuntosUy_mobile.Views;
-using QRCoder;
-using SkiaSharp;
 using Microsoft.Extensions.Configuration;
-using System.Diagnostics;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Alerts;
 
 namespace ServiPuntosUy_mobile.ViewModels;
 
 [QueryProperty(nameof(Product), "Product")]
-public partial class ProductDetailViewModel(IConfiguration configuration, IBranchService branchService, IProductsService productsService, ITenantService tenantService) : ObservableObject
+public partial class ProductDetailViewModel(IConfiguration configuration, IBranchService branchService, IProductsService productsService, ITenantService tenantService, IQrCodeService qrCodeService) : ObservableObject
 {
   private readonly IConfiguration _configs = configuration;
   private readonly IProductsService _productsService = productsService;
   private readonly IBranchService _branchService = branchService;
   private readonly ITenantService _tenantService = tenantService;
+  private readonly IQrCodeService _qrCodeService = qrCodeService;
   public event Action? QrGenerated;
   [ObservableProperty]
   private ImageSource? qrImage;
@@ -124,7 +122,7 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
         var response = await _productsService.CreateProductRedemption(Product.Id, SelectedBranch.Id);
         if (response is { Error: false, Data: not null })
         {
-          QrImage = QrCodeService.GenerateQrCode($"{_configs["API_URL"]}redemption/process/{response.Data.Token}");
+          QrImage = _qrCodeService.GenerateQrCode($"{_configs["API_URL"]}redemption/process/{response.Data.Token}");
           QrGenerated?.Invoke();
         }
         else
@@ -142,42 +140,5 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
   public void Reset()
   {
     Quantity = 1;
-  }
-}
-
-public static class QrCodeService
-{
-  public static ImageSource GenerateQrCode(string text)
-  {
-    using var qrGenerator = new QRCodeGenerator();
-    using var qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
-
-    int pixelsPerModule = 10;
-    int size = qrCodeData.ModuleMatrix.Count * pixelsPerModule;
-
-    using var surface = SKSurface.Create(new SKImageInfo(size, size));
-    var canvas = surface.Canvas;
-    canvas.Clear(SKColors.White);
-
-    using var paint = new SKPaint { Color = SKColors.Black, IsAntialias = false };
-
-    for (int y = 0; y < qrCodeData.ModuleMatrix.Count; y++)
-    {
-      for (int x = 0; x < qrCodeData.ModuleMatrix[y].Count; x++)
-      {
-        if (qrCodeData.ModuleMatrix[y][x])
-        {
-          canvas.DrawRect(x * pixelsPerModule, y * pixelsPerModule, pixelsPerModule, pixelsPerModule, paint);
-        }
-      }
-    }
-
-    using var image = surface.Snapshot();
-    using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-    using var stream = new MemoryStream();
-    data.SaveTo(stream);
-    stream.Position = 0;
-
-    return ImageSource.FromStream(() => new MemoryStream(stream.ToArray()));
   }
 }

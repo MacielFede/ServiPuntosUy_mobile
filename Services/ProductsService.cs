@@ -6,6 +6,17 @@ namespace ServiPuntosUy_mobile.Services;
 
 public class ProductsService(IConfiguration configs) : ApiService(configs), IProductsService
 {
+  public async Task<ApiResponse<Promotion[]>> GetPromotionsAsync()
+  {
+    try
+    {
+      return await GET<Promotion[]>("promotion/tenant");
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<Promotion[]>(true, null, ex.Message);
+    }
+  }
   public async Task<ApiResponse<Product[]>> GetProductsAsync()
   {
     try

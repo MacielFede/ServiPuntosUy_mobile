@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
@@ -16,7 +17,11 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
   private readonly IProductsService _productService = productsService;
   private readonly IAuthService _authService = authService;
   [ObservableProperty]
-  private ObservableCollection<Product> flashOffers = [];
+  private ObservableCollection<Promotion> flashOffers = [];
+  partial void OnFlashOffersChanged(ObservableCollection<Promotion> value)
+  {
+    OnPropertyChanged(nameof(HasFlashOffers));
+  }
 
   public bool HasFlashOffers => FlashOffers.Any();
   [ObservableProperty]
@@ -31,6 +36,21 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
     await Shell.Current.GoToAsync($"//{nameof(WelcomePage)}");
   }
 
+  public async Task LoadPromotions()
+  {
+    try
+    {
+      var response = await _productService.GetPromotionsAsync();
+      if (response is { Error: false, Data: not null })
+        FlashOffers = response.Data.ToObservableCollection();
+      else
+        await Toast.Make($"{response.Message}", ToastDuration.Short).Show();
+    }
+    catch (Exception ex)
+    {
+      await Toast.Make($"{ex.Message}", ToastDuration.Short).Show();
+    }
+  }
   public async Task LoadProducts()
   {
     try
