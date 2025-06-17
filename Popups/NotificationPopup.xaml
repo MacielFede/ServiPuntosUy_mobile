@@ -4,8 +4,7 @@
            xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
            x:Class="ServiPuntosUy_mobile.Popups.NotificationPopup"
            CanBeDismissedByTappingOutsideOfPopup="True">
-  <VerticalStackLayout BackgroundColor="White"
-                       Padding="20"
+  <VerticalStackLayout Padding="20"
                        Spacing="10">
     <Image
       x:Name="NotificationImage"

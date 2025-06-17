@@ -4,7 +4,6 @@ using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
-using Plugin.Firebase.CloudMessaging;
 using ServiPuntosUy_mobile.Services.Interfaces;
 using ServiPuntosUy_mobile.Views;
 
@@ -32,8 +31,6 @@ public partial class WelcomeViewModel(IConfiguration _configs, IAuthService auth
     {
       SigningWithGoogle = true;
       var loginResult = await _authService.LoginGoogle();
-      Debug.WriteLine($"ESTOY {loginResult.Message}");
-      Debug.WriteLine($"ESTOY {loginResult.Data}");
       if (loginResult is { Error: false, Data: not null })
       {
         await _authService.SaveSession(loginResult.Data);

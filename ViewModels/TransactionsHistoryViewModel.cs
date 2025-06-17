@@ -35,16 +35,12 @@ public partial class TransactionsHistoryViewModel(IProductsService productsServi
       }
       else
       {
-        Debug.WriteLine($"ESTOY {response.Message}");
-        Transactions = [new Transaction { Id = 1, BranchId = 101, UserId = 1001, CreatedAt = DateTime.Now, Amount = 150.75m, PointsEarned = 15, Type = TransactionType.Compra, PointsSpent = 10 },
-        new Transaction { Id = 2, BranchId = 102, UserId = 1002, CreatedAt = DateTime.Now.AddDays(-1), Amount = 200.00m, PointsEarned = 20, Type = TransactionType.Canje, PointsSpent = 0 }];
+        await Toast.Make($"{response.Message}", ToastDuration.Short).Show();
       }
     }
     catch (Exception ex)
     {
-      Debug.WriteLine($"ESTOY {ex.Message}");
-      Transactions = [new Transaction { Id = 1, BranchId = 101, UserId = 1001, CreatedAt = DateTime.Now, Amount = 150.75m, PointsEarned = 15, Type = TransactionType.Compra, PointsSpent = 10 },
-        new Transaction { Id = 2, BranchId = 102, UserId = 1002, CreatedAt = DateTime.Now.AddDays(-1), Amount = 200.00m, PointsEarned = 20, Type = TransactionType.Canje, PointsSpent = 0 }];
+      await Toast.Make($"{ex.Message}", ToastDuration.Short).Show();
     }
   }
   public async Task ShowDetails(int transactionId)

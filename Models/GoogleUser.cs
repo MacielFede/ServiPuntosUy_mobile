@@ -2,10 +2,8 @@ namespace ServiPuntosUy_mobile.Models;
 
 public class GoogleUser
 {
-  public string? Id { get; set; }
-  public string? Name { get; set; }
-  public string? GivenName { get; set; }
-  public string? FamilyName { get; set; }
-  public string? Email { get; set; }
-  public Uri? Picture { get; set; }
+  public required string IdToken { get; set; }
+  public required string Email { get; set; }
+  public required string Name { get; set; }
+  public required string GoogleId { get; set; }
 }

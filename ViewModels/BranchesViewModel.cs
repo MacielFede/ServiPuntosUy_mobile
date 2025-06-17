@@ -23,5 +23,16 @@ public class BranchesViewModel(IBranchService branchService) : ObservableObject
     }
   }
 
-  public Branch[] GetBranches() => _branchService.AllBranches != null ? [.. _branchService.AllBranches] : [];
+  public TimeOnly? FilterOpenTime { get; set; }
+  public TimeOnly? FilterClosingTime { get; set; }
+
+  public Branch[] GetBranches()
+  {
+    var branches = _branchService.AllBranches?.ToList() ?? [];
+    if (FilterOpenTime != null)
+      branches = [.. branches.Where(b => b.OpenTime >= FilterOpenTime.Value)];
+    if (FilterClosingTime != null)
+      branches = [.. branches.Where(b => b.ClosingTime <= FilterClosingTime.Value)];
+    return [.. branches];
+  }
 }

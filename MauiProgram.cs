@@ -50,10 +50,11 @@ public static class MauiProgram
 		{
 			Domain = config["AUTH_DOMAIN"],
 			ClientId = config["AUTH_CLIENTID"],
-			RedirectUri = "myapp://callback/",
-			PostLogoutRedirectUri = "myapp://callback/",
+			RedirectUri = "servipuntos://callback/",
+			PostLogoutRedirectUri = "servipuntos://callback/",
 			Scope = "openid profile email"
 		}));
+		builder.Services.AddSingleton<IApiService, ApiService>();
 		builder.Services.AddSingleton<IAuthService, AuthService>();
 		builder.Services.AddSingleton<IProductsService, ProductsService>();
 		builder.Services.AddSingleton<IBranchService, BranchService>();
@@ -64,8 +65,8 @@ public static class MauiProgram
 
 		// Pages
 		builder.Services.AddSingleton<WelcomePage>();
-		builder.Services.AddSingleton<SignUpPage>();
-		builder.Services.AddSingleton<LoginPage>();
+		builder.Services.AddTransient<SignUpPage>();
+		builder.Services.AddTransient<LoginPage>();
 		builder.Services.AddSingleton<HomePage>();
 		builder.Services.AddSingleton<ProductDetailPage>();
 		builder.Services.AddSingleton<IdentityVerificationPage>();
@@ -76,11 +77,11 @@ public static class MauiProgram
 
 		// ViewModels
 		builder.Services.AddSingleton<WelcomeViewModel>();
-		builder.Services.AddSingleton<SignUpViewModel>();
+		builder.Services.AddTransient<LoginViewModel>();
+		builder.Services.AddTransient<SignUpViewModel>();
 		builder.Services.AddSingleton<HomeViewModel>();
 		builder.Services.AddSingleton<ProductDetailViewModel>();
 		builder.Services.AddSingleton<IdentityVerificationViewModel>();
-		builder.Services.AddSingleton<LoginViewModel>();
 		builder.Services.AddSingleton<FuelPricesViewModel>();
 		builder.Services.AddSingleton<BranchesViewModel>();
 		builder.Services.AddSingleton<TransactionsHistoryViewModel>();

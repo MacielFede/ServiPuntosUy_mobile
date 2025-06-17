@@ -59,6 +59,7 @@ public partial class HomePage : ContentPage
   private void StartPolling()
   {
     _pollingCancellationTokenSource = new CancellationTokenSource();
+    bool isFirstPoll = true;
 
     Task.Run(async () =>
     {
@@ -66,21 +67,27 @@ public partial class HomePage : ContentPage
       {
         try
         {
-          if (BindingContext is HomeViewModel homeViewModel && homeViewModel.UserPoints == 0)
+          if (BindingContext is HomeViewModel homeViewModel)
           {
-            await CurrencyFormatConverter.InitializeCurrencySymbolAsync();
-            await homeViewModel.GetUserPoints();
+            // Always run on first poll
+            if (isFirstPoll || homeViewModel.UserPoints == 0)
+            {
+              await CurrencyFormatConverter.InitializeCurrencySymbolAsync();
+              await homeViewModel.GetUserPoints();
+              isFirstPoll = false;
+            }
+            else
+            {
+              StopPolling();
+              break;
+            }
           }
-          else
-          {
-            StopPolling();
-          }
-          // Wait 5 seconds before the next poll
+
           await Task.Delay(TimeSpan.FromSeconds(0.5), _pollingCancellationTokenSource.Token);
         }
         catch (TaskCanceledException)
         {
-          // Normal case when polling is stopped
+          // Normal when polling is stopped
         }
         catch (Exception ex)
         {

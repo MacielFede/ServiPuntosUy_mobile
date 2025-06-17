@@ -1,11 +1,8 @@
-using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using ServiPuntosUy_mobile.Services.Interfaces;
-using Microsoft.Maui.Storage;
 using ServiPuntosUy_mobile.Models;
 using ServiPuntosUy_mobile.Models.Enums;
 
@@ -13,6 +10,7 @@ namespace ServiPuntosUy_mobile.Services;
 
 public partial class ApiService : IApiService
 {
+  public event EventHandler? UserUnauthorized;
   private readonly HttpClient _httpClient;
   private readonly IConfiguration _configs;
 
@@ -34,6 +32,11 @@ public partial class ApiService : IApiService
       if (storedToken != null)
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
       var response = await _httpClient.GetAsync(requestUri);
+      if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+      {
+        UserUnauthorized?.Invoke(this, EventArgs.Empty);
+        throw new UnauthorizedAccessException("Unauthorized");
+      }
       var responseContent = await response.Content.ReadAsStringAsync();
       return JsonConvert.DeserializeObject<ApiResponse<T>>(responseContent) ?? new ApiResponse<T>(true, default, "Error interno, intenta nuevamente más tarde.");
     }
@@ -52,6 +55,11 @@ public partial class ApiService : IApiService
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
       var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
       var response = await _httpClient.PostAsync(requestUri, content);
+      if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+      {
+        UserUnauthorized?.Invoke(this, EventArgs.Empty);
+        throw new UnauthorizedAccessException("Unauthorized");
+      }
       var responseContent = await response.Content.ReadAsStringAsync();
       return JsonConvert.DeserializeObject<ApiResponse<T>>(responseContent) ?? new ApiResponse<T>(true, default, "Error interno, intenta nuevamente más tarde.");
     }
@@ -75,6 +83,11 @@ public partial class ApiService : IApiService
         Content = content
       };
       var response = await _httpClient.SendAsync(request);
+      if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+      {
+        UserUnauthorized?.Invoke(this, EventArgs.Empty);
+        throw new UnauthorizedAccessException("Unauthorized");
+      }
       var responseContent = await response.Content.ReadAsStringAsync();
       return JsonConvert.DeserializeObject<ApiResponse<T>>(responseContent) ?? new ApiResponse<T>(true, default, "Error interno, intenta nuevamente más tarde.");
     }

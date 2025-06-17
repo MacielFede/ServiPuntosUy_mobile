@@ -6,8 +6,7 @@
              xmlns:icons="http://www.aathifmahir.com/dotnet/2022/maui/icons"
              x:Class="ServiPuntosUy_mobile.Views.LoginPage"
              x:DataType="viewModel:LoginViewModel">
-
-    <ScrollView>
+    <Grid>
         <VerticalStackLayout
             Padding="30,0"
             Margin="20">
@@ -54,6 +53,20 @@
                     Style="{StaticResource SecondaryButtonStyle}"/>
             </StackLayout>
         </VerticalStackLayout>
-    </ScrollView>
-
+        <Grid x:Name="LoadingOverlay"
+              IsVisible="{Binding UsingMagicLink}"
+              BackgroundColor="#80000000"
+              InputTransparent="False"
+              VerticalOptions="Fill"
+              HorizontalOptions="Fill"
+              ZIndex="10">
+            <ActivityIndicator
+                IsRunning="True"
+                Color="White"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                WidthRequest="60"
+                HeightRequest="60"/>
+        </Grid>
+    </Grid>
 </ContentPage>

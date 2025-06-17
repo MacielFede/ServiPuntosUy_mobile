@@ -8,11 +8,12 @@ public interface IAuthService
   public Task<ApiResponse<SessionData>> Login(string email, string password);
 
   public Task<ApiResponse<SessionData>> LoginGoogle();
+  public Task<ApiResponse<string>> CreateMagicLink(string email);
+  public Task<ApiResponse<SessionData>> ValidateMagicLink(string token);
 
   public Task<ApiResponse<SessionData>> Signup(string name, string email, string password);
 
-  public void Logout();
-
+  public Task Logout();
   public Task SaveSession(SessionData sessionData);
   public Task<ApiResponse<User>> VerifyIdentity(Document document);
   public Task LoadUserData();

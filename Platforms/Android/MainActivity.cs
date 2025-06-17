@@ -5,10 +5,25 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Plugin.Firebase.CloudMessaging;
+using ServiPuntosUy_mobile.Views;
 
 namespace ServiPuntosUy_mobile;
 
-[Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true, LaunchMode = LaunchMode.SingleTop, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
+[Activity(
+  Theme = "@style/Maui.SplashTheme",
+  MainLauncher = true,
+   LaunchMode = LaunchMode.SingleTop,
+    ConfigurationChanges = ConfigChanges.ScreenSize
+    | ConfigChanges.Orientation
+    | ConfigChanges.UiMode
+    | ConfigChanges.ScreenLayout
+    | ConfigChanges.SmallestScreenSize
+    | ConfigChanges.Density)]
+[IntentFilter(
+        [Intent.ActionView],
+        Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
+        DataScheme = "servipuntos",
+        DataHost = "validate-magic-link")]
 public class MainActivity : MauiAppCompatActivity
 {
   protected override void OnCreate(Bundle? saveInstanceState)
@@ -35,6 +50,11 @@ public class MainActivity : MauiAppCompatActivity
     if (intent != null)
     {
       FirebaseCloudMessagingImplementation.OnNewIntent(intent);
+      if (intent.Data != null)
+      {
+        var uri = new Uri(intent.Data.ToString()!);
+        App.Current?.SendOnAppLinkRequestReceived(uri);
+      }
     }
   }
 }

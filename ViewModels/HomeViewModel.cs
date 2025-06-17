@@ -32,7 +32,7 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
   [RelayCommand]
   public async Task Logout()
   {
-    _authService.Logout();
+    await _authService.Logout();
     await Shell.Current.GoToAsync($"//{nameof(WelcomePage)}");
   }
 

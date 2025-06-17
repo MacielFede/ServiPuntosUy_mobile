@@ -45,7 +45,7 @@
 				<string>MauiAuth0App</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
-					<string>myapp</string>
+					<string>servipuntos</string>
 				</array>
 				<key>CFBundleTypeRole</key>
 				<string>Editor</string>

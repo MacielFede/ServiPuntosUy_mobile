@@ -30,7 +30,7 @@ public class FuelService(IConfiguration configs, IBranchService branchService) :
       }
       catch (Exception ex)
       {
-        Debug.WriteLine($"ESTOY: No pude obtener el precio del tipo de combustible {type}: {ex.Message}");
+        Debug.WriteLine($"No pude obtener el precio del tipo de combustible {type}: {ex.Message}");
       }
     }
     return activePrices.Count == 0 ? throw new Exception("Estamos trabajando para obtener el precio de los combustibles mas cercanos a ti.") : [.. activePrices];

@@ -6,6 +6,11 @@ namespace ServiPuntosUy_mobile.Services;
 
 public class ProductsService(IConfiguration configs) : ApiService(configs), IProductsService
 {
+  public event EventHandler? UserMadePurchase;
+  public void InvokeUserMadePurchaseEvent()
+  {
+    UserMadePurchase?.Invoke(this, EventArgs.Empty);
+  }
   public async Task<ApiResponse<Promotion[]>> GetPromotionsAsync()
   {
     try

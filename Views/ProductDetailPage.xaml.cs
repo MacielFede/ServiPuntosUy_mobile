@@ -45,10 +45,10 @@ public partial class ProductDetailPage : ContentPage
     });
   }
 
-  private async void CloseQrOverlay_Clicked(object sender, EventArgs e)
+  private void CloseQrOverlay_Clicked(object sender, EventArgs e)
   {
     var viewModel = BindingContext as ProductDetailViewModel;
-    if (viewModel is not null) await viewModel.GetUserPoints();
+    viewModel?.SendPurchaseEvent();
     QrOverlay.IsVisible = false;
   }
 }

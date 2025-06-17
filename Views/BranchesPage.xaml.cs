@@ -26,23 +26,7 @@ public partial class BranchesPage : ContentPage
   {
     var location = await _branchesViewModel.GetUserLocation();
     BranchesMap.MoveToRegion(new MapSpan(location, 0.1, 0.1));
-    BranchesMap.Pins.Clear();
-    foreach (var branch in _branchesViewModel.GetBranches() ?? [])
-    {
-      Debug.WriteLine($"ESTOY {branch}");
-      Pin pin = new()
-      {
-        Location = new Location(branch.Latitud, branch.Longitud),
-        Label = branch.Address,
-        Address = $"Clickea aqui para mas info...\n" +
-                    $"Teléfono: {branch.Phone ?? "No disponible"}\n" +
-                    $"Hora de apertura: {branch.OpenTime:HH\\:mm}\n" +
-                    $"Hora de cierre: {branch.ClosingTime:HH\\:mm}",
-        Type = PinType.Place
-      };
-      pin.InfoWindowClicked += OnInfoWindowClicked;
-      BranchesMap.Pins.Add(pin);
-    }
+    RefreshMapMarkers();
   }
 
   private void OnInfoWindowClicked(object? sender, PinClickedEventArgs e)
@@ -59,4 +43,41 @@ public partial class BranchesPage : ContentPage
   }
 
   static string CleanLabel(string rawAddressText) => rawAddressText.Replace("Clickea aqui para mas info...\n", "").Trim();
+
+  private void RefreshMapMarkers()
+  {
+    BranchesMap.Pins.Clear();
+    foreach (var branch in _branchesViewModel.GetBranches() ?? [])
+    {
+      Pin pin = new()
+      {
+        Location = new Location(branch.Latitud, branch.Longitud),
+        Label = branch.Address,
+        Address = $"Clickea aqui para mas info...\nTeléfono: {branch.Phone ?? "No disponible"}\nHora de apertura: {branch.OpenTime:HH\\:mm}\nHora de cierre: {branch.ClosingTime:HH\\:mm}",
+        Type = PinType.Place
+      };
+      pin.InfoWindowClicked += OnInfoWindowClicked;
+      BranchesMap.Pins.Add(pin);
+    }
+  }
+
+  private void OnOpenFilterActionClicked(object sender, EventArgs e)
+  {
+    var button = sender as Button;
+    if (button?.Text == "Limpiar filtro")
+      _branchesViewModel.FilterOpenTime = null;
+    else
+      _branchesViewModel.FilterOpenTime = TimeOnly.FromTimeSpan(OpenTimePicker.Time);
+    RefreshMapMarkers();
+  }
+
+  private void OnCloseFilterActionClicked(object sender, EventArgs e)
+  {
+    var button = sender as Button;
+    if (button?.Text == "Limpiar filtro")
+      _branchesViewModel.FilterClosingTime = null;
+    else
+      _branchesViewModel.FilterClosingTime = TimeOnly.FromTimeSpan(CloseTimePicker.Time);
+    RefreshMapMarkers();
+  }
 }

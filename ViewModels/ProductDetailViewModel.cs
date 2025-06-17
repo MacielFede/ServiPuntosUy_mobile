@@ -97,6 +97,7 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
         if (response is { Error: false, Data: not null })
         {
           await Shell.Current.DisplayAlert("Carrito de compras", $"Gracias por comprar {Product.Name}!\nPodes retirarlo en {SelectedBranch?.Address}.\nObtuviste {response.Data.PointsEarned} puntos", "OK");
+          _productsService.InvokeUserMadePurchaseEvent();
           await Shell.Current.Navigation.PopToRootAsync();
           await Shell.Current.GoToAsync($"//{nameof(TransactionsHistoryPage)}");
         }
@@ -140,5 +141,10 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
   public void Reset()
   {
     Quantity = 1;
+  }
+
+  public void SendPurchaseEvent()
+  {
+    _productsService.InvokeUserMadePurchaseEvent();
   }
 }

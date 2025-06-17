@@ -9,6 +9,7 @@ using Android.App;
 using Android.Content;
 #elif IOS
 using UIKit;
+using UserNotifications;
 #endif
 
 namespace ServiPuntosUy_mobile.Views;
@@ -16,24 +17,31 @@ namespace ServiPuntosUy_mobile.Views;
 public partial class App : Microsoft.Maui.Controls.Application
 {
 	private readonly IAuthService _authService;
-	private readonly IBranchService _branchService;
 	private readonly ITenantService _tenantService;
 	private readonly IConfiguration _configs;
-	public App(IBranchService branchService, IAuthService authService, ITenantService tenantService, IConfiguration configs)
+	public App(IApiService apiService, IProductsService productsService, IBranchService branchService, IAuthService authService, ITenantService tenantService, IConfiguration configs)
 	{
 		InitializeComponent();
-		_branchService = branchService;
 		_authService = authService;
 		_tenantService = tenantService;
 		_configs = configs;
+		apiService.UserUnauthorized += async (s, e) =>
+		{
+			await _authService.Logout();
+			if (Shell.Current is not null) await Shell.Current.GoToAsync($"//{nameof(WelcomePage)}");
+		};
 		_authService.SessionCreatedSuccessfully += async (s, e) =>
 		{
 			await Task.WhenAll([
 				_authService.LoadUserData(),
-				_branchService.LoadBranchesAsync(),
-				_branchService.LoadUserLocationAsync(),
+				branchService.LoadBranchesAsync(),
+				branchService.LoadUserLocationAsync(),
 				_tenantService.LoadTenantParameters(),
 			]);
+		};
+		productsService.UserMadePurchase += async (s, e) =>
+		{
+			await _authService.LoadUserData();
 		};
 	}
 
@@ -113,8 +121,28 @@ public partial class App : Microsoft.Maui.Controls.Application
 		var notificationManager = Android.App.Application.Context.GetSystemService(Context.NotificationService) as NotificationManager;
 		notificationManager?.CancelAll();
 #elif IOS
-UNUserNotificationCenter.Current.RemoveAllDeliveredNotifications();
-UNUserNotificationCenter.Current.RemoveAllPendingNotificationRequests();
+		UNUserNotificationCenter.Current.RemoveAllDeliveredNotifications();
+		UNUserNotificationCenter.Current.RemoveAllPendingNotificationRequests();
 #endif
+	}
+
+	protected override void OnAppLinkRequestReceived(Uri uri)
+	{
+		base.OnAppLinkRequestReceived(uri);
+		if (uri.Scheme == "servipuntos" && uri.Host == "validate-magic-link")
+		{
+			var token = System.Web.HttpUtility.ParseQueryString(uri.Query).Get("token");
+			if (token is not null)
+			{
+				MainThread.BeginInvokeOnMainThread(async () =>
+				{
+					var routeParams = new Dictionary<string, object>
+						{
+								{ "Token", token }
+						};
+					await Shell.Current.GoToAsync(nameof(LoginPage), routeParams);
+				});
+			}
+		}
 	}
 }

@@ -115,6 +115,7 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
       //   if (response is { Error: false, Data: not null })
       //   {
       //     await Shell.Current.DisplayAlert("Carrito de compras", $"Gracias por comprar {Promotion.Name}!\nPodes retirarlo en {SelectedBranch?.Address}.\nObtuviste {response.Data.PointsEarned} puntos", "OK");
+      // _productService.InvokeUserMadePurchaseEvent();
       //     await Shell.Current.Navigation.PopToRootAsync();
       //     await Shell.Current.GoToAsync($"//{nameof(TransactionsHistoryPage)}");
       //   }
@@ -158,9 +159,13 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
       await Toast.Make("Trabajo en proceso", ToastDuration.Short).Show();
     }
   }
-
   public void Reset()
   {
     Quantity = 1;
+  }
+
+  public void SendPurchaseEvent()
+  {
+    _productService.InvokeUserMadePurchaseEvent();
   }
 }

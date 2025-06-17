@@ -4,6 +4,8 @@ namespace ServiPuntosUy_mobile.Services.Interfaces;
 
 public interface IProductsService
 {
+  public event EventHandler? UserMadePurchase;
+  public void InvokeUserMadePurchaseEvent();
   public Task<ApiResponse<Product[]>> GetProductsAsync();
   public Task<ApiResponse<Promotion[]>> GetPromotionsAsync();
   public Task<ApiResponse<Product>> GetProductInfo(int id);

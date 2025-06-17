@@ -7,23 +7,57 @@
              x:Class="ServiPuntosUy_mobile.Views.BranchesPage"
              x:DataType="vm:BranchesViewModel"
              Title="Nuestras estaciones">
-
-  <maps:Map x:Name="BranchesMap"
-            MapType="Street"
-            IsShowingUser="True">
-    <x:Arguments>
-      <maps:MapSpan>
-        <x:Arguments>
-          <sensors:Location>
-            <x:Arguments>
-              <x:Double>-34.9011</x:Double>
-              <x:Double>-56.1645</x:Double>
-            </x:Arguments>
-          </sensors:Location>
-          <x:Double>0.1</x:Double>
-          <x:Double>0.1</x:Double>
-        </x:Arguments>
-      </maps:MapSpan>
-    </x:Arguments>
-  </maps:Map>
+  <StackLayout>
+    <StackLayout Orientation="Vertical"
+                 Padding="10">
+      <Label Text="Filtrar por hora de apertura:"
+             VerticalOptions="Center"/>
+      <TimePicker x:Name="OpenTimePicker"
+                  Time="{Binding FilterOpenTime, Mode=TwoWay}"
+                  Format="HH:mm"/>
+      <HorizontalStackLayout HorizontalOptions="Center">
+        <Button Text="Aplicar filtro"
+                Clicked="OnOpenFilterActionClicked"
+                Margin="10"
+                Style="{StaticResource PrimaryButtonStyle}"/>
+        <Button Text="Limpiar filtro"
+                Clicked="OnOpenFilterActionClicked"
+                Margin="10"
+                Style="{StaticResource SecondaryButtonStyle}"/>
+      </HorizontalStackLayout>
+      <Label Text="Filtrar por hora de cierre:"
+             VerticalOptions="Center"/>
+      <TimePicker x:Name="CloseTimePicker"
+                  Time="{Binding FilterClosingTime, Mode=TwoWay}"
+                  Format="HH:mm"/>
+      <HorizontalStackLayout HorizontalOptions="Center">
+        <Button Text="Aplicar filtro"
+                Clicked="OnCloseFilterActionClicked"
+                Margin="10"
+                Style="{StaticResource PrimaryButtonStyle}"/>
+        <Button Text="Limpiar filtro"
+                Clicked="OnCloseFilterActionClicked"
+                Margin="10"
+                Style="{StaticResource SecondaryButtonStyle}"/>
+      </HorizontalStackLayout>
+    </StackLayout>
+    <maps:Map x:Name="BranchesMap"
+              MapType="Street"
+              IsShowingUser="True">
+      <x:Arguments>
+        <maps:MapSpan>
+          <x:Arguments>
+            <sensors:Location>
+              <x:Arguments>
+                <x:Double>-34.9011</x:Double>
+                <x:Double>-56.1645</x:Double>
+              </x:Arguments>
+            </sensors:Location>
+            <x:Double>0.1</x:Double>
+            <x:Double>0.1</x:Double>
+          </x:Arguments>
+        </maps:MapSpan>
+      </x:Arguments>
+    </maps:Map>
+  </StackLayout>
 </ContentPage>

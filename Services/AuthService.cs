@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using ServiPuntosUy_mobile.Models.Enums;
 using System.Diagnostics;
 using Auth0.OidcClient;
+using System.Threading.Tasks;
 
 namespace ServiPuntosUy_mobile.Services;
 
@@ -30,27 +31,53 @@ public class AuthService(IConfiguration configs, Auth0Client auth0Client) : ApiS
     }
   }
 
+  public async Task<ApiResponse<SessionData>> ValidateMagicLink(string token)
+  {
+    try
+    {
+      var payload = new { Token = token };
+      return await POST<SessionData>("auth/validate-magic-link", payload);
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<SessionData>(true, null, ex.Message);
+    }
+  }
+  public async Task<ApiResponse<string>> CreateMagicLink(string email)
+  {
+    try
+    {
+      var payload = new { Email = email };
+      return await POST<string>("auth/magic-link", payload);
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<string>(true, null, ex.Message);
+    }
+  }
   public async Task<ApiResponse<SessionData>> LoginGoogle()
   {
     try
     {
       var loginResult = await _auth0Client.LoginAsync();
-      Debug.WriteLine($"ESTOY {loginResult.ErrorDescription}");
       if (!loginResult.IsError)
       {
-        Debug.WriteLine($"ESTOY LOGIN SUCCESS {loginResult.User.Identity?.Name}");
-        Debug.WriteLine($"ESTOY LOGIN SUCCESS {loginResult.User.Claims.First(c => c.Type == "email")?.Value}");
-        return await POST<SessionData>("auth/signup", loginResult.AccessToken);
+        var payload = new GoogleUser()
+        {
+          IdToken = loginResult.AccessToken,
+          Email = loginResult.User.Claims.First(c => c.Type == "email")?.Value!,
+          Name = loginResult.User.Identity?.Name!,
+          GoogleId = loginResult.User.Claims.First(c => c.Type == "sid").Value!
+        };
+        return await POST<SessionData>("auth/google-login", payload);
       }
       else
       {
-        Debug.WriteLine($"ESTOY Login failed: {loginResult.ErrorDescription}");
         return new ApiResponse<SessionData>(true, null, loginResult.ErrorDescription);
       }
     }
     catch (Exception ex)
     {
-      Debug.WriteLine($"ESTOY Login failed: {ex.Message}");
       return new ApiResponse<SessionData>(true, null, ex.Message);
     }
   }
@@ -61,8 +88,9 @@ public class AuthService(IConfiguration configs, Auth0Client auth0Client) : ApiS
     return await POST<SessionData>("auth/signup", payload);
   }
 
-  public void Logout()
+  public async Task Logout()
   {
+    await _auth0Client.LogoutAsync();
     SecureStorage.Remove(SecureStorageType.Session.ToString());
     SecureStorage.Remove(SecureStorageType.User.ToString());
   }

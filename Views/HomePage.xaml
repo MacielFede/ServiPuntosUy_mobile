@@ -23,8 +23,7 @@
                 AlignItems="Center"
                 JustifyContent="SpaceBetween"
                 Padding="10"
-                Margin="20,10,20,10"
-                BackgroundColor="White">
+                Margin="20,10,20,10">
       <ImageButton Source="avatar.png"
                    WidthRequest="50"
                    HeightRequest="50"
@@ -68,7 +67,6 @@
                     Padding="10"
                     Margin="5"
                     WidthRequest="200"
-                    BackgroundColor="White"
                     StrokeShape="RoundRectangle 10">
               <StackLayout HorizontalOptions="Center"
                            VerticalOptions="Center">
@@ -121,7 +119,6 @@
                     Padding="10"
                     Margin="5"
                     HorizontalOptions="Fill"
-                    BackgroundColor="White"
                     StrokeShape="RoundRectangle 10">
               <StackLayout>
                 <Image Source="{Binding ImageUrl}"

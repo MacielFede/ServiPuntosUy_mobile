@@ -1,16 +1,18 @@
 using Android.App;
+using Android.Content;
 using Android.Content.PM;
+using ServiPuntosUy_mobile.Views;
 
-namespace MauiAuth0App;
+namespace ServiPuntosUy_mobile;
 
 [Activity(NoHistory = true, LaunchMode = LaunchMode.SingleTop, Exported = true)]
-[IntentFilter(new[] { Android.Content.Intent.ActionView },
+[IntentFilter([Intent.ActionView],
               Categories = new[] {
-                Android.Content.Intent.CategoryDefault,
-                Android.Content.Intent.CategoryBrowsable
+                Intent.CategoryDefault,
+                Intent.CategoryBrowsable
               },
-              DataScheme = CALLBACK_SCHEME)]
-public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.WebAuthenticatorCallbackActivity
+              DataScheme = "servipuntos",
+              DataHost = "callback")]
+public class WebAuthenticationCallbackActivity : WebAuthenticatorCallbackActivity
 {
-  const string CALLBACK_SCHEME = "myapp";
 }
