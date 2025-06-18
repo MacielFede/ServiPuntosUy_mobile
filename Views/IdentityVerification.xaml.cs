@@ -9,9 +9,4 @@ public partial class IdentityVerificationPage : ContentPage
     InitializeComponent();
     BindingContext = _identityVerificationViewModel;
   }
-  protected override void OnDisappearing()
-  {
-    base.OnDisappearing();
-    (BindingContext as IdentityVerificationViewModel)?.Reset();
-  }
 }

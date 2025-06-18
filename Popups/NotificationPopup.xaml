@@ -3,20 +3,25 @@
            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
            xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
            x:Class="ServiPuntosUy_mobile.Popups.NotificationPopup"
-           CanBeDismissedByTappingOutsideOfPopup="True">
-  <VerticalStackLayout Padding="20"
-                       Spacing="10">
-    <Image
-      x:Name="NotificationImage"
+           CanBeDismissedByTappingOutsideOfPopup="True"
+           Color="Transparent">
+  <Border Padding="10"
+      BackgroundColor="White">
+    <Border.StrokeShape>
+      <RoundRectangle CornerRadius="20"
+                      StrokeThickness="4"/>
+    </Border.StrokeShape>
+    <VerticalStackLayout
+      Spacing="10"
       VerticalOptions="Center"
-      HorizontalOptions="Center"/>
-    <Label
-      x:Name="NotificationText"
-      VerticalOptions="Center"
-      HorizontalOptions="Center"
-      FontSize="18"/>
-    <Button Text="Descartar"
-            Clicked="Close_Clicked"
-            Style="{StaticResource SecondaryButtonStyle}"/>
-  </VerticalStackLayout>
+      MaximumWidthRequest="300">
+      <Label
+        x:Name="NotificationText"
+        FontSize="18"
+        LineBreakMode="WordWrap"/>
+      <Button Text="Descartar"
+              Clicked="Close_Clicked"
+              Style="{StaticResource SecondaryButtonStyle}"/>
+    </VerticalStackLayout>
+  </Border>
 </mct:Popup>

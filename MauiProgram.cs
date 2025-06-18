@@ -54,6 +54,9 @@ public static class MauiProgram
 			PostLogoutRedirectUri = "servipuntos://callback/",
 			Scope = "openid profile email"
 		}));
+		builder.Services.AddSingleton<ISessionManager, SessionManager>();
+		builder.Services.AddSingleton<INotificationService, NotificationService>();
+		builder.Services.AddSingleton<INavigationManager, NavigationManager>();
 		builder.Services.AddSingleton<IApiService, ApiService>();
 		builder.Services.AddSingleton<IAuthService, AuthService>();
 		builder.Services.AddSingleton<IProductsService, ProductsService>();
@@ -81,7 +84,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<SignUpViewModel>();
 		builder.Services.AddSingleton<HomeViewModel>();
 		builder.Services.AddSingleton<ProductDetailViewModel>();
-		builder.Services.AddSingleton<IdentityVerificationViewModel>();
+		builder.Services.AddTransient<IdentityVerificationViewModel>();
 		builder.Services.AddSingleton<FuelPricesViewModel>();
 		builder.Services.AddSingleton<BranchesViewModel>();
 		builder.Services.AddSingleton<TransactionsHistoryViewModel>();

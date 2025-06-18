@@ -1,23 +1,16 @@
 using CommunityToolkit.Maui.Views;
+using ServiPuntosUy_mobile.Services.Interfaces;
 
 namespace ServiPuntosUy_mobile.Popups
 {
   public partial class NotificationPopup : Popup
   {
-    public NotificationPopup(string message, string imageUrl)
+    public NotificationPopup(string message, INotificationService notificationService)
     {
       InitializeComponent();
 
       NotificationText.Text = message;
-
-      if (!string.IsNullOrEmpty(imageUrl))
-      {
-        NotificationImage.Source = ImageSource.FromUri(new Uri(imageUrl));
-      }
-      else
-      {
-        NotificationImage.IsVisible = false;
-      }
+      notificationService.ClearNotifications();
     }
 
     private void Close_Clicked(object sender, EventArgs e)

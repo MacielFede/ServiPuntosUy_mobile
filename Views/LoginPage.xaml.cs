@@ -15,9 +15,4 @@ public partial class LoginPage : ContentPage
     base.OnAppearing();
     (BindingContext as LoginViewModel)?.GetTenantName();
   }
-  protected override void OnDisappearing()
-  {
-    base.OnDisappearing();
-    (BindingContext as LoginViewModel)?.Reset();
-  }
 }
