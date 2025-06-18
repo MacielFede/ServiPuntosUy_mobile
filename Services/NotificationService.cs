@@ -27,7 +27,9 @@ public class NotificationService(IConfiguration configs) : INotificationService
     {
       MainThread.BeginInvokeOnMainThread(async () =>
       {
-        await Shell.Current.ShowPopupAsync(new NotificationPopup(e.Notification.Body, this));
+        var notificationText = e.Notification.Data?.Where(item => item.Key == "Description").FirstOrDefault().Value;
+        if (notificationText is not null)
+          await Shell.Current.ShowPopupAsync(new NotificationPopup(notificationText, this));
       });
     };
 
@@ -35,7 +37,9 @@ public class NotificationService(IConfiguration configs) : INotificationService
     {
       MainThread.BeginInvokeOnMainThread(async () =>
       {
-        await Shell.Current.ShowPopupAsync(new NotificationPopup(e.Notification.Body, this));
+        var notificationText = e.Notification.Data?.Where(item => item.Key == "Description").FirstOrDefault().Value;
+        if (notificationText is not null)
+          await Shell.Current.ShowPopupAsync(new NotificationPopup(notificationText, this));
       });
     };
 

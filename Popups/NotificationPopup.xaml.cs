@@ -10,7 +10,11 @@ namespace ServiPuntosUy_mobile.Popups
       InitializeComponent();
 
       NotificationText.Text = message;
-      notificationService.ClearNotifications();
+      _ = Task.Run(async () =>
+      {
+        await Task.Delay(1000);
+        notificationService.ClearNotifications();
+      });
     }
 
     private void Close_Clicked(object sender, EventArgs e)

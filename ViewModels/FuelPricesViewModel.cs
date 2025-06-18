@@ -20,8 +20,9 @@ public partial class FuelPricesViewModel(IFuelService fuelService, IBranchServic
   {
     try
     {
-      FuelPrices = new ObservableCollection<FuelPrice>(await _fuelService.GetFuelPrices());
+      await _branchService.LoadUserLocationAsync();
       var address = _branchService?.ClosestBranch?.Address;
+      FuelPrices = new ObservableCollection<FuelPrice>(await _fuelService.GetFuelPrices());
       if (address is null && _branchService is not null)
       {
         await _branchService.LoadBranchesAsync();
