@@ -31,6 +31,25 @@
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>fetch</string>
+			<string>remote-notification</string>
+		</array>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>We need your location to find the nearest stores.</string>
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>We need your location to find the nearest stores, even when the app is in the
+			background.</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleURLName</key>
+				<string>MauiAuth0App</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>servipuntos</string>
+				</array>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+			</dict>
 		</array>
 	</dict>
 </plist>

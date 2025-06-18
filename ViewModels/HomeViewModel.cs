@@ -1,57 +1,80 @@
 using System.Collections.ObjectModel;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.Services.Interfaces;
-using ServiPuntos.uy_mobile.Views;
+using Newtonsoft.Json;
+using ServiPuntosUy_mobile.Models;
+using ServiPuntosUy_mobile.Models.Enums;
+using ServiPuntosUy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Views;
 
-namespace ServiPuntos.uy_mobile.ViewModels;
+namespace ServiPuntosUy_mobile.ViewModels;
 
 public partial class HomeViewModel(IProductsService productsService, IAuthService authService) : ObservableObject
 {
   private readonly IProductsService _productService = productsService;
   private readonly IAuthService _authService = authService;
   [ObservableProperty]
-  private ObservableCollection<Product> products = [];
+  private ObservableCollection<Promotion> flashOffers = [];
+  partial void OnFlashOffersChanged(ObservableCollection<Promotion> value)
+  {
+    OnPropertyChanged(nameof(HasFlashOffers));
+  }
+
+  public bool HasFlashOffers => FlashOffers.Any();
   [ObservableProperty]
-  private int gasPrice;
+  private int userPoints;
 
-  public async Task LoadProducts()
-  {
-    try
-    {
-      var productsList = await _productService.GetProductsAsync();
-      if (productsList is { Error: false, Data: not null })
-        Products = new ObservableCollection<Product>(productsList.Data);
-      else
-        await Shell.Current.DisplayAlert("Error obteniendo productos", productsList.Message, "OK");
-    }
-    catch (Exception ex)
-    {
-      await Shell.Current.DisplayAlert("Error obteniendo productos", ex.Message, "OK");
-    }
-  }
-
-  public async Task GetGasPrice()
-  {
-    try
-    {
-      var gasPriceResponse = _productService.GetGasPrice();
-      if (gasPriceResponse is { Error: false })
-        GasPrice = gasPriceResponse.Data;
-      else
-        await Shell.Current.DisplayAlert("Error obteniendo productos", gasPriceResponse.Message, "OK");
-    }
-    catch (Exception ex)
-    {
-      await Shell.Current.DisplayAlert("Error obteniendo precio del combustible", ex.Message, "OK");
-    }
-  }
-
+  [ObservableProperty]
+  private ObservableCollection<Product> products = [];
   [RelayCommand]
   public async Task Logout()
   {
     await _authService.Logout();
     await Shell.Current.GoToAsync($"//{nameof(WelcomePage)}");
+  }
+
+  public async Task LoadPromotions()
+  {
+    try
+    {
+      var response = await _productService.GetPromotionsAsync();
+      if (response is { Error: false, Data: not null })
+        FlashOffers = response.Data.ToObservableCollection();
+      else
+        await Toast.Make($"{response.Message}", ToastDuration.Short).Show();
+    }
+    catch (Exception ex)
+    {
+      await Toast.Make($"{ex.Message}", ToastDuration.Short).Show();
+    }
+  }
+  public async Task LoadProducts()
+  {
+    try
+    {
+      var response = await _productService.GetProductsAsync();
+      if (response is { Error: false, Data: not null })
+        Products = new ObservableCollection<Product>(response.Data);
+      else
+        await Toast.Make($"{response.Message}", ToastDuration.Short).Show();
+    }
+    catch (Exception ex)
+    {
+      await Toast.Make($"{ex.Message}", ToastDuration.Short).Show();
+    }
+  }
+
+  public async Task GetUserPoints()
+  {
+    string? userData = await SecureStorage.GetAsync(SecureStorageType.User.ToString());
+    if (string.IsNullOrWhiteSpace(userData))
+    {
+      UserPoints = 0;
+      return;
+    }
+    UserPoints = JsonConvert.DeserializeObject<User>(userData)?.PointBalance ?? 0;
   }
 }

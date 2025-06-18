@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Detect if AndroidManifest.xml is staged for commit
+if git diff --cached --name-only | grep -q "^.*AndroidManifest\.xml$"; then
+  echo "Error: Changes to AndroidManifest.xml are not allowed. Please revert the changes before committing."
+  exit 1
+fi
+
+exit 0

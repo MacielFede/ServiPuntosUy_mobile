@@ -273,3 +273,7 @@ System.*/
 
 **/obj/
 **/bin/
+
+appsettings.json
+**/google-services.json
+**/GoogleService-info.plist

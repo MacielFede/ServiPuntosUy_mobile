@@ -1,34 +1,38 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModel="clr-namespace:ServiPuntos.uy_mobile.ViewModels"
-             xmlns:models="clr-namespace:ServiPuntos.uy_mobile.Models"
-             x:Class="ServiPuntos.uy_mobile.Views.HomePage"
+             xmlns:viewModel="clr-namespace:ServiPuntosUy_mobile.ViewModels"
+             xmlns:models="clr-namespace:ServiPuntosUy_mobile.Models"
+             xmlns:converters="clr-namespace:ServiPuntosUy_mobile.Converters"
+             x:Class="ServiPuntosUy_mobile.Views.HomePage"
              x:DataType="viewModel:HomeViewModel">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
 
-  <Grid>
+  <Grid RowSpacing="0">
     <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <!-- Header with Avatar -->
-    <FlexLayout AlignContent="SpaceBetween"
+    <!-- HEADER -->
+    <FlexLayout Grid.Row="0"
                 AlignItems="Center"
                 JustifyContent="SpaceBetween"
                 Padding="10"
-                Margin="10,10,10,30">
+                Margin="20,10,20,10">
       <ImageButton Source="avatar.png"
                    WidthRequest="50"
                    HeightRequest="50"
                    Clicked="OnAvatarClicked"/>
-      <Label
-        FontSize="16"
-        VerticalOptions="Center">
+      <Label>
         <Label.FormattedText>
           <FormattedString>
-            <Span Text="1L de combustible: "/>
-            <Span Text="{Binding GasPrice}"
+            <Span Text="Puntos acumulados: "/>
+            <Span Text="{Binding UserPoints}"
                   FontAttributes="Bold"
                   TextColor="DarkGreen"/>
           </FormattedString>
@@ -40,42 +44,96 @@
               Command="{Binding LogoutCommand}"/>
     </FlexLayout>
 
+    <StackLayout Grid.Row="1"
+                 Padding="20, 20, 20, 0"
+                 Spacing="5"
+                 IsVisible="{Binding HasFlashOffers}">
+      <Label Text="Ofertas flash ⚡️"
+             FontSize="20"
+             FontAttributes="Bold"/>
+      <CollectionView ItemsSource="{Binding FlashOffers}"
+                      HeightRequest="150"
+                      HorizontalScrollBarVisibility="Always"
+                      SelectionMode="Single"
+                      SelectionChanged="OnPromotionSelected">
+        <CollectionView.ItemsLayout>
+          <LinearItemsLayout Orientation="Horizontal"
+                             ItemSpacing="10"/>
+        </CollectionView.ItemsLayout>
+        <CollectionView.ItemTemplate>
+          <DataTemplate x:DataType="models:Promotion">
+            <Border Stroke="LightGray"
+                    StrokeThickness="1"
+                    Padding="10"
+                    Margin="5"
+                    WidthRequest="200"
+                    StrokeShape="RoundRectangle 10">
+              <StackLayout HorizontalOptions="Center"
+                           VerticalOptions="Center">
+                <Label Text="{Binding Description}"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
+                <Label Text="{Binding Price, Converter={StaticResource CurrencyFormatConverter}}"
+                       TextColor="SeaGreen"
+                       HorizontalOptions="Center"/>
+                <Label Text="{Binding StartDate, StringFormat='Inicio: {0:MM/dd/yyyy}'}"
+                       FontSize="14"/>
+                <Label Text="{Binding EndDate, StringFormat='Finalizacion: {0:MM/dd/yyyy}'}"
+                       FontSize="14"/>
+              </StackLayout>
+            </Border>
+          </DataTemplate>
+        </CollectionView.ItemTemplate>
+      </CollectionView>
+    </StackLayout>
 
-    <!-- Product List -->
-    <CollectionView Grid.Row="1"
-                    ItemsSource="{Binding Products}"
-                    SelectionMode="Single"
-                    SelectionChanged="OnProductSelected">
-      <CollectionView.ItemsLayout>
-        <GridItemsLayout
-          Orientation="Vertical"
-          Span="2"
-          HorizontalItemSpacing="0"
-          VerticalItemSpacing="10"/>
-      </CollectionView.ItemsLayout>
-      <CollectionView.ItemTemplate>
-        <DataTemplate x:DataType="models:Product">
-          <Border Stroke="LightGray"
-                  StrokeThickness="1"
-                  Padding="10"
-                  Margin="5"
-                  HorizontalOptions="Fill"
-                  BackgroundColor="White"
-                  StrokeShape="RoundRectangle 10">
+    <Grid Grid.Row="2"
+          Padding="20, 0"
+          RowSpacing="10">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
 
-            <StackLayout>
-              <Image Source="{Binding ImageUrl}"
-                     WidthRequest="50"
-                     HeightRequest="50"/>
-              <Label Text="{Binding Name}"
-                     FontSize="18"
-                     FontAttributes="Bold"/>
-              <Label Text="{Binding Price, StringFormat='${0:F2}'}"
-                     TextColor="SeaGreen"/>
-            </StackLayout>
-          </Border>
-        </DataTemplate>
-      </CollectionView.ItemTemplate>
-    </CollectionView>
+      <Label Grid.Row="0"
+             Text="Productos"
+             FontSize="20"
+             FontAttributes="Bold"
+             Margin="0,10,0,0"/>
+      <CollectionView Grid.Row="1"
+                      ItemsSource="{Binding Products}"
+                      SelectionMode="Single"
+                      SelectionChanged="OnProductSelected"
+                      VerticalOptions="Fill">
+        <CollectionView.ItemsLayout>
+          <GridItemsLayout Orientation="Vertical"
+                           Span="2"
+                           HorizontalItemSpacing="10"
+                           VerticalItemSpacing="10"/>
+        </CollectionView.ItemsLayout>
+        <CollectionView.ItemTemplate>
+          <DataTemplate x:DataType="models:Product">
+            <Border Stroke="LightGray"
+                    StrokeThickness="1"
+                    Padding="10"
+                    Margin="5"
+                    HorizontalOptions="Fill"
+                    StrokeShape="RoundRectangle 10">
+              <StackLayout>
+                <Image Source="{Binding ImageUrl}"
+                       WidthRequest="50"
+                       HeightRequest="50"/>
+                <Label Text="{Binding Name}"
+                       FontSize="18"
+                       FontAttributes="Bold"/>
+                <Label Text="{Binding Price, Converter={StaticResource CurrencyFormatConverter}}"
+                       TextColor="SeaGreen"/>
+              </StackLayout>
+            </Border>
+          </DataTemplate>
+        </CollectionView.ItemTemplate>
+      </CollectionView>
+    </Grid>
   </Grid>
 </ContentPage>

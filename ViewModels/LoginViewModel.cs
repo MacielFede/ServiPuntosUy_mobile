@@ -1,16 +1,28 @@
+using System.Diagnostics;
+using System.Threading.Tasks;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
-using ServiPuntos.uy_mobile.Services.Interfaces;
-using ServiPuntos.uy_mobile.Views;
+using ServiPuntosUy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Views;
 
-namespace ServiPuntos.uy_mobile.ViewModels;
+namespace ServiPuntosUy_mobile.ViewModels;
 
+[QueryProperty(nameof(Token), "Token")]
 public partial class LoginViewModel(IAuthService authService, IConfiguration _configs) : ObservableObject
 {
   [ObservableProperty] private string? _email;
   [ObservableProperty] private string? _TenantName;
   [ObservableProperty] private string? _password;
+  [ObservableProperty] private string? token;
+  [ObservableProperty] private bool usingMagicLink = false;
+
+  partial void OnTokenChanged(string? value)
+  {
+    _ = OnTokenChangedAsync(value);
+  }
 
   [RelayCommand]
   private async Task Login()
@@ -19,29 +31,73 @@ public partial class LoginViewModel(IAuthService authService, IConfiguration _co
     {
       if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
       {
-        await Shell.Current.DisplayAlert("Error en el inicio de sesión", "Debes ingresar email y contraseña", "OK");
+        await Toast.Make("Debes ingresar email y contraseña", ToastDuration.Short).Show();
         return;
       }
       var loginResult = await authService.Login(Email, Password);
       if (loginResult is { Error: false, Data: not null })
       {
         await authService.SaveSession(loginResult.Data);
+        authService.TriggerSessionCreatedEvent();
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
       }
       else
       {
-        await Shell.Current.DisplayAlert("Error en el inicio de sesión", loginResult?.Message, "OK");
+        await Toast.Make(loginResult.Message, ToastDuration.Short).Show();
       }
     }
     catch (Exception e)
     {
-      await Shell.Current.DisplayAlert("Error en el inicio de sesión", e.Message, "OK");
+      await Toast.Make(e.Message, ToastDuration.Short).Show();
     }
   }
-  [RelayCommand]
-  private async Task SignleSignOn()
+
+
+  private async Task OnTokenChangedAsync(string? value)
   {
-    await Shell.Current.DisplayAlert("Error en contraseña unica", "Tamos trabajando en esto", "OK");
+    if (!string.IsNullOrEmpty(value))
+    {
+      await Toast.Make(value, ToastDuration.Long).Show();
+      var response = await authService.ValidateMagicLink(value);
+      if (response is { Error: false, Data: not null })
+      {
+        await authService.SaveSession(response.Data);
+        authService.TriggerSessionCreatedEvent();
+        await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+        UsingMagicLink = false;
+      }
+      else
+      {
+        await Toast.Make("Ocurrio un error validando tu inicio de sesion", ToastDuration.Long).Show();
+        UsingMagicLink = false;
+      }
+    }
+    else
+    {
+      await Toast.Make("Ocurrio un error validando tu inicio de sesion", ToastDuration.Long).Show();
+      UsingMagicLink = false;
+    }
+  }
+
+  [RelayCommand]
+  private async Task SingleSignOn()
+  {
+    if (string.IsNullOrWhiteSpace(Email))
+    {
+      await Toast.Make("Debes ingresar tu correo electronico para crear el magic link", ToastDuration.Short).Show();
+      return;
+    }
+    UsingMagicLink = true;
+    var loginResult = await authService.CreateMagicLink(Email);
+    if (loginResult is { Error: false, Data: not null })
+    {
+      await Shell.Current.DisplayAlert("Inicio de sesion", "Recibiras un email con un link para continuar con el inicio de seison", "Ok");
+    }
+    else
+    {
+      await Toast.Make(loginResult.Message, ToastDuration.Short).Show();
+    }
+    UsingMagicLink = false;
   }
 
   public void Reset()
@@ -54,31 +110,4 @@ public partial class LoginViewModel(IAuthService authService, IConfiguration _co
   {
     TenantName = _configs["TENANT_NAME"] ?? "interno";
   }
-
-  // [RelayCommand]
-  // private async Task LoginAuth0()
-  // {
-  //   var siteResult = await authService.ValidateSite();
-
-  //   if (siteResult == null || siteResult.Error)
-  //   {
-  //     await Application.Current.MainPage.DisplayAlert("Site error", siteResult.Message, "OK");
-  //     return;
-  //   }
-
-  //   var accessType = siteResult.Data.AccessType;
-
-  //   var loginResult = await authService.LoginAuth0(, accessType);
-
-  //   if (loginResult is { Error: false })
-  //   {
-  //     await authService.SaveSession(loginResult.Data, );
-  //     await Shell.Current.GoToAsync($"///{nameof(EventsPage)}");
-  //   }
-  //   else
-  //   {
-  //     await Application.Current.MainPage.DisplayAlert("Login error", loginResult.Message, "OK");
-  //   }
-  // }
-
 }

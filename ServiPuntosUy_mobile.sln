@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiPuntos.uy_mobile", "ServiPuntos.uy_mobile.csproj", "{4D6E7BCC-6F97-B3DD-249C-0E8A025B1809}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiPuntosUy_mobile", "ServiPuntosUy_mobile.csproj", "{4D6E7BCC-6F97-B3DD-249C-0E8A025B1809}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

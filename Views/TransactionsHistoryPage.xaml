@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:ServiPuntosUy_mobile.ViewModels"
+             xmlns:models="clr-namespace:ServiPuntosUy_mobile.Models"
+             x:Class="ServiPuntosUy_mobile.Views.TransactionsHistoryPage"
+             xmlns:converters="clr-namespace:ServiPuntosUy_mobile.Converters"
+             Title="Historial de transacciones">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <ScrollView>
+    <ScrollView.Content>
+      <CollectionView x:DataType="viewModel:TransactionsHistoryViewModel"
+                      ItemsSource="{Binding Transactions}">
+        <CollectionView.ItemTemplate>
+          <DataTemplate x:DataType="models:Transaction">
+            <Border Padding="10"
+                    Margin="5"
+                    Stroke="#CCC"
+                    StrokeThickness="2"
+                    StrokeShape="RoundRectangle 10"
+                    HorizontalOptions="Fill">
+              <StackLayout
+                Spacing="1">
+                <StackLayout>
+                  <FlexLayout
+                    JustifyContent="SpaceBetween"
+                    Direction="Row"
+                    HorizontalOptions="Fill"
+                    Margin="0"
+                    Padding="0">
+                    <Label Text="{Binding Type}"
+                           FontAttributes="Bold"
+                           FontSize="18"/>
+                    <Label Text="{Binding PointsEarned, StringFormat='Puntos obtenidos: {0}'}"
+                           FontSize="14"
+                           IsVisible="{Binding IsCompra}"/>
+                    <Label Text="{Binding PointsSpent, StringFormat='Puntos utilizados: {0}'}"
+                           FontSize="14"
+                           IsVisible="{Binding IsCanje}"/>
+                  </FlexLayout>
+                  <FlexLayout
+                    JustifyContent="SpaceBetween"
+                    Direction="Row"
+                    HorizontalOptions="Fill">
+                    <Label Text="{Binding CreatedAt, StringFormat='Fecha: {0:MM/dd/yyyy}'}"
+                           FontSize="14"/>
+                    <Label FontSize="14"
+                           IsVisible="{Binding IsCompra}">
+                      <Label.FormattedText>
+                        <FormattedString>
+                          <Span Text="Precio total: "/>
+                          <Span Text="{Binding Amount, Converter={StaticResource CurrencyFormatConverter}}"/>
+                        </FormattedString>
+                      </Label.FormattedText>
+                    </Label>
+                  </FlexLayout>
+                  <Label Text="{Binding BranchAddress, StringFormat='Lugar de retiro: {0}'}"
+                         FontSize="14"
+                         HorizontalOptions="Fill"/>
+                </StackLayout>
+                <Button
+                  Text="Ver detalle"
+                  Style="{StaticResource SecondaryButtonStyle}"
+                  Clicked="OnShowDetailClicked"
+                  CommandParameter="{Binding Id}"
+                  CornerRadius="5"/>
+              </StackLayout>
+            </Border>
+          </DataTemplate>
+        </CollectionView.ItemTemplate>
+      </CollectionView>
+    </ScrollView.Content>
+  </ScrollView>
+</ContentPage>

@@ -1,8 +1,8 @@
 ﻿<?xml version = "1.0" encoding = "UTF-8" ?>
 <Application
-    x:Class="ServiPuntos.uy_mobile.Views.App"
+    x:Class="ServiPuntosUy_mobile.Views.App"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:local="clr-namespace:ServiPuntos.uy_mobile"
+    xmlns:local="clr-namespace:ServiPuntosUy_mobile"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -10,6 +10,26 @@
                 <ResourceDictionary Source="/Resources/Styles/Colors.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Color x:Key="PrimaryColor">#0000FF</Color>
+            <Color x:Key="PrimaryTextColor">White</Color>
+            <Color x:Key="SecondaryColor">#FFFF00</Color>
+            <Color x:Key="SecondaryTextColor">Black</Color>
+            <Color x:Key="TabBarUnselectedColor">White</Color>
+            <x:String x:Key="LogoUrl">https://www.shutterstock.com/image-vector/gas-station-logo-template-design-260nw-1681719721.jpg</x:String>
+            <Style TargetType="Button"
+                   x:Key="PrimaryButtonStyle">
+                <Setter Property="BackgroundColor"
+                        Value="{DynamicResource PrimaryColor}"/>
+                <Setter Property="TextColor"
+                        Value="{DynamicResource PrimaryTextColor}"/>
+            </Style>
+            <Style TargetType="Button"
+                   x:Key="SecondaryButtonStyle">
+                <Setter Property="BackgroundColor"
+                        Value="{DynamicResource SecondaryColor}"/>
+                <Setter Property="TextColor"
+                        Value="{DynamicResource SecondaryTextColor}"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+           xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+           x:Class="ServiPuntosUy_mobile.Popups.NotificationPopup"
+           CanBeDismissedByTappingOutsideOfPopup="True"
+           Color="Transparent">
+  <Border Padding="10"
+      BackgroundColor="White">
+    <Border.StrokeShape>
+      <RoundRectangle CornerRadius="20"
+                      StrokeThickness="4"/>
+    </Border.StrokeShape>
+    <VerticalStackLayout
+      Spacing="10"
+      VerticalOptions="Center"
+      MaximumWidthRequest="300">
+      <Label
+        x:Name="NotificationText"
+        FontSize="18"
+        LineBreakMode="WordWrap"/>
+      <Button Text="Descartar"
+              Clicked="Close_Clicked"
+              Style="{StaticResource SecondaryButtonStyle}"/>
+    </VerticalStackLayout>
+  </Border>
+</mct:Popup>

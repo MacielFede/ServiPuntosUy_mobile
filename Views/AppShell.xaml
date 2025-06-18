@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="ServiPuntos.uy_mobile.Views.AppShell"
+    x:Class="ServiPuntosUy_mobile.Views.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:ServiPuntos.uy_mobile.Views"
-    Title="ServiPuntos.uy"
+    xmlns:views="clr-namespace:ServiPuntosUy_mobile.Views"
+    Title="ServiPuntosUy"
     FlyoutBehavior="Disabled">
 
     <ShellContent
         Title="Bienvenido"
         ContentTemplate="{DataTemplate views:WelcomePage}"
         Route="WelcomePage"/>
-    <ShellContent
-        ContentTemplate="{DataTemplate views:HomePage}"
-        Route="HomePage"/>
+    <TabBar       Shell.TabBarBackgroundColor="{DynamicResource PrimaryColor}"
+                  Shell.TabBarUnselectedColor="{DynamicResource TabBarUnselectedColor}"
+                  Shell.TabBarForegroundColor="{DynamicResource SecondaryColor}">
+        <ShellContent
+            ContentTemplate="{DataTemplate views:HomePage}"
+            Route="HomePage"
+            Icon="home_icon.png"/>
+        <ShellContent
+            ContentTemplate="{DataTemplate views:FuelPricesPage}"
+            Route="FuelPricesPage"
+            Icon="gas_icon.png"/>
+        <ShellContent
+            ContentTemplate="{DataTemplate views:BranchesPage}"
+            Route="BranchesPage"
+            Icon="location_icon.png"/>
+        <ShellContent
+            ContentTemplate="{DataTemplate views:TransactionsHistoryPage}"
+            Route="TransactionsHistoryPage"
+            Icon="history_icon.png"/>
+    </TabBar>
 
 </Shell>

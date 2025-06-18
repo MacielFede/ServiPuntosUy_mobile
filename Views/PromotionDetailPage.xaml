@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:ServiPuntosUy_mobile.ViewModels"
+             xmlns:model="clr-namespace:ServiPuntosUy_mobile.Models"
+             xmlns:converters="clr-namespace:ServiPuntosUy_mobile.Converters"
+             x:Class="ServiPuntosUy_mobile.Views.PromotionDetailPage"
+             x:DataType="viewModel:PromotionDetailViewModel"
+             Title="{Binding UserPoints, StringFormat='Tus puntos: {0}'}">
+       <ContentPage.Resources>
+              <ResourceDictionary>
+                     <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
+              </ResourceDictionary>
+       </ContentPage.Resources>
+       <Grid>
+              <ScrollView>
+                     <VerticalStackLayout Padding="20"
+                                          Spacing="10">
+                            <Label Text="{Binding Promotion.Description}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding Promotion.StartDate, StringFormat='Fecha de inicio: {0:MM/dd/yyyy}'}"
+                                   FontSize="14"/>
+                            <Label Text="{Binding Promotion.EndDate, StringFormat='Fecha de finalizacion: {0:MM/dd/yyyy}'}"
+                                   FontSize="14"/>
+                            <Label Text="Productos y precios originales:"
+                                   FontSize="18"
+                                   FontAttributes="Bold"/>
+                            <CollectionView ItemsSource="{Binding Products}"
+                                            SelectionMode="None"
+                                            Margin="5">
+                                   <CollectionView.ItemTemplate>
+                                          <DataTemplate x:DataType="model:Product">
+                                                 <StackLayout Orientation="Horizontal"
+                                                              Spacing="3">
+                                                        <Label>
+                                                               <Label.FormattedText>
+                                                                      <FormattedString>
+                                                                             <Span Text="{Binding Name}"/>
+                                                                             <Span Text=" | "/>
+                                                                             <Span Text="{Binding Price, Converter={StaticResource CurrencyFormatConverter}}"
+                                                                                   FontAttributes="Bold"
+                                                                                   TextColor="DarkGreen"/>
+                                                                      </FormattedString>
+                                                               </Label.FormattedText>
+                                                        </Label>
+                                                 </StackLayout>
+                                          </DataTemplate>
+                                   </CollectionView.ItemTemplate>
+
+                            </CollectionView>
+                            <VerticalStackLayout>
+                                   <Label Text="Selecciona donde lo retiras:"
+                                          FontSize="18"
+                                          FontAttributes="Bold"/>
+                                   <Picker ItemsSource="{Binding Branches}"
+                                           SelectedItem="{Binding SelectedBranch}"
+                                           ItemDisplayBinding="{Binding Address, x:DataType=model:Branch}"
+                                           Title="Elegí una sucursal"/>
+                            </VerticalStackLayout>
+                            <HorizontalStackLayout VerticalOptions="Center">
+                                   <Label Text="Cantidad:"
+                                          FontSize="18"
+                                          VerticalOptions="Center"
+                                                 FontAttributes="Bold"/>
+                                   <Stepper Minimum="1"
+                                            Maximum="100"
+                                            Value="{Binding Quantity}"
+                                            HorizontalOptions="Fill"/>
+                                   <Label Text="{Binding Quantity}"
+                                          FontSize="18"
+                                          VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding TotalPrice, Converter={StaticResource CurrencyFormatConverter}}"
+                                   FontSize="18"
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding TotalPointsPrice, StringFormat='Precio total en puntos: {0}'}"
+                                   FontSize="16"
+                                   FontAttributes="Italic"/>
+                            <VerticalStackLayout Padding="10"
+                                                 Spacing="10">
+                                   <Button Text="Comprar"
+                                           BackgroundColor="Green"
+                                           Command="{Binding BuyCommand}"/>
+                                   <Button Text="Usa tus puntos!"
+                                           Command="{Binding UsePointsCommand}"
+                                           Style="{StaticResource PrimaryButtonStyle}"/>
+                            </VerticalStackLayout>
+                     </VerticalStackLayout>
+              </ScrollView>
+
+              <ContentView x:Name="QrOverlay"
+                           IsVisible="False"
+                           BackgroundColor="#80000000"
+                           HorizontalOptions="Fill"
+                           VerticalOptions="Fill">
+                     <Grid HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           BackgroundColor="White"
+                           Padding="20"
+                           WidthRequest="300"
+                           HeightRequest="300">
+                            <VerticalStackLayout HorizontalOptions="Center"
+                                                 VerticalOptions="Center"
+                                                 Spacing="10">
+                                   <Image Source="{Binding QrImage}"
+                                          WidthRequest="200"
+                                          HeightRequest="200"/>
+                                   <Button Text="Cerrar"
+                                           Style="{StaticResource SecondaryButtonStyle}"
+                                           Clicked="CloseQrOverlay_Clicked"/>
+                            </VerticalStackLayout>
+                     </Grid>
+              </ContentView>
+       </Grid>
+</ContentPage>

@@ -1,18 +1,19 @@
 using System.Diagnostics;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.Models.Enums;
-using ServiPuntos.uy_mobile.Views;
+using ServiPuntosUy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Views;
 
-namespace ServiPuntos.uy_mobile.ViewModels;
+namespace ServiPuntosUy_mobile.ViewModels;
 
-public partial class WelcomeViewModel(IConfiguration _configs) : ObservableObject
+public partial class WelcomeViewModel(IConfiguration _configs, IAuthService authService) : ObservableObject
 {
-
-  [ObservableProperty] private string? _TenantName;
+  private readonly IAuthService _authService = authService;
+  [ObservableProperty] private bool _signingWithGoogle = false;
+  [ObservableProperty] private string? _tenantName;
   [RelayCommand]
   private async Task GoToLoginPage()
   {
@@ -23,15 +24,29 @@ public partial class WelcomeViewModel(IConfiguration _configs) : ObservableObjec
   {
     await Shell.Current.GoToAsync($"{nameof(SignUpPage)}");
   }
-
-  public async Task CheckUserSession()
+  [RelayCommand]
+  private async Task LoginWithGoogle()
   {
-    var sessionData =
-        JsonConvert.DeserializeObject<SessionData>(await SecureStorage.GetAsync(SecureStorageType.Session.ToString()) ??
-                                                   string.Empty);
-    if (sessionData != null /* && sessionData.Expiration > DateTime.Now.AddMinutes(15) */)
+    try
     {
-      await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+      SigningWithGoogle = true;
+      var loginResult = await _authService.LoginGoogle();
+      if (loginResult is { Error: false, Data: not null })
+      {
+        await _authService.SaveSession(loginResult.Data);
+        _authService.TriggerSessionCreatedEvent();
+        await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+      }
+      else
+      {
+        await Toast.Make(loginResult.Message, ToastDuration.Short).Show();
+      }
+      SigningWithGoogle = false;
+    }
+    catch (Exception e)
+    {
+      SigningWithGoogle = false;
+      await Toast.Make(e.Message, ToastDuration.Short).Show();
     }
   }
   public void GetTenantName()

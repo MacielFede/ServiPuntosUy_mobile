@@ -1,6 +1,6 @@
-using ServiPuntos.uy_mobile.ViewModels;
+using ServiPuntosUy_mobile.ViewModels;
 
-namespace ServiPuntos.uy_mobile.Views;
+namespace ServiPuntosUy_mobile.Views;
 
 public partial class SignUpPage : ContentPage
 {

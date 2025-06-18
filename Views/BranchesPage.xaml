@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
+             xmlns:sensors="clr-namespace:Microsoft.Maui.Devices.Sensors;assembly=Microsoft.Maui.Essentials"
+             xmlns:vm="clr-namespace:ServiPuntosUy_mobile.ViewModels"
+             x:Class="ServiPuntosUy_mobile.Views.BranchesPage"
+             x:DataType="vm:BranchesViewModel"
+             Title="Nuestras estaciones">
+  <StackLayout>
+    <StackLayout Orientation="Vertical"
+                 Padding="10">
+      <Label Text="Filtrar por hora de apertura:"
+             VerticalOptions="Center"/>
+      <TimePicker x:Name="OpenTimePicker"
+                  Time="{Binding FilterOpenTime, Mode=TwoWay}"
+                  Format="HH:mm"/>
+      <HorizontalStackLayout HorizontalOptions="Center">
+        <Button Text="Aplicar filtro"
+                Clicked="OnOpenFilterActionClicked"
+                Margin="10"
+                Style="{StaticResource PrimaryButtonStyle}"/>
+        <Button Text="Limpiar filtro"
+                Clicked="OnOpenFilterActionClicked"
+                Margin="10"
+                Style="{StaticResource SecondaryButtonStyle}"/>
+      </HorizontalStackLayout>
+      <Label Text="Filtrar por hora de cierre:"
+             VerticalOptions="Center"/>
+      <TimePicker x:Name="CloseTimePicker"
+                  Time="{Binding FilterClosingTime, Mode=TwoWay}"
+                  Format="HH:mm"/>
+      <HorizontalStackLayout HorizontalOptions="Center">
+        <Button Text="Aplicar filtro"
+                Clicked="OnCloseFilterActionClicked"
+                Margin="10"
+                Style="{StaticResource PrimaryButtonStyle}"/>
+        <Button Text="Limpiar filtro"
+                Clicked="OnCloseFilterActionClicked"
+                Margin="10"
+                Style="{StaticResource SecondaryButtonStyle}"/>
+      </HorizontalStackLayout>
+    </StackLayout>
+    <maps:Map x:Name="BranchesMap"
+              MapType="Street"
+              IsShowingUser="True">
+      <x:Arguments>
+        <maps:MapSpan>
+          <x:Arguments>
+            <sensors:Location>
+              <x:Arguments>
+                <x:Double>-34.9011</x:Double>
+                <x:Double>-56.1645</x:Double>
+              </x:Arguments>
+            </sensors:Location>
+            <x:Double>0.1</x:Double>
+            <x:Double>0.1</x:Double>
+          </x:Arguments>
+        </maps:MapSpan>
+      </x:Arguments>
+    </maps:Map>
+  </StackLayout>
+</ContentPage>

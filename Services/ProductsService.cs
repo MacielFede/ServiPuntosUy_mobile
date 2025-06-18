@@ -1,11 +1,27 @@
 using Microsoft.Extensions.Configuration;
-using ServiPuntos.uy_mobile.Models;
-using ServiPuntos.uy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Models;
+using ServiPuntosUy_mobile.Services.Interfaces;
 
-namespace ServiPuntos.uy_mobile.Services;
+namespace ServiPuntosUy_mobile.Services;
 
 public class ProductsService(IConfiguration configs) : ApiService(configs), IProductsService
 {
+  public event EventHandler? UserMadePurchase;
+  public void InvokeUserMadePurchaseEvent()
+  {
+    UserMadePurchase?.Invoke(this, EventArgs.Empty);
+  }
+  public async Task<ApiResponse<Promotion[]>> GetPromotionsAsync()
+  {
+    try
+    {
+      return await GET<Promotion[]>("promotion/tenant");
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<Promotion[]>(true, null, ex.Message);
+    }
+  }
   public async Task<ApiResponse<Product[]>> GetProductsAsync()
   {
     try
@@ -31,15 +47,50 @@ public class ProductsService(IConfiguration configs) : ApiService(configs), IPro
     }
   }
 
-  public ApiResponse<int> GetGasPrice()
+  public async Task<ApiResponse<Transaction>> PurchaseProduct(ProductForTransaction[] products, int branchId)
   {
     try
     {
-      return new ApiResponse<int>(false, 3000, "Precio actualizado con exito");
+      return await POST<Transaction>("transaction", new { BranchId = branchId, products });
     }
     catch (Exception ex)
     {
-      return new ApiResponse<int>(true, 100, ex.Message);
+      return new ApiResponse<Transaction>(true, null, ex.Message);
+    }
+  }
+  public async Task<ApiResponse<SessionData>> CreateProductRedemption(int productId, int branchId)
+  {
+    try
+    {
+      return await POST<SessionData>("redemption/generate-token", new { BranchId = branchId, ProductId = productId });
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<SessionData>(true, null, ex.Message);
+    }
+  }
+
+  public async Task<ApiResponse<Transaction[]>> GetTransactionHistory()
+  {
+    try
+    {
+      return await GET<Transaction[]>("transaction/history");
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<Transaction[]>(true, null, ex.Message);
+    }
+  }
+
+  public async Task<ApiResponse<TransactionItem[]>> GetTransactionDetails(int transactionId)
+  {
+    try
+    {
+      return await GET<TransactionItem[]>($"transaction/{transactionId}/items");
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<TransactionItem[]>(true, null, ex.Message);
     }
   }
 }

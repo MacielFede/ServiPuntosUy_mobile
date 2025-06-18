@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
 		<OutputType>Exe</OutputType>
-		<RootNamespace>ServiPuntos.uy_mobile</RootNamespace>
+		<RootNamespace>ServiPuntosUy_mobile</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -13,7 +13,7 @@
 		<ApplicationTitle>ServiPuntos</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.servipuntos.uy_mobile</ApplicationId>
+		<ApplicationId>com.servipuntos.uy</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -26,7 +26,9 @@
 		<SupportedOSPlatformVersion
 			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion
-			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
+		<CodesignEntitlements>Platforms/iOS/Entitlements.plist</CodesignEntitlements>
+		<ApplicationEntitlements>Platforms/iOS/Entitlements.plist</ApplicationEntitlements>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -47,16 +49,43 @@
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
-
+	<PropertyGroup
+		Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android|AnyCPU'">
+		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+	</PropertyGroup>
+	<!-- * Secrets -->
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+		<GoogleServicesJson Include="google-services.json" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
+		<BundleResource Include="GoogleService-Info.plist" />
+	</ItemGroup>
 	<ItemGroup>
-		<!-- * Dependencies -->
+		<None Remove="appsettings.json" />
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+	</ItemGroup>
+	<!-- * Dependencies -->
+	<ItemGroup>
+		<PackageReference Include="Auth0.OidcClient.MAUI" Version="1.3.0" />
 		<PackageReference Include="DotNetEnv" Version="3.1.1" />
 		<PackageReference Include="DotNetMeteor.HotReload.Plugin" Version="3.*" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.2" />
+		<PackageReference Include="CommunityToolkit.Maui.Maps" Version="3.0.2" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="Microsoft.Extensions.Primitives" Version="9.0.5" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+		<PackageReference Include="Plugin.Firebase.CloudMessaging" Version="3.1.2" />
+		<PackageReference Include="QRCoder" Version="1.6.0" />
+		<PackageReference Include="SkiaSharp" Version="3.119.0" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -82,6 +111,18 @@
 			<SubType>Designer</SubType>
 		</MauiXaml>
 		<MauiXaml Update="Views\IdentityVerificationPage.xaml">
+			<SubType>Designer</SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\TransactionsHistoryPage.xaml">
+			<SubType>Designer</SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\BranchesPage.xaml">
+			<SubType>Designer</SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\FuelPricesPage.xaml">
+			<SubType>Designer</SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\PromotionDetailPage.xaml">
 			<SubType>Designer</SubType>
 		</MauiXaml>
 	</ItemGroup>
@@ -119,5 +160,25 @@
 			<DependentUpon>IdentityVerificationPage.xaml</DependentUpon>
 			<SubType>Code</SubType>
 		</Compile>
+		<Compile Update="Views\TransactionsHistoryPage.xaml.cs">
+			<DependentUpon>TransactionsHistoryPage.xaml</DependentUpon>
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\BranchesPage.xaml.cs">
+			<DependentUpon>BranchesPage.xaml</DependentUpon>
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\FuelPricesPage.xaml.cs">
+			<DependentUpon>FuelPricesPage.xaml</DependentUpon>
+			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Views\PromotionDetailPage.xaml.cs">
+			<DependentUpon>PromotionDetailPage.xaml</DependentUpon>
+			<SubType>Code</SubType>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<MauiXaml Update="Popups/NotificationPopup.xaml">
+		</MauiXaml>
 	</ItemGroup>
 </Project>

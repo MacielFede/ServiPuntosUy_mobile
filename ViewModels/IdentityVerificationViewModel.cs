@@ -1,13 +1,14 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ServiPuntos.uy_mobile.Services.Interfaces;
-using ServiPuntos.uy_mobile.Models;
-using System.Diagnostics;
+using ServiPuntosUy_mobile.Services.Interfaces;
+using ServiPuntosUy_mobile.Models;
 using Newtonsoft.Json;
-using ServiPuntos.uy_mobile.Models.Enums;
+using ServiPuntosUy_mobile.Models.Enums;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Alerts;
 
 
-namespace ServiPuntos.uy_mobile.ViewModels;
+namespace ServiPuntosUy_mobile.ViewModels;
 
 public partial class IdentityVerificationViewModel(IAuthService authService) : ObservableObject
 {
@@ -19,7 +20,7 @@ public partial class IdentityVerificationViewModel(IAuthService authService) : O
   {
     if (DocumentNumber == null)
     {
-      await Shell.Current.DisplayAlert("Error en la verificación de edad", "Debes ingresar tu numero de cedula y de serie", "OK");
+      await Toast.Make("Debes ingresar tu numero de cedula y de serie", ToastDuration.Short).Show();
       return;
     }
     try
@@ -29,17 +30,17 @@ public partial class IdentityVerificationViewModel(IAuthService authService) : O
       {
         var userJson = JsonConvert.SerializeObject(userDTOResponse.Data);
         await SecureStorage.SetAsync(SecureStorageType.User.ToString(), userJson);
-        await Shell.Current.DisplayAlert("Identidad verificada con éxito.", "Podrás acceder a ofertas exclusivas!", "OK");
+        await Shell.Current.DisplayAlert("Identidad verificada con éxito.", "Podrás acceder a ofertas exclusivas!", "Volver");
         await Shell.Current.GoToAsync("..");
       }
       else
       {
-        await Shell.Current.DisplayAlert("Error en la verificación de edad", userDTOResponse.Message, "OK");
+        await Toast.Make(userDTOResponse.Message, ToastDuration.Short).Show();
       }
     }
     catch (Exception ex)
     {
-      await Shell.Current.DisplayAlert("Error en la verificación de edad", ex.Message, "OK");
+      await Toast.Make(ex.Message, ToastDuration.Short).Show();
     }
   }
 

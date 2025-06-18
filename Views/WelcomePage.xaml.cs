@@ -1,6 +1,6 @@
-﻿using ServiPuntos.uy_mobile.ViewModels;
+﻿using ServiPuntosUy_mobile.ViewModels;
 
-namespace ServiPuntos.uy_mobile.Views;
+namespace ServiPuntosUy_mobile.Views;
 
 public partial class WelcomePage : ContentPage
 {
@@ -14,6 +14,5 @@ public partial class WelcomePage : ContentPage
 	{
 		base.OnAppearing();
 		(BindingContext as WelcomeViewModel)?.GetTenantName();
-		_ = (BindingContext as WelcomeViewModel)?.CheckUserSession();
 	}
 }

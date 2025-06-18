@@ -1,6 +1,6 @@
-using ServiPuntos.uy_mobile.ViewModels;
+using ServiPuntosUy_mobile.ViewModels;
 
-namespace ServiPuntos.uy_mobile.Views;
+namespace ServiPuntosUy_mobile.Views;
 
 public partial class IdentityVerificationPage : ContentPage
 {
@@ -8,10 +8,5 @@ public partial class IdentityVerificationPage : ContentPage
   {
     InitializeComponent();
     BindingContext = _identityVerificationViewModel;
-  }
-  protected override void OnDisappearing()
-  {
-    base.OnDisappearing();
-    (BindingContext as IdentityVerificationViewModel)?.Reset();
   }
 }
