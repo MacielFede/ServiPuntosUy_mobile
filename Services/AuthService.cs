@@ -66,8 +66,7 @@ public class AuthService(IConfiguration configs, Auth0Client auth0Client) : ApiS
         {
           IdToken = loginResult.AccessToken,
           Email = loginResult.User.Claims.First(c => c.Type == "email")?.Value!,
-          Name = loginResult.User.Identity?.Name!,
-          GoogleId = loginResult.User.Claims.First(c => c.Type == "sid").Value!
+          Name = loginResult.User.Claims.First(c => c.Type == "name")?.Value!,
         };
         return await POST<SessionData>("auth/google-login", payload);
       }
