@@ -19,8 +19,8 @@ public partial class PromotionDetailPage : ContentPage
     if (viewModel is not null)
     {
       await Task.WhenAll([
-        viewModel.GetUserPoints(),
         viewModel.LoadBranchesAsync(),
+        viewModel.GetUserPoints(),
         viewModel.GetTenantPointsValue(),
         viewModel.LoadProductsAsync()
       ]);

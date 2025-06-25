@@ -6,10 +6,13 @@
              xmlns:converters="clr-namespace:ServiPuntosUy_mobile.Converters"
              x:Class="ServiPuntosUy_mobile.Views.PromotionDetailPage"
              x:DataType="viewModel:PromotionDetailViewModel"
-             Title="{Binding UserPoints, StringFormat='Tus puntos: {0}'}">
+             Title="{Binding UserPoints, StringFormat='Tus puntos: {0}'}"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
        <ContentPage.Resources>
               <ResourceDictionary>
+                     <converters:ProductPriceConverter x:Key="ProductPriceConverter"/>
                      <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
+                     <converters:CustomInvertedBoolConverter x:Key="InvertedBoolConverter"/>
               </ResourceDictionary>
        </ContentPage.Resources>
        <Grid>
@@ -38,18 +41,16 @@
                                                                       <FormattedString>
                                                                              <Span Text="{Binding Name}"/>
                                                                              <Span Text=" | "/>
-                                                                             <Span Text="{Binding Price, Converter={StaticResource CurrencyFormatConverter}}"
-                                                                                   FontAttributes="Bold"
-                                                                                   TextColor="DarkGreen"/>
                                                                       </FormattedString>
                                                                </Label.FormattedText>
                                                         </Label>
+                                                        <Label Text="{Binding ., Converter={StaticResource ProductPriceConverter}}"
+                                                               TextColor="Green"/>
                                                  </StackLayout>
                                           </DataTemplate>
                                    </CollectionView.ItemTemplate>
-
                             </CollectionView>
-                            <VerticalStackLayout>
+                            <VerticalStackLayout IsVisible="{Binding IsStockAvailable}">
                                    <Label Text="Selecciona donde lo retiras:"
                                           FontSize="18"
                                           FontAttributes="Bold"/>
@@ -62,7 +63,7 @@
                                    <Label Text="Cantidad:"
                                           FontSize="18"
                                           VerticalOptions="Center"
-                                                 FontAttributes="Bold"/>
+                                          FontAttributes="Bold"/>
                                    <Stepper Minimum="1"
                                             Maximum="100"
                                             Value="{Binding Quantity}"
@@ -71,14 +72,15 @@
                                           FontSize="18"
                                           VerticalOptions="Center"/>
                             </HorizontalStackLayout>
-                            <Label Text="{Binding TotalPrice, Converter={StaticResource CurrencyFormatConverter}}"
+                            <Label Text="{Binding TotalPrice,Converter={StaticResource CurrencyFormatConverter}}"
                                    FontSize="18"
                                    FontAttributes="Bold"/>
                             <Label Text="{Binding TotalPointsPrice, StringFormat='Precio total en puntos: {0}'}"
                                    FontSize="16"
                                    FontAttributes="Italic"/>
                             <VerticalStackLayout Padding="10"
-                                                 Spacing="10">
+                                                 Spacing="10"
+                                                 IsVisible="{Binding IsStockAvailable}">
                                    <Button Text="Comprar"
                                            BackgroundColor="Green"
                                            Command="{Binding BuyCommand}"/>
@@ -86,9 +88,13 @@
                                            Command="{Binding UsePointsCommand}"
                                            Style="{StaticResource PrimaryButtonStyle}"/>
                             </VerticalStackLayout>
+                            <VerticalStackLayout Padding="10"
+                                                 Spacing="10"
+                                                 IsVisible="{Binding IsStockAvailable, Converter={StaticResource InvertedBoolConverter}}">
+                                   <Label TextColor="Red">No contamos con stock disponible en niguna sucursal, vuelve a la tienda mas tarde por favor</Label>
+                            </VerticalStackLayout>
                      </VerticalStackLayout>
               </ScrollView>
-
               <ContentView x:Name="QrOverlay"
                            IsVisible="False"
                            BackgroundColor="#80000000"

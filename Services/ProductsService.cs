@@ -22,6 +22,17 @@ public class ProductsService(IConfiguration configs) : ApiService(configs), IPro
       return new ApiResponse<Promotion[]>(true, null, ex.Message);
     }
   }
+  public async Task<ApiResponse<Product[]>> Get()
+  {
+    try
+    {
+      return await GET<Product[]>("product");
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<Product[]>(true, null, ex.Message);
+    }
+  }
   public async Task<ApiResponse<Product[]>> GetProductsAsync()
   {
     try
@@ -40,6 +51,17 @@ public class ProductsService(IConfiguration configs) : ApiService(configs), IPro
     {
       var response = await GET<Product>($"product/{id}");
       return response;
+    }
+    catch (Exception ex)
+    {
+      return new ApiResponse<Product>(true, null, ex.Message);
+    }
+  }
+  public async Task<ApiResponse<Product>> GetProductStock(int id, int branchId)
+  {
+    try
+    {
+      return await GET<Product>($"product/stock/{branchId}/{id}");
     }
     catch (Exception ex)
     {
@@ -93,4 +115,5 @@ public class ProductsService(IConfiguration configs) : ApiService(configs), IPro
       return new ApiResponse<TransactionItem[]>(true, null, ex.Message);
     }
   }
+
 }

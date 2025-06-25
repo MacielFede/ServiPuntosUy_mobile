@@ -30,8 +30,8 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
 
   [ObservableProperty]
   private List<Branch>? branches;
-
-
+  [ObservableProperty]
+  private bool isStockAvailable;
   [ObservableProperty]
   private int quantity = 1;
 
@@ -58,12 +58,48 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
     OnPropertyChanged(nameof(TotalPointsPrice));
   }
 
+  partial void OnSelectedBranchChanged(Branch? value)
+  {
+    if (value?.Id != SelectedBranch?.Id) UpdateProductStockAsync(value);
+  }
+
+  private async void UpdateProductStockAsync(Branch? branch)
+  {
+    if (Product is not null)
+    {
+      branch ??= SelectedBranch;
+      try
+      {
+        var response = await _productsService.GetProductStock(Product.Id, branch!.Id);
+        if (!response.Error && response.Data is not null)
+        {
+          Product = response.Data;
+        }
+      }
+      catch (Exception) { }
+    }
+  }
+
   [RelayCommand]
   public async Task LoadBranchesAsync()
   {
     await _branchService.LoadBranchesAsync();
-    Branches = _branchService.AllBranches?.ToList();
-    SelectedBranch = _branchService.ClosestBranch;
+    var eligibleBranches = new List<Branch>();
+    while (Product is null) { await Task.Delay(1000); }
+    var filteredBranches = _branchService.AllBranches?.ToList();
+    if (filteredBranches != null)
+    {
+      var eligibleBranchesTemp = await Task.WhenAll(filteredBranches.Select(async branch =>
+      {
+        var response = await _productsService.GetProductStock(Product.Id, branch.Id);
+        return (!response.Error && response.Data != null && response.Data.Stock > 0) ? branch : null;
+      }));
+      eligibleBranches = eligibleBranchesTemp.Where(b => b is not null).Select(b => b!).ToList();
+    }
+    Branches = eligibleBranches;
+    IsStockAvailable = Branches.Count != 0;
+    SelectedBranch = Branches?.FirstOrDefault();
+    UpdateProductStockAsync(null);
   }
 
   public async Task GetTenantPointsValue()

@@ -73,6 +73,7 @@ public partial class HomePage : ContentPage
             if (isFirstPoll || homeViewModel.UserPoints == 0)
             {
               await CurrencyFormatConverter.InitializeCurrencySymbolAsync();
+              await ProductPriceConverter.InitializeCurrencySymbolAsync();
               await homeViewModel.GetUserPoints();
               isFirstPoll = false;
             }

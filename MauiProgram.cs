@@ -83,12 +83,12 @@ public static class MauiProgram
 		builder.Services.AddTransient<LoginViewModel>();
 		builder.Services.AddTransient<SignUpViewModel>();
 		builder.Services.AddSingleton<HomeViewModel>();
-		builder.Services.AddSingleton<ProductDetailViewModel>();
+		builder.Services.AddTransient<ProductDetailViewModel>();
 		builder.Services.AddTransient<IdentityVerificationViewModel>();
 		builder.Services.AddSingleton<FuelPricesViewModel>();
 		builder.Services.AddSingleton<BranchesViewModel>();
 		builder.Services.AddSingleton<TransactionsHistoryViewModel>();
-		builder.Services.AddSingleton<PromotionDetailViewModel>();
+		builder.Services.AddTransient<PromotionDetailViewModel>();
 		return builder.Build();
 	}
 

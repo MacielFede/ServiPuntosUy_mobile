@@ -9,7 +9,9 @@
              Title="{Binding Product.Name}">
        <ContentPage.Resources>
               <ResourceDictionary>
+                     <converters:ProductPriceConverter x:Key="ProductPriceConverter"/>
                      <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
+                     <converters:CustomInvertedBoolConverter x:Key="InvertedBoolConverter"/>
               </ResourceDictionary>
        </ContentPage.Resources>
        <Grid>
@@ -29,7 +31,6 @@
                                           </Label.FormattedText>
                                    </Label>
                             </HorizontalStackLayout>
-
                             <Image Source="{Binding Product.ImageUrl}"
                                    WidthRequest="150"
                                    HeightRequest="150"/>
@@ -48,24 +49,24 @@
                                           FontSize="18"
                                           VerticalOptions="Center"/>
                             </HorizontalStackLayout>
-                            <Label Text="Selecciona donde lo retiras:"
-                                   FontSize="18"
-                                   VerticalOptions="Center"/>
-                            <Picker ItemsSource="{Binding Branches}"
-                                    SelectedItem="{Binding SelectedBranch}"
-                                    ItemDisplayBinding="{Binding Address, x:DataType=model:Branch}"
-                                    Title="Elegí una sucursal"/>
-
-                            <Label Text="{Binding TotalPrice, Converter={StaticResource CurrencyFormatConverter}}"
-                                   FontSize="18"
-                                   FontAttributes="Bold"/>
-
+                            <VerticalStackLayout IsVisible="{Binding IsStockAvailable}">
+                                   <Label Text="Selecciona donde lo retiras:"
+                                          FontSize="18"
+                                          VerticalOptions="Center"/>
+                                   <Picker ItemsSource="{Binding Branches}"
+                                           SelectedItem="{Binding SelectedBranch}"
+                                           ItemDisplayBinding="{Binding Address, x:DataType=model:Branch}"
+                                           Title="Elegí una sucursal"/>
+                            </VerticalStackLayout>
+                            <Label FontSize="18"
+                                   FontAttributes="Bold"
+                                   Text="{Binding Product,Converter={StaticResource ProductPriceConverter}}"/>
                             <Label Text="{Binding TotalPointsPrice, StringFormat='Precio total en puntos: {0}'}"
                                    FontSize="16"
                                    FontAttributes="Italic"/>
-
                             <VerticalStackLayout Padding="10"
-                                                 Spacing="10">
+                                                 Spacing="10"
+                                                 IsVisible="{Binding IsStockAvailable}">
                                    <Button Text="Comprar"
                                            BackgroundColor="Green"
                                            Command="{Binding BuyCommand}"/>
@@ -73,9 +74,13 @@
                                            Command="{Binding UsePointsCommand}"
                                            Style="{StaticResource PrimaryButtonStyle}"/>
                             </VerticalStackLayout>
+                            <VerticalStackLayout Padding="10"
+                                                 Spacing="10"
+                                                 IsVisible="{Binding IsStockAvailable, Converter={StaticResource InvertedBoolConverter}}">
+                                   <Label TextColor="Red">No contamos con stock disponible en niguna sucursal, vuelve a la tienda mas tarde por favor</Label>
+                            </VerticalStackLayout>
                      </VerticalStackLayout>
               </ScrollView>
-
               <ContentView x:Name="QrOverlay"
                            IsVisible="False"
                            BackgroundColor="#80000000"

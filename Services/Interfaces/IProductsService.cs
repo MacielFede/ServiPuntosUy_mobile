@@ -9,6 +9,7 @@ public interface IProductsService
   public Task<ApiResponse<Product[]>> GetProductsAsync();
   public Task<ApiResponse<Promotion[]>> GetPromotionsAsync();
   public Task<ApiResponse<Product>> GetProductInfo(int id);
+  public Task<ApiResponse<Product>> GetProductStock(int id, int branchId);
   public Task<ApiResponse<Transaction>> PurchaseProduct(ProductForTransaction[] products, int branchId);
   public Task<ApiResponse<SessionData>> CreateProductRedemption(int productId, int branchId);
   public Task<ApiResponse<Transaction[]>> GetTransactionHistory();

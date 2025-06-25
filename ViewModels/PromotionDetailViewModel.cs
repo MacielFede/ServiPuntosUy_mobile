@@ -1,5 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using ServiPuntosUy_mobile.Models;
 using ServiPuntosUy_mobile.Models.Enums;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Alerts;
+using ServiPuntosUy_mobile.Views;
 
 namespace ServiPuntosUy_mobile.ViewModels;
 
@@ -30,6 +33,9 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
 
   [ObservableProperty]
   private List<Branch>? branches;
+
+  [ObservableProperty]
+  private bool isStockAvailable;
   [ObservableProperty]
   private List<Product?> products = [];
 
@@ -80,8 +86,24 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
   public async Task LoadBranchesAsync()
   {
     await _branchService.LoadBranchesAsync();
-    Branches = _branchService.AllBranches?.Where(branch => Promotion?.Branches.Contains(branch.Id) == true).ToList();
+    var eligibleBranches = new List<Branch>();
+    while (Promotion is null) { await Task.Delay(1000); }
+    var filteredBranches = _branchService.AllBranches?.Where(branch => Promotion?.Branches.Contains(branch.Id) == true).ToList();
+    if (filteredBranches != null && Promotion.Products != null)
+    {
+      var eligibleBranchesTemp = await Task.WhenAll(filteredBranches.Select(async branch =>
+      {
+        var stockResponses = await Task.WhenAll(Promotion.Products.Select(productId => _productService.GetProductStock(productId, branch.Id)));
+        bool allProductsAvailable = stockResponses.All(r => !r.Error && r.Data != null && r.Data.Stock > 0);
+        return allProductsAvailable ? branch : null;
+      }));
+      eligibleBranches = eligibleBranchesTemp?.Where(b => b is not null)?.Select(b => b!)?.ToList() ?? [];
+    }
+
+    Branches = eligibleBranches;
+    IsStockAvailable = Branches.Count != 0;
     SelectedBranch = Branches?.FirstOrDefault();
+    UpdateProductsStockAsync(null);
   }
 
   public async Task GetTenantPointsValue()
@@ -104,32 +126,30 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
   {
     if (Promotion is not null && SelectedBranch is not null)
     {
-      // try
-      // {
-      //   var PromotionForTransaction = new PromotionForTransaction
-      //   {
-      //     PromotionId = Promotion.Id,
-      //     Quantity = Quantity
-      //   };
-      //   var response = await _PromotionsService.PurchasePromotion([PromotionForTransaction], SelectedBranch.Id);
-      //   if (response is { Error: false, Data: not null })
-      //   {
-      //     await Shell.Current.DisplayAlert("Carrito de compras", $"Gracias por comprar {Promotion.Name}!\nPodes retirarlo en {SelectedBranch?.Address}.\nObtuviste {response.Data.PointsEarned} puntos", "OK");
-      // _productService.InvokeUserMadePurchaseEvent();
-      //     await Shell.Current.Navigation.PopToRootAsync();
-      //     await Shell.Current.GoToAsync($"//{nameof(TransactionsHistoryPage)}");
-      //   }
-      //   else
-      //   {
-      //     await Toast.Make(response.Message, ToastDuration.Short).Show();
-      //   }
-      // }
-      // catch (Exception ex)
-      // {
-      //   await Toast.Make(ex.Message, ToastDuration.Short).Show();
-      // }
-
-      await Toast.Make("Trabajo en proceso", ToastDuration.Short).Show();
+      try
+      {
+        var productsForTransaction = Promotion.Products.Select(prod => new ProductForTransaction
+        {
+          ProductId = prod,
+          Quantity = Quantity
+        }).ToArray();
+        var response = await _productService.PurchaseProduct(productsForTransaction, SelectedBranch.Id);
+        if (response is { Error: false, Data: not null })
+        {
+          await Shell.Current.DisplayAlert("Carrito de compras", $"Gracias por comprar {Promotion.Description}!\nPodes retirarlo en {SelectedBranch?.Address}.\nObtuviste {response.Data.PointsEarned} puntos", "OK");
+          _productService.InvokeUserMadePurchaseEvent();
+          await Shell.Current.Navigation.PopToRootAsync();
+          await Shell.Current.GoToAsync($"//{nameof(TransactionsHistoryPage)}");
+        }
+        else
+        {
+          await Toast.Make(response.Message, ToastDuration.Short).Show();
+        }
+      }
+      catch (Exception ex)
+      {
+        await Toast.Make(ex.Message, ToastDuration.Short).Show();
+      }
     }
   }
 
@@ -140,7 +160,7 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
     {
       // try
       // {
-      //   var response = await _PromotionsService.CreatePromotionRedemption(Promotion.Id, SelectedBranch.Id);
+      //   var response = await _productService.CreateProductRedemption(Promotion.Id, SelectedBranch.Id);
       //   if (response is { Error: false, Data: not null })
       //   {
       //     QrImage = _qrCodeService.GenerateQrCode($"{_configs["API_URL"]}redemption/process/{response.Data.Token}");
@@ -155,7 +175,6 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
       // {
       //   await Toast.Make(ex.Message, ToastDuration.Short).Show();
       // }
-
       await Toast.Make("Trabajo en proceso", ToastDuration.Short).Show();
     }
   }
@@ -167,5 +186,25 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
   public void SendPurchaseEvent()
   {
     _productService.InvokeUserMadePurchaseEvent();
+  }
+
+  partial void OnSelectedBranchChanged(Branch? value)
+  {
+    UpdateProductsStockAsync(value);
+  }
+
+  private async void UpdateProductsStockAsync(Branch? branch)
+  {
+    branch ??= SelectedBranch;
+    try
+    {
+      var tasks = Promotion?.Products.Select(productId => _productService.GetProductStock(productId, branch!.Id));
+      var responses = await Task.WhenAll(tasks ?? []);
+      Products = responses
+                    .Where(r => !r.Error && r.Data is not null && r.Data.Stock > 0)
+                    .Select(r => r.Data)
+                    .ToList();
+    }
+    catch (Exception) { }
   }
 }
