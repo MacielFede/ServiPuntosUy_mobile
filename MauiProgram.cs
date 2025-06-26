@@ -71,12 +71,12 @@ public static class MauiProgram
 		builder.Services.AddTransient<SignUpPage>();
 		builder.Services.AddTransient<LoginPage>();
 		builder.Services.AddSingleton<HomePage>();
-		builder.Services.AddSingleton<ProductDetailPage>();
-		builder.Services.AddSingleton<IdentityVerificationPage>();
+		builder.Services.AddTransient<ProductDetailPage>();
+		builder.Services.AddTransient<IdentityVerificationPage>();
 		builder.Services.AddSingleton<FuelPricesPage>();
 		builder.Services.AddSingleton<BranchesPage>();
 		builder.Services.AddSingleton<TransactionsHistoryPage>();
-		builder.Services.AddSingleton<PromotionDetailPage>();
+		builder.Services.AddTransient<PromotionDetailPage>();
 
 		// ViewModels
 		builder.Services.AddSingleton<WelcomeViewModel>();

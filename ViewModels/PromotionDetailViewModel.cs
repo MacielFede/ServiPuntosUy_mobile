@@ -1,7 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
 using ServiPuntosUy_mobile.Models;
 using ServiPuntosUy_mobile.Models.Enums;
@@ -11,20 +9,20 @@ using System.Diagnostics;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Alerts;
 using ServiPuntosUy_mobile.Views;
+using CommunityToolkit.Maui.Views;
+using ServiPuntosUy_mobile.Popups;
+using ServiPuntosUy_mobile.ViewModels.Interfaces;
 
 namespace ServiPuntosUy_mobile.ViewModels;
 
 [QueryProperty(nameof(Promotion), "Promotion")]
-public partial class PromotionDetailViewModel(IConfiguration configuration, IProductsService productsService, IBranchService branchService, ITenantService tenantService, IQrCodeService qrCodeService) : ObservableObject
+public partial class PromotionDetailViewModel(IConfiguration configuration, IProductsService productsService, IBranchService branchService, ITenantService tenantService, IQrCodeService qrCodeService) : ObservableObject, IPurchaseViewModel
 {
   private readonly IConfiguration _configs = configuration;
   private readonly IBranchService _branchService = branchService;
   private readonly ITenantService _tenantService = tenantService;
   private readonly IProductsService _productService = productsService;
   private readonly IQrCodeService _qrCodeService = qrCodeService;
-  public event Action? QrGenerated;
-  [ObservableProperty]
-  private ImageSource? qrImage;
   [ObservableProperty]
   private Promotion? promotion;
 
@@ -65,41 +63,28 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
   }
 
   [RelayCommand]
-  public async Task LoadProductsAsync()
-  {
-    var results = await Task.WhenAll(Promotion?.Products.Select(_productService.GetProductInfo).ToArray() ?? []);
-
-    Products = results
-        .Where(productResponse =>
-        {
-          if (productResponse is { Error: false, Data: not null })
-          {
-            return true;
-          }
-          Debug.WriteLine($"No se pudo obtener el producto, {productResponse.Message}");
-          return false;
-        }).Select(response => response.Data)
-        .ToList() ?? [];
-  }
-
-  [RelayCommand]
   public async Task LoadBranchesAsync()
   {
     await _branchService.LoadBranchesAsync();
     var eligibleBranches = new List<Branch>();
     while (Promotion is null) { await Task.Delay(1000); }
     var filteredBranches = _branchService.AllBranches?.Where(branch => Promotion?.Branches.Contains(branch.Id) == true).ToList();
+    Product[] productsStock = [];
     if (filteredBranches != null && Promotion.Products != null)
     {
       var eligibleBranchesTemp = await Task.WhenAll(filteredBranches.Select(async branch =>
       {
         var stockResponses = await Task.WhenAll(Promotion.Products.Select(productId => _productService.GetProductStock(productId, branch.Id)));
         bool allProductsAvailable = stockResponses.All(r => !r.Error && r.Data != null && r.Data.Stock > 0);
+        if (allProductsAvailable && productsStock.Length == 0)
+        {
+          productsStock = [.. stockResponses.Select(stock => stock.Data!)];
+        }
         return allProductsAvailable ? branch : null;
       }));
       eligibleBranches = eligibleBranchesTemp?.Where(b => b is not null)?.Select(b => b!)?.ToList() ?? [];
     }
-
+    Products = [.. productsStock!.Select(p => (Product?)p)];
     Branches = eligibleBranches;
     IsStockAvailable = Branches.Count != 0;
     SelectedBranch = Branches?.FirstOrDefault();
@@ -151,6 +136,10 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
         await Toast.Make(ex.Message, ToastDuration.Short).Show();
       }
     }
+    else
+    {
+      await Toast.Make("Estamos teniendo un problema interno, intente de nuevo mas tarde", ToastDuration.Short).Show();
+    }
   }
 
   [RelayCommand]
@@ -158,24 +147,31 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
   {
     if (Promotion is not null && SelectedBranch is not null)
     {
-      // try
-      // {
-      //   var response = await _productService.CreateProductRedemption(Promotion.Id, SelectedBranch.Id);
-      //   if (response is { Error: false, Data: not null })
-      //   {
-      //     QrImage = _qrCodeService.GenerateQrCode($"{_configs["API_URL"]}redemption/process/{response.Data.Token}");
-      //     QrGenerated?.Invoke();
-      //   }
-      //   else
-      //   {
-      //     await Toast.Make(response.Message, ToastDuration.Short).Show();
-      //   }
-      // }
-      // catch (Exception ex)
-      // {
-      //   await Toast.Make(ex.Message, ToastDuration.Short).Show();
-      // }
-      await Toast.Make("Trabajo en proceso", ToastDuration.Short).Show();
+      try
+      {
+        var productsForTransaction = Promotion.Products.Select(prod => new ProductForTransaction
+        {
+          ProductId = prod,
+          Quantity = Quantity
+        }).ToArray();
+        var response = await _productService.CreateProductRedemption(productsForTransaction, SelectedBranch.Id);
+        if (response is { Error: false, Data: not null })
+        {
+          await Shell.Current.ShowPopupAsync(new QrPopup(_qrCodeService.GenerateQrCode($"{_configs["API_URL"]}redemption/process/{response.Data.Token}"), this));
+        }
+        else
+        {
+          await Toast.Make(response.Message, ToastDuration.Short).Show();
+        }
+      }
+      catch (Exception ex)
+      {
+        await Toast.Make(ex.Message, ToastDuration.Short).Show();
+      }
+    }
+    else
+    {
+      await Toast.Make("Estamos teniendo un problema interno, intente de nuevo mas tarde", ToastDuration.Short).Show();
     }
   }
   public void Reset()

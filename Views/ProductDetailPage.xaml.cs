@@ -8,8 +8,6 @@ public partial class ProductDetailPage : ContentPage
   {
     InitializeComponent();
     BindingContext = productDetailViewModel;
-
-    productDetailViewModel.QrGenerated += OnQrGenerated;
   }
 
   protected override async void OnAppearing()
@@ -30,25 +28,6 @@ public partial class ProductDetailPage : ContentPage
   {
     base.OnDisappearing();
     var viewModel = BindingContext as ProductDetailViewModel;
-    if (viewModel is not null)
-    {
-      viewModel.QrGenerated -= OnQrGenerated;
-      viewModel.Reset();
-    }
-  }
-
-  private void OnQrGenerated()
-  {
-    MainThread.BeginInvokeOnMainThread(() =>
-    {
-      QrOverlay.IsVisible = true;
-    });
-  }
-
-  private void CloseQrOverlay_Clicked(object sender, EventArgs e)
-  {
-    var viewModel = BindingContext as ProductDetailViewModel;
-    viewModel?.SendPurchaseEvent();
-    QrOverlay.IsVisible = false;
+    viewModel?.Reset();
   }
 }

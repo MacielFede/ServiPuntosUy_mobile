@@ -80,11 +80,11 @@ public class ProductsService(IConfiguration configs) : ApiService(configs), IPro
       return new ApiResponse<Transaction>(true, null, ex.Message);
     }
   }
-  public async Task<ApiResponse<SessionData>> CreateProductRedemption(int productId, int branchId)
+  public async Task<ApiResponse<SessionData>> CreateProductRedemption(ProductForTransaction[] products, int branchId)
   {
     try
     {
-      return await POST<SessionData>("redemption/generate-token", new { BranchId = branchId, ProductId = productId });
+      return await POST<SessionData>("redemption/generate-token", new { BranchId = branchId, Products = products });
     }
     catch (Exception ex)
     {

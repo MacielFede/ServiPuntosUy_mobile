@@ -25,10 +25,19 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
 
   public bool HasFlashOffers => FlashOffers.Any();
   [ObservableProperty]
-  private int userPoints;
+  private User? user;
+  partial void OnUserChanged(User? value)
+  {
+    if (value is not null && value.IsVerified is true && FlashOffers.Count == 0 || Products.Count == 0)
+    {
+      _ = LoadPromotions();
+      _ = LoadProducts();
+    }
+  }
 
   [ObservableProperty]
   private ObservableCollection<Product> products = [];
+
   [RelayCommand]
   public async Task Logout()
   {
@@ -38,6 +47,7 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
 
   public async Task LoadPromotions()
   {
+    if (User?.IsVerified is null or false) return;
     try
     {
       var response = await _productService.GetPromotionsAsync();
@@ -57,7 +67,7 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
     {
       var response = await _productService.GetProductsAsync();
       if (response is { Error: false, Data: not null })
-        Products = new ObservableCollection<Product>(response.Data);
+        Products = response.Data.Where(prod => !prod.AgeRestricted || User?.IsVerified is true).ToObservableCollection();
       else
         await Toast.Make($"{response.Message}", ToastDuration.Short).Show();
     }
@@ -67,14 +77,21 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
     }
   }
 
-  public async Task GetUserPoints()
+  public async Task GetUser()
   {
+    await _authService.LoadUserData();
     string? userData = await SecureStorage.GetAsync(SecureStorageType.User.ToString());
     if (string.IsNullOrWhiteSpace(userData))
     {
-      UserPoints = 0;
+      await Logout();
       return;
     }
-    UserPoints = JsonConvert.DeserializeObject<User>(userData)?.PointBalance ?? 0;
+    var savedUser = JsonConvert.DeserializeObject<User>(userData);
+    if (savedUser is null)
+    {
+      await Logout();
+      return;
+    }
+    User = savedUser;
   }
 }

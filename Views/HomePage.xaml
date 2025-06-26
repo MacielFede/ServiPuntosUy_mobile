@@ -8,6 +8,7 @@
   <ContentPage.Resources>
     <ResourceDictionary>
       <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
+      <converters:CustomInvertedBoolConverter x:Key="CustomInvertedBoolConverter"/>
     </ResourceDictionary>
   </ContentPage.Resources>
 
@@ -32,7 +33,7 @@
         <Label.FormattedText>
           <FormattedString>
             <Span Text="Puntos acumulados: "/>
-            <Span Text="{Binding UserPoints}"
+            <Span Text="{Binding User.PointBalance}"
                   FontAttributes="Bold"
                   TextColor="DarkGreen"/>
           </FormattedString>
@@ -44,10 +45,16 @@
               Command="{Binding LogoutCommand}"/>
     </FlexLayout>
 
+    <Label Text="Las ofertas y algunos productos estan habilitados solamente para usuarios verificados, ingresa en el icono de avatar para verificar tu identidad."
+           FontSize="16"
+           TextColor="DarkRed"
+           Grid.Row="1"
+           Padding="20, 20, 20, 0"
+           IsVisible="{Binding User.IsVerified, Converter={StaticResource CustomInvertedBoolConverter}}"/>
     <StackLayout Grid.Row="1"
                  Padding="20, 20, 20, 0"
                  Spacing="5"
-                 IsVisible="{Binding HasFlashOffers}">
+                 IsVisible="{Binding User.IsVerified}">
       <Label Text="Ofertas flash ⚡️"
              FontSize="20"
              FontAttributes="Bold"/>

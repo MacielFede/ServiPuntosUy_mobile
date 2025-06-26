@@ -18,8 +18,8 @@ public partial class HomePage : ContentPage
     base.OnAppearing();
     if (BindingContext is HomeViewModel homeViewModel)
     {
-      await Task.WhenAll([homeViewModel.LoadProducts(), homeViewModel.LoadPromotions()]);
       StartPolling();
+      await Task.WhenAll([homeViewModel.LoadProducts(), homeViewModel.LoadPromotions()]);
     }
   }
 
@@ -70,11 +70,11 @@ public partial class HomePage : ContentPage
           if (BindingContext is HomeViewModel homeViewModel)
           {
             // Always run on first poll
-            if (isFirstPoll || homeViewModel.UserPoints == 0)
+            if (isFirstPoll || homeViewModel.User?.PointBalance is null or 0)
             {
               await CurrencyFormatConverter.InitializeCurrencySymbolAsync();
               await ProductPriceConverter.InitializeCurrencySymbolAsync();
-              await homeViewModel.GetUserPoints();
+              await homeViewModel.GetUser();
               isFirstPoll = false;
             }
             else

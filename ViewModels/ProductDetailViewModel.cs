@@ -4,24 +4,24 @@ using Newtonsoft.Json;
 using ServiPuntosUy_mobile.Models;
 using ServiPuntosUy_mobile.Models.Enums;
 using ServiPuntosUy_mobile.Services.Interfaces;
-using ServiPuntosUy_mobile.Views;
+using ServiPuntosUy_mobile.ViewModels.Interfaces;
 using Microsoft.Extensions.Configuration;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Views;
+using ServiPuntosUy_mobile.Popups;
+using ServiPuntosUy_mobile.Views;
 
 namespace ServiPuntosUy_mobile.ViewModels;
 
 [QueryProperty(nameof(Product), "Product")]
-public partial class ProductDetailViewModel(IConfiguration configuration, IBranchService branchService, IProductsService productsService, ITenantService tenantService, IQrCodeService qrCodeService) : ObservableObject
+public partial class ProductDetailViewModel(IConfiguration configuration, IBranchService branchService, IProductsService productsService, ITenantService tenantService, IQrCodeService qrCodeService) : ObservableObject, IPurchaseViewModel
 {
   private readonly IConfiguration _configs = configuration;
   private readonly IProductsService _productsService = productsService;
   private readonly IBranchService _branchService = branchService;
   private readonly ITenantService _tenantService = tenantService;
   private readonly IQrCodeService _qrCodeService = qrCodeService;
-  public event Action? QrGenerated;
-  [ObservableProperty]
-  private ImageSource? qrImage;
   [ObservableProperty]
   private Product? product;
 
@@ -30,18 +30,23 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
 
   [ObservableProperty]
   private List<Branch>? branches;
+
   [ObservableProperty]
   private bool isStockAvailable;
+
   [ObservableProperty]
   private int quantity = 1;
 
-
   [ObservableProperty]
   private int userPoints;
+
   public decimal TotalPrice => Product is not null ? Product.Price * Quantity : 0;
+
   [ObservableProperty]
   private int tenantPointsValue;
+
   public int TotalPointsPrice => Product is not null && TenantPointsValue > 0 ? ((int)Product.Price) / TenantPointsValue * Quantity : 0;
+
   partial void OnQuantityChanged(int value)
   {
     OnPropertyChanged(nameof(TotalPrice));
@@ -53,6 +58,7 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
     OnPropertyChanged(nameof(TotalPrice));
     OnPropertyChanged(nameof(TotalPointsPrice));
   }
+
   partial void OnTenantPointsValueChanged(int value)
   {
     OnPropertyChanged(nameof(TotalPointsPrice));
@@ -60,7 +66,8 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
 
   partial void OnSelectedBranchChanged(Branch? value)
   {
-    if (value?.Id != SelectedBranch?.Id) UpdateProductStockAsync(value);
+    if (value?.Id != SelectedBranch?.Id)
+      UpdateProductStockAsync(value);
   }
 
   private async void UpdateProductStockAsync(Branch? branch)
@@ -106,6 +113,7 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
   {
     TenantPointsValue = await _tenantService.GetTenantPointValue();
   }
+
   public async Task GetUserPoints()
   {
     string? userData = await SecureStorage.GetAsync(SecureStorageType.User.ToString());
@@ -129,10 +137,11 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
           ProductId = Product.Id,
           Quantity = Quantity
         };
-        var response = await _productsService.PurchaseProduct([productForTransaction], SelectedBranch.Id);
+        var response = await _productsService.PurchaseProduct(new[] { productForTransaction }, SelectedBranch.Id);
         if (response is { Error: false, Data: not null })
         {
-          await Shell.Current.DisplayAlert("Carrito de compras", $"Gracias por comprar {Product.Name}!\nPodes retirarlo en {SelectedBranch?.Address}.\nObtuviste {response.Data.PointsEarned} puntos", "OK");
+          await Shell.Current.DisplayAlert("Carrito de compras",
+              $"Gracias por comprar {Product.Name}!\nPodes retirarlo en {SelectedBranch?.Address}.\nObtuviste {response.Data.PointsEarned} puntos", "OK");
           _productsService.InvokeUserMadePurchaseEvent();
           await Shell.Current.Navigation.PopToRootAsync();
           await Shell.Current.GoToAsync($"//{nameof(TransactionsHistoryPage)}");
@@ -156,11 +165,10 @@ public partial class ProductDetailViewModel(IConfiguration configuration, IBranc
     {
       try
       {
-        var response = await _productsService.CreateProductRedemption(Product.Id, SelectedBranch.Id);
+        var response = await _productsService.CreateProductRedemption(new[] { new ProductForTransaction { ProductId = Product.Id, Quantity = Quantity } }, SelectedBranch.Id);
         if (response is { Error: false, Data: not null })
         {
-          QrImage = _qrCodeService.GenerateQrCode($"{_configs["API_URL"]}redemption/process/{response.Data.Token}");
-          QrGenerated?.Invoke();
+          await Shell.Current.ShowPopupAsync(new QrPopup(_qrCodeService.GenerateQrCode($"{_configs["API_URL"]}redemption/process/{response.Data.Token}"), this));
         }
         else
         {

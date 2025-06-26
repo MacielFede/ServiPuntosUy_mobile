@@ -81,28 +81,5 @@
                             </VerticalStackLayout>
                      </VerticalStackLayout>
               </ScrollView>
-              <ContentView x:Name="QrOverlay"
-                           IsVisible="False"
-                           BackgroundColor="#80000000"
-                           HorizontalOptions="Fill"
-                           VerticalOptions="Fill">
-                     <Grid HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           BackgroundColor="White"
-                           Padding="20"
-                           WidthRequest="300"
-                           HeightRequest="300">
-                            <VerticalStackLayout HorizontalOptions="Center"
-                                                 VerticalOptions="Center"
-                                                 Spacing="10">
-                                   <Image Source="{Binding QrImage}"
-                                          WidthRequest="200"
-                                          HeightRequest="200"/>
-                                   <Button Text="Cerrar"
-                                           Style="{StaticResource SecondaryButtonStyle}"
-                                           Clicked="CloseQrOverlay_Clicked"/>
-                            </VerticalStackLayout>
-                     </Grid>
-              </ContentView>
        </Grid>
 </ContentPage>

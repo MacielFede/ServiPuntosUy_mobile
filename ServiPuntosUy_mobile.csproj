@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
 		<TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>ServiPuntosUy_mobile</RootNamespace>
@@ -179,6 +180,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Popups/NotificationPopup.xaml">
+		</MauiXaml>
+		<MauiXaml Update="Popups/QrPopup.xaml">
 		</MauiXaml>
 	</ItemGroup>
 </Project>
