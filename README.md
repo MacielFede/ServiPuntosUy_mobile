@@ -1,6 +1,21 @@
 # ServiPuntosUy Mobile App
+## **🚀 Running the Project on Android & iOS – .NET MAUI**
 
-## First setup
+### **🔧 Prerequisites**
+
+* [.NET 8 SDK](https://dotnet.microsoft.com/download)
+
+* [Visual Studio 2022 or later](https://visualstudio.microsoft.com/) with **.NET MAUI** workload installed
+
+* A physical or virtual Android/iOS device for testing
+
+* Proper platform setup:
+
+  * [Android SDK and emulator](https://developer.android.com/studio)
+
+  * [Xcode and iOS simulator](https://developer.apple.com/xcode/) (macOS only)
+
+### First setup
 
 Execute the file `./setup-hooks.sh` to setup the git pre-commit hook.
 If you can't run the file, give it permission:
@@ -8,21 +23,56 @@ If you can't run the file, give it permission:
 chmod +x .git/hooks/pre-commit
 ```
 
-## Google Maps API Key Configuration
+### **🧩 Recommended Extension for Debugging**
 
+It’s highly recommended to install the [.NET Meteor extension](https://marketplace.visualstudio.com/items?itemName=nromanov.dotnet-meteor) for a better debugging experience in .NET MAUI:
+
+Visual Studio \> Extensions \> Manage Extensions \> Search: ".NET Meteor" \> Install
+
+### **📄 Required Setup Before Running**
 This project requires a Google Maps API key to be injected into the Android build process.
+**Insert your Google Maps API key into the `AndroidManifest.xml`**  
+ Go to `Platforms/Android/AndroidManifest.xml` and locate the `meta-data` entry for the Google Maps API:
 
-### Where to include the API key
+ \<meta-data android:name="com.google.android.geo.API\_KEY"  
+           android:value="{GEO\_API\_KEY}" /\>
 
-You must provide the Google Maps API key as an Android manifest placeholder named `GEO_API_KEY`.
-Go into the `AndroidManifest.xml` file and search for `${GEO_API_KEY}` and replace it with the api key.
+1.  Replace `{GEO_API_KEY}` with your actual API key from the [Google Cloud Console](https://console.cloud.google.com/).
 
-### !Important!
-Before commiting to the repo, revert your changes to the `AndroidManifest.xml` file, otherwise you would likely not be able to commit.
+2. **Add a valid `appsettings.json`**  
+    Ensure your project has a properly configured `appsettings.json` file at the root. This file should include necessary configuration data for the app to run correctly (e.g., API URLs, keys, etc.).
 
+### **▶️ How to Run the Project**
 
-## How to build the project
+#### **🟢 Android**
 
+1. Connect an Android device or start an emulator.
+
+2. Set the target framework to **Android** in Visual Studio.
+
+Click **Run** or use:
+
+ dotnet build \-t:Run \-f net8.0-android
+
+3. 
+
+#### **🍏 iOS (on macOS)**
+
+1. Connect a physical iOS device or start the iOS simulator.
+
+2. Set the target framework to **iOS** in Visual Studio.
+
+Click **Run** or use:
+
+ dotnet build \-t:Run \-f net8.0-ios
+
+3. 
+
+⚠️ iOS development requires macOS and a valid Apple Developer account.
+
+## Build an APK
+
+Using this command you should be able to create an updated APK file from the project
 ```bash
-dotnet build -p:Configuration=Debug -p:TargetFramework=net9.0-android
+dotnet publish -f:net9.0-android -c:Release -p:AndroidPackageFormat=apk
 ```
