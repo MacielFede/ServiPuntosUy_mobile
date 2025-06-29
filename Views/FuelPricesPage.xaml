@@ -6,35 +6,44 @@
              x:Class="ServiPuntosUy_mobile.Views.FuelPricesPage"
              x:DataType="viewModel:FuelPricesViewModel"
              xmlns:converters="clr-namespace:ServiPuntosUy_mobile.Converters"
-             Title="Precios de combustible actualizado">
+             Title="Precios de combustible">
   <ContentPage.Resources>
     <ResourceDictionary>
       <converters:StringToBooleanConverter x:Key="StringToBooleanConverter"/>
       <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
     </ResourceDictionary>
   </ContentPage.Resources>
-  <FlexLayout Padding="10"
+  <FlexLayout Padding="15"
+              Margin="10"
               HorizontalOptions="Fill"
               JustifyContent="Center"
               Direction="Column">
     <Label FontSize="20"
-           IsVisible="{Binding Error, Converter={StaticResource StringToBooleanConverter},ConverterParameter='invert'}"
-           Padding="15"
-           Margin="10">
+           IsVisible="{Binding Error, Converter={StaticResource StringToBooleanConverter},ConverterParameter='invert'}">
       <Label.FormattedText>
         <FormattedString>
-          <Span Text="Estos son los precios de nuestra estacion más cercana, ubicada en: "/>
-          <Span Text="{Binding NearestBranchAddress}"
+          <Span Text="Estos son los precios de la estación que seleccionaste, ubicada en: "/>
+          <Span Text="{Binding SelectedBranch.Address}"
                 FontAttributes="Bold"/>
         </FormattedString>
       </Label.FormattedText>
     </Label>
     <Label Text="{Binding Error}"
            IsVisible="{Binding Error, Converter={StaticResource StringToBooleanConverter}}"
-           TextColor="Red"
-           Padding="15"
-           Margin="10"/>
+           TextColor="Red"/>
+    <VerticalStackLayout Margin="0, 10">
+      <Label Text="Selecciona la estación:"
+             FontSize="18"
+             FontAttributes="Bold"/>
+      <Picker ItemsSource="{Binding Branches}"
+              SelectedItem="{Binding SelectedBranch}"
+              ItemDisplayBinding="{Binding Address, x:DataType=models:Branch}"
+              Title="Elegí una sucursal"/>
+    </VerticalStackLayout>
 
+    <Label IsVisible="{Binding LoadingBranches}"
+           Text="Cargando precios para la estación seleccionada"
+           TextColor="DarkGoldenrod"/>
     <CollectionView ItemsSource="{Binding FuelPrices}"
                     IsVisible="{Binding Error, Converter={StaticResource StringToBooleanConverter}, ConverterParameter='invert'}">
       <CollectionView.ItemTemplate>

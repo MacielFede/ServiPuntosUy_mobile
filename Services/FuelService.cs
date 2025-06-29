@@ -10,13 +10,12 @@ namespace ServiPuntosUy_mobile.Services;
 public class FuelService(IConfiguration configs, IBranchService branchService) : ApiService(configs), IFuelService
 {
   private readonly IBranchService _branchService = branchService;
-  public async Task<FuelPrice[]> GetFuelPrices()
+  public async Task<FuelPrice[]> GetFuelPrices(int? _branchId)
   {
-    int? branchId = _branchService?.ClosestBranch?.Id;
+    int? branchId = _branchId ?? _branchService?.ClosestBranch?.Id;
     if (branchId is null && _branchService is not null)
     {
       await _branchService.LoadBranchesAsync();
-      throw new Exception("Estamos trabajando para obtener el precio de los combustibles mas cercanos a ti.");
     }
     ApiResponse<FuelPrice> fetchedFuelprice;
     List<FuelPrice> activePrices = [];
@@ -24,7 +23,7 @@ public class FuelService(IConfiguration configs, IBranchService branchService) :
     {
       try
       {
-        fetchedFuelprice = await GET<FuelPrice>($"fuel/{branchId}/price/{type}");
+        fetchedFuelprice = await GET<FuelPrice>($"fuel/{branchId ?? _branchService?.ClosestBranch?.Id}/price/{type}");
         if (fetchedFuelprice is { Error: false, Data: not null }) activePrices.Add(fetchedFuelprice.Data);
         else throw new Exception(fetchedFuelprice.Message);
       }
@@ -33,6 +32,6 @@ public class FuelService(IConfiguration configs, IBranchService branchService) :
         Debug.WriteLine($"No pude obtener el precio del tipo de combustible {type}: {ex.Message}");
       }
     }
-    return activePrices.Count == 0 ? throw new Exception("Estamos trabajando para obtener el precio de los combustibles mas cercanos a ti.") : [.. activePrices];
+    return activePrices.Count == 0 ? throw new Exception("No pudimos obtener los combustible para la estación seleccionada, prueba con otra porfavor.") : [.. activePrices];
   }
 }

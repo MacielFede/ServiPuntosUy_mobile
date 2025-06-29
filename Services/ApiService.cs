@@ -32,7 +32,7 @@ public partial class ApiService : IApiService
       if (storedToken != null)
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
       var response = await _httpClient.GetAsync(requestUri);
-      if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+      if (storedToken is not null && response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
       {
         UserUnauthorized?.Invoke(this, EventArgs.Empty);
         throw new UnauthorizedAccessException("Unauthorized");
@@ -55,7 +55,7 @@ public partial class ApiService : IApiService
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
       var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
       var response = await _httpClient.PostAsync(requestUri, content);
-      if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+      if (storedToken is not null && response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
       {
         UserUnauthorized?.Invoke(this, EventArgs.Empty);
         throw new UnauthorizedAccessException("Unauthorized");
@@ -83,7 +83,7 @@ public partial class ApiService : IApiService
         Content = content
       };
       var response = await _httpClient.SendAsync(request);
-      if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+      if (storedToken is not null && response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
       {
         UserUnauthorized?.Invoke(this, EventArgs.Empty);
         throw new UnauthorizedAccessException("Unauthorized");

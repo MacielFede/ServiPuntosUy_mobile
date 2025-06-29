@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Alerts;
 using Microsoft.Extensions.Configuration;
 using ServiPuntosUy_mobile.Models;
 using ServiPuntosUy_mobile.Services.Interfaces;
@@ -39,10 +40,6 @@ public class BranchService(IConfiguration configs, IGeoService geoService) : Api
 
   public async Task LoadBranchesAsync()
   {
-    if (_allBranches?.Count > 0)
-    {
-      return;
-    }
     try
     {
       ApiResponse<List<Branch>> branches = await GET<List<Branch>>("branch");
@@ -74,7 +71,7 @@ public class BranchService(IConfiguration configs, IGeoService geoService) : Api
     }
     catch (Exception ex)
     {
-      Debug.WriteLine($"Error obteniendo tu ubicacion, vamos a usar una por defecto: {ex.Message}");
+      Toast.Make($"Error obteniendo tu ubicacion, vamos a usar una por defecto: {ex.Message}");
     }
   }
 }

@@ -2,6 +2,7 @@ using System.Diagnostics;
 using ServiPuntosUy_mobile.Services.Interfaces;
 using ServiPuntosUy_mobile.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Threading.Tasks;
 
 namespace ServiPuntosUy_mobile.ViewModels;
 
@@ -26,8 +27,9 @@ public class BranchesViewModel(IBranchService branchService) : ObservableObject
   public TimeOnly? FilterOpenTime { get; set; }
   public TimeOnly? FilterClosingTime { get; set; }
 
-  public Branch[] GetBranches()
+  public async Task<Branch[]> GetBranches()
   {
+    await _branchService.LoadBranchesAsync();
     var branches = _branchService.AllBranches?.ToList() ?? [];
     if (FilterOpenTime != null)
       branches = [.. branches.Where(b => b.OpenTime >= FilterOpenTime.Value)];

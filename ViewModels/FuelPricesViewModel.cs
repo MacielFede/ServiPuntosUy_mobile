@@ -12,27 +12,40 @@ public partial class FuelPricesViewModel(IFuelService fuelService, IBranchServic
   [ObservableProperty]
   private ObservableCollection<FuelPrice> fuelPrices = [];
   [ObservableProperty]
+  private bool loadingBranches = true;
+  [ObservableProperty]
   private string error = "";
   [ObservableProperty]
-  private string nearestBranchAddress = "";
-
-  public async Task LoadFuelPrices()
+  private List<Branch>? branches;
+  [ObservableProperty]
+  private Branch? selectedBranch;
+  partial void OnSelectedBranchChanged(Branch? value)
+  {
+    FuelPrices = [];
+    Error = "";
+    LoadingBranches = true;
+    _ = LoadFuelPrices(value?.Id);
+  }
+  public async Task LoadFuelPrices(int? newBranchId)
   {
     try
     {
       await _branchService.LoadUserLocationAsync();
-      var address = _branchService?.ClosestBranch?.Address;
-      FuelPrices = new ObservableCollection<FuelPrice>(await _fuelService.GetFuelPrices());
-      if (address is null && _branchService is not null)
+      FuelPrices = new ObservableCollection<FuelPrice>(await _fuelService.GetFuelPrices(newBranchId ?? SelectedBranch?.Id));
+      if (Branches is null || _branchService.ClosestBranch is null)
       {
         await _branchService.LoadBranchesAsync();
+        Branches = _branchService.AllBranches?.ToList();
+        SelectedBranch = _branchService?.ClosestBranch;
       }
-      NearestBranchAddress = address ?? _branchService?.ClosestBranch?.Address ?? ""; ;
       Error = "";
     }
     catch (Exception ex)
     {
+      Branches = _branchService.AllBranches?.ToList();
+      SelectedBranch ??= _branchService?.ClosestBranch;
       Error = ex.Message;
     }
+    LoadingBranches = false;
   }
 }

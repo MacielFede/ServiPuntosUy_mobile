@@ -31,12 +31,12 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 #if DEBUG
 		builder.Logging.AddDebug();
-		builder.EnableHotReload()
+		builder.EnableHotReload();
 #endif
-				.UseMauiApp<App>()
-				.RegisterFirebaseServices()
-				.UseSkiaSharp()
-				.ConfigureFonts(fonts =>
+		builder.UseMauiApp<App>()
+		.RegisterFirebaseServices()
+		.UseSkiaSharp()
+		.ConfigureFonts(fonts =>
 		{
 			fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 			fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");

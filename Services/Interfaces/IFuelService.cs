@@ -4,6 +4,6 @@ namespace ServiPuntosUy_mobile.Services.Interfaces;
 
 public interface IFuelService
 {
-  public Task<FuelPrice[]> GetFuelPrices();
+  public Task<FuelPrice[]> GetFuelPrices(int? _branchId);
 }
 

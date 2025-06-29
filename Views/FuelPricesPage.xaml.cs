@@ -13,7 +13,7 @@ namespace ServiPuntosUy_mobile.Views
     protected override void OnAppearing()
     {
       base.OnAppearing();
-      (BindingContext as FuelPricesViewModel)?.LoadFuelPrices();
+      (BindingContext as FuelPricesViewModel)?.LoadFuelPrices(null);
     }
   }
 }

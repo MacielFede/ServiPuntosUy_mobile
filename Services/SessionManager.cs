@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ServiPuntosUy_mobile.Services.Interfaces;
 using ServiPuntosUy_mobile.Views;
 
@@ -31,14 +32,23 @@ public class SessionManager : ISessionManager
 
   public async Task HandleUnauthorizedAsync()
   {
-    if (Shell.Current is not null)
+    try
     {
-      var currentPage = Shell.Current.CurrentPage.GetType().Name;
-      if (currentPage is not (nameof(LoginPage) or nameof(SignUpPage) or nameof(WelcomePage)))
+      if (Shell.Current is not null)
       {
-        await _authService.Logout();
-        await Shell.Current.GoToAsync($"//{nameof(WelcomePage)}");
+        var currentPage = Shell.Current.CurrentPage.GetType().Name;
+        if (currentPage is not (nameof(LoginPage) or nameof(SignUpPage) or nameof(WelcomePage)))
+        {
+          await _authService.Logout();
+          await Shell.Current.GoToAsync($"//{nameof(WelcomePage)}");
+        }
       }
+    }
+    catch (Exception e)
+    {
+      Debug.WriteLine(e.Message);
+      await _authService.Logout();
+      await Shell.Current.GoToAsync($"//{nameof(WelcomePage)}");
     }
   }
 

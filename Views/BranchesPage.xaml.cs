@@ -3,6 +3,7 @@ using ServiPuntosUy_mobile.ViewModels;
 using Microsoft.Maui.Maps;
 using Microsoft.Maui.Controls.Maps;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace ServiPuntosUy_mobile.Views;
 
@@ -26,7 +27,7 @@ public partial class BranchesPage : ContentPage
   {
     var location = await _branchesViewModel.GetUserLocation();
     BranchesMap.MoveToRegion(new MapSpan(location, 0.1, 0.1));
-    RefreshMapMarkers();
+    await RefreshMapMarkers();
   }
 
   private void OnInfoWindowClicked(object? sender, PinClickedEventArgs e)
@@ -44,10 +45,10 @@ public partial class BranchesPage : ContentPage
 
   static string CleanLabel(string rawAddressText) => rawAddressText.Replace("Clickea aqui para mas info...\n", "").Trim();
 
-  private void RefreshMapMarkers()
+  private async Task RefreshMapMarkers()
   {
     BranchesMap.Pins.Clear();
-    foreach (var branch in _branchesViewModel.GetBranches() ?? [])
+    foreach (var branch in await _branchesViewModel.GetBranches() ?? [])
     {
       Pin pin = new()
       {
@@ -68,7 +69,7 @@ public partial class BranchesPage : ContentPage
       _branchesViewModel.FilterOpenTime = null;
     else
       _branchesViewModel.FilterOpenTime = TimeOnly.FromTimeSpan(OpenTimePicker.Time);
-    RefreshMapMarkers();
+    _ = RefreshMapMarkers();
   }
 
   private void OnCloseFilterActionClicked(object sender, EventArgs e)
@@ -78,6 +79,6 @@ public partial class BranchesPage : ContentPage
       _branchesViewModel.FilterClosingTime = null;
     else
       _branchesViewModel.FilterClosingTime = TimeOnly.FromTimeSpan(CloseTimePicker.Time);
-    RefreshMapMarkers();
+    _ = RefreshMapMarkers();
   }
 }
