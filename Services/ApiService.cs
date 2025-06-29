@@ -35,7 +35,7 @@ public partial class ApiService : IApiService
       if (storedToken is not null && response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
       {
         UserUnauthorized?.Invoke(this, EventArgs.Empty);
-        throw new UnauthorizedAccessException("Unauthorized");
+        throw new UnauthorizedAccessException("La sesion expiró");
       }
       var responseContent = await response.Content.ReadAsStringAsync();
       return JsonConvert.DeserializeObject<ApiResponse<T>>(responseContent) ?? new ApiResponse<T>(true, default, "Error interno, intenta nuevamente más tarde.");
@@ -55,34 +55,6 @@ public partial class ApiService : IApiService
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
       var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
       var response = await _httpClient.PostAsync(requestUri, content);
-      if (storedToken is not null && response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-      {
-        UserUnauthorized?.Invoke(this, EventArgs.Empty);
-        throw new UnauthorizedAccessException("Unauthorized");
-      }
-      var responseContent = await response.Content.ReadAsStringAsync();
-      return JsonConvert.DeserializeObject<ApiResponse<T>>(responseContent) ?? new ApiResponse<T>(true, default, "Error interno, intenta nuevamente más tarde.");
-    }
-    catch (Exception ex)
-    {
-      return new ApiResponse<T>(true, default, ex.Message);
-    }
-  }
-
-  public async Task<ApiResponse<T>> PATCH<T>(string requestUri, dynamic requestData)
-  {
-    try
-    {
-      var storedToken = await GetTokenAsync();
-      if (storedToken != null)
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storedToken);
-      var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-
-      var request = new HttpRequestMessage(new HttpMethod("PATCH"), requestUri)
-      {
-        Content = content
-      };
-      var response = await _httpClient.SendAsync(request);
       if (storedToken is not null && response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
       {
         UserUnauthorized?.Invoke(this, EventArgs.Empty);
