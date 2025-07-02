@@ -54,7 +54,7 @@
     <StackLayout Grid.Row="1"
                  Padding="20, 20, 20, 0"
                  Spacing="5"
-                 IsVisible="{Binding User.IsVerified}">
+                 IsVisible="{Binding HasFlashOffers}">
       <Label Text="Ofertas flash ⚡️"
              FontSize="20"
              FontAttributes="Bold"/>

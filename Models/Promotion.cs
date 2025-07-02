@@ -8,5 +8,5 @@ public class Promotion
   public DateTime StartDate { get; set; }
   public DateTime EndDate { get; set; }
   public List<int> Branches { get; set; } = [];
-  public List<int> Products { get; set; } = [];
+  public List<Product> Products { get; set; } = [];
 }

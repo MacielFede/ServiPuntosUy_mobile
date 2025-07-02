@@ -23,7 +23,7 @@ public partial class HomeViewModel(IProductsService productsService, IAuthServic
     OnPropertyChanged(nameof(HasFlashOffers));
   }
 
-  public bool HasFlashOffers => FlashOffers.Any();
+  public bool HasFlashOffers => User?.IsVerified is true && FlashOffers.Any();
   [ObservableProperty]
   private User? user;
   partial void OnUserChanged(User? value)

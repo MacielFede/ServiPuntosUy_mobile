@@ -74,7 +74,7 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
     {
       var eligibleBranchesTemp = await Task.WhenAll(filteredBranches.Select(async branch =>
       {
-        var stockResponses = await Task.WhenAll(Promotion.Products.Select(productId => _productService.GetProductStock(productId, branch.Id)));
+        var stockResponses = await Task.WhenAll(Promotion.Products.Select(product => _productService.GetProductStock(product.Id, branch.Id)));
         bool allProductsAvailable = stockResponses.All(r => !r.Error && r.Data != null && r.Data.Stock > 0);
         if (allProductsAvailable && productsStock.Length == 0)
         {
@@ -115,7 +115,7 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
       {
         var productsForTransaction = Promotion.Products.Select(prod => new ProductForTransaction
         {
-          ProductId = prod,
+          ProductId = prod.Id,
           Quantity = Quantity
         }).ToArray();
         var response = await _productService.PurchaseProduct(productsForTransaction, SelectedBranch.Id);
@@ -151,7 +151,7 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
       {
         var productsForTransaction = Promotion.Products.Select(prod => new ProductForTransaction
         {
-          ProductId = prod,
+          ProductId = prod.Id,
           Quantity = Quantity
         }).ToArray();
         var response = await _productService.CreateProductRedemption(productsForTransaction, SelectedBranch.Id);
@@ -194,12 +194,11 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
     branch ??= SelectedBranch;
     try
     {
-      var tasks = Promotion?.Products.Select(productId => _productService.GetProductStock(productId, branch!.Id));
+      var tasks = Promotion?.Products.Select(product => _productService.GetProductStock(product.Id, branch!.Id));
       var responses = await Task.WhenAll(tasks ?? []);
-      Products = responses
+      Products = [.. responses
                     .Where(r => !r.Error && r.Data is not null && r.Data.Stock > 0)
-                    .Select(r => r.Data)
-                    .ToList();
+                    .Select(r => r.Data)];
     }
     catch (Exception) { }
   }

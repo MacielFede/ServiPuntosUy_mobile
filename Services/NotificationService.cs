@@ -37,9 +37,14 @@ public class NotificationService(IConfiguration configs) : INotificationService
     {
       MainThread.BeginInvokeOnMainThread(async () =>
       {
-        var notificationText = e.Notification.Data?.Where(item => item.Key == "Description").FirstOrDefault().Value;
-        if (notificationText is not null)
+        if (e.Notification?.Data != null && e.Notification.Data.TryGetValue("Description", out var notificationText))
+        {
           await Shell.Current.ShowPopupAsync(new NotificationPopup(notificationText, this));
+        }
+        else
+        {
+          Debug.WriteLine("NotificationTapped: Data was null or did not contain 'Description'.");
+        }
       });
     };
 
@@ -52,8 +57,8 @@ public class NotificationService(IConfiguration configs) : INotificationService
   public void ClearNotifications()
   {
 #if ANDROID
-        var notificationManager = Android.App.Application.Context.GetSystemService(Context.NotificationService) as NotificationManager;
-        notificationManager?.CancelAll();
+    var notificationManager = Android.App.Application.Context.GetSystemService(Context.NotificationService) as NotificationManager;
+    notificationManager?.CancelAll();
 #elif IOS
     UNUserNotificationCenter.Current.RemoveAllDeliveredNotifications();
     UNUserNotificationCenter.Current.RemoveAllPendingNotificationRequests();

@@ -29,10 +29,19 @@ public class MainActivity : MauiAppCompatActivity
   protected override void OnCreate(Bundle? saveInstanceState)
   {
     base.OnCreate(saveInstanceState);
-    if (Intent is not null)
+
+    try
     {
-      FirebaseCloudMessagingImplementation.OnNewIntent(Intent);
+      if (Intent is not null)
+      {
+        FirebaseCloudMessagingImplementation.OnNewIntent(Intent);
+      }
     }
+    catch (Exception ex)
+    {
+      Android.Util.Log.Error("FCM", $"OnCreate intent error: {ex}");
+    }
+
     if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
     {
       var channelId = $"{PackageName}.default";
@@ -47,14 +56,24 @@ public class MainActivity : MauiAppCompatActivity
   protected override void OnNewIntent(Intent? intent)
   {
     base.OnNewIntent(intent);
-    if (intent != null)
+
+    try
     {
-      FirebaseCloudMessagingImplementation.OnNewIntent(intent);
-      if (intent.Data != null)
+      if (intent != null)
       {
-        var uri = new Uri(intent.Data.ToString()!);
-        App.Current?.SendOnAppLinkRequestReceived(uri);
+        FirebaseCloudMessagingImplementation.OnNewIntent(intent);
+
+        if (intent.Data != null)
+        {
+          var uri = new Uri(intent.Data.ToString()!);
+          App.Current?.SendOnAppLinkRequestReceived(uri);
+        }
       }
     }
+    catch (Exception ex)
+    {
+      Android.Util.Log.Error("FCM", $"OnNewIntent error: {ex}");
+    }
   }
+
 }
