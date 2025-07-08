@@ -19,6 +19,11 @@ public partial class TransactionsHistoryViewModel(IProductsService productsServi
   private readonly IProductsService _productService = productsService;
   [ObservableProperty]
   private ObservableCollection<Transaction> transactions = [];
+  partial void OnTransactionsChanged(ObservableCollection<Transaction> value)
+  {
+    OnPropertyChanged(nameof(IsEmptyTransactions));
+  }
+  public bool IsEmptyTransactions => Transactions.Count == 0;
 
   public async Task LoadTransactions()
   {

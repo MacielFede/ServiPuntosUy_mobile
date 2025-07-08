@@ -1,0 +1,48 @@
+{
+  "sqltools.connections": [
+    {
+      "connectionTimeout": 15,
+      "mssqlOptions": {
+        "appName": "SQLTools",
+        "useUTC": true,
+        "encrypt": true,
+        "trustServerCertificate": true
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 1433,
+      "driver": "MSSQL",
+      "name": "net",
+      "database": "ServiPuntosCentral",
+      "username": "tecnoinf",
+      "password": "password123"
+    },
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5433,
+      "driver": "PostgreSQL",
+      "name": "GeoDB",
+      "database": "geodb",
+      "username": "geouser",
+      "password": "geopass"
+    },
+    {
+      "connectionTimeout": 15,
+      "mssqlOptions": {
+        "appName": "SQLTools",
+        "useUTC": true,
+        "encrypt": true,
+        "trustServerCertificate": true
+      },
+      "previewLimit": 50,
+      "server": "yamanote.proxy.rlwy.net",
+      "port": 50402,
+      "driver": "MSSQL",
+      "name": "net_prod",
+      "database": "ServiPuntosCentral",
+      "username": "sa",
+      "password": "1StrongPwd!!"
+    }
+  ]
+}

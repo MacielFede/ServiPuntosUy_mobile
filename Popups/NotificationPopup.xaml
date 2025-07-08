@@ -6,7 +6,7 @@
            CanBeDismissedByTappingOutsideOfPopup="True"
            Color="Transparent">
   <Border Padding="10"
-      BackgroundColor="White">
+          Background="{AppThemeBinding Light=#FFFFFF, Dark=#1E1E1E}">
     <Border.StrokeShape>
       <RoundRectangle CornerRadius="20"
                       StrokeThickness="4"/>

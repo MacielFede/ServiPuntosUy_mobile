@@ -68,9 +68,11 @@ public partial class PromotionDetailViewModel(IConfiguration configuration, IPro
     await _branchService.LoadBranchesAsync();
     var eligibleBranches = new List<Branch>();
     while (Promotion is null) { await Task.Delay(1000); }
-    var filteredBranches = _branchService.AllBranches?.Where(branch => Promotion?.Branches.Contains(branch.Id) == true).ToList();
+    var filteredBranches = Promotion?.Branches.Count == 0 ?
+        _branchService.AllBranches is not null ? [.. _branchService.AllBranches] : []
+        : _branchService.AllBranches?.Where(branch => Promotion?.Branches.Contains(branch.Id) == true).ToList();
     Product[] productsStock = [];
-    if (filteredBranches != null && Promotion.Products != null)
+    if (filteredBranches != null && Promotion?.Products != null)
     {
       var eligibleBranchesTemp = await Task.WhenAll(filteredBranches.Select(async branch =>
       {

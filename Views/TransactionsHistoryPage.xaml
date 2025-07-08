@@ -5,14 +5,20 @@
              xmlns:models="clr-namespace:ServiPuntosUy_mobile.Models"
              x:Class="ServiPuntosUy_mobile.Views.TransactionsHistoryPage"
              xmlns:converters="clr-namespace:ServiPuntosUy_mobile.Converters"
-             Title="Historial de transacciones">
+             Title="Historial de transacciones"
+             x:DataType="viewModel:TransactionsHistoryViewModel">
   <ContentPage.Resources>
     <ResourceDictionary>
       <converters:CurrencyFormatConverter x:Key="CurrencyFormatConverter"/>
     </ResourceDictionary>
   </ContentPage.Resources>
   <ScrollView>
-    <ScrollView.Content>
+    <VerticalStackLayout>
+      <Label Text="No realizaste ninguna transacción hasta el momento"
+             IsVisible="{Binding IsEmptyTransactions}"
+             TextColor="SandyBrown"
+             FontSize="24"
+             Margin="14"/>
       <CollectionView x:DataType="viewModel:TransactionsHistoryViewModel"
                       ItemsSource="{Binding Transactions}">
         <CollectionView.ItemTemplate>
@@ -73,6 +79,6 @@
           </DataTemplate>
         </CollectionView.ItemTemplate>
       </CollectionView>
-    </ScrollView.Content>
+    </VerticalStackLayout>
   </ScrollView>
 </ContentPage>
