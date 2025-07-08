@@ -57,7 +57,6 @@ public partial class LoginViewModel(IAuthService authService, IConfiguration _co
   {
     if (!string.IsNullOrEmpty(value))
     {
-      await Toast.Make(value, ToastDuration.Long).Show();
       var response = await authService.ValidateMagicLink(value);
       if (response is { Error: false, Data: not null })
       {
