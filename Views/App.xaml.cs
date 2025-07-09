@@ -36,6 +36,12 @@ public partial class App : Application
 		]);
 	}
 
+	protected override async void OnResume()
+	{
+		base.OnResume();
+		await _tenantService.LoadTenantUIAsync();
+	}
+
 	protected override void OnAppLinkRequestReceived(Uri uri)
 	{
 		base.OnAppLinkRequestReceived(uri);

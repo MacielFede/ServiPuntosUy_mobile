@@ -59,6 +59,10 @@ public class TenantService(IConfiguration configs) : ApiService(configs), ITenan
           Debug.WriteLine($"Error obteniendo ui: {tenantUIRepsonse.Message}");
         }
       }
+      else
+      {
+        Debug.WriteLine($"Error obteniendo ui: {tenantUIRepsonse.Message}");
+      }
     }
     catch (Exception ex)
     {
